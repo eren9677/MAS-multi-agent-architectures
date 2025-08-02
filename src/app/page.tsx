@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react'
 import { SearchBar } from '@/components/SearchBar'
 import { ArchitectureGrid } from '@/components/ArchitectureGrid'
 import { ArchitectureModal } from '@/components/ArchitectureModal'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/Button'
 import { architectures } from '@/data/architectures'
 import { filterArchitectures, getAllCategories } from '@/utils/helpers'
@@ -42,22 +43,28 @@ export default function Home() {
     })
   }
 
+  const handleAddArchitectureClick = () => {
+    // TODO: Implement add architecture functionality
+    console.log('Add architecture clicked')
+  }
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-light-bg dark:bg-dark-bg transition-colors duration-200">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white sticky top-0 z-40">
+      <header className="border-b border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg sticky top-0 z-40 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-bold text-primary-500">
+              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent bg-size-200 animate-gradient-shift hover:bg-gradient-primary-dark transition-all duration-300">
                 Multi-Agent Architectures
               </h1>
-              <span className="ml-2 text-sm text-gray-600">
+              <span className="ml-2 text-sm text-light-text-secondary dark:text-dark-text-secondary">
                 Open-source collaboration platform
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">⭐ 5 architectures</span>
+              <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">⭐ 5 architectures</span>
+              <ThemeToggle />
               <Button variant="primary" size="sm">
                 Add Architecture
               </Button>
@@ -68,21 +75,21 @@ export default function Home() {
 
       <div className="flex">
         {/* Left Sidebar */}
-        <aside className="w-64 bg-gray-50 border-r border-gray-200 min-h-screen p-6">
+        <aside className="w-64 bg-light-surface dark:bg-dark-surface border-r border-light-border dark:border-dark-border min-h-screen p-6 transition-colors duration-200">
           <div className="space-y-6">
             {/* Platform Selection */}
             <div>
-              <h3 className="text-sm font-medium text-gray-900 mb-3">
+              <h3 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">
                 Choose your AI platform
               </h3>
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1 bg-primary-500 text-white text-xs rounded-full">
                   Multi-Agent
                 </span>
-                <span className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full">
+                <span className="px-3 py-1 bg-gray-200 dark:bg-dark-card text-gray-700 dark:text-dark-text-secondary text-xs rounded-full">
                   Single Agent
                 </span>
-                <span className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full">
+                <span className="px-3 py-1 bg-gray-200 dark:bg-dark-card text-gray-700 dark:text-dark-text-secondary text-xs rounded-full">
                   Hybrid
                 </span>
               </div>
@@ -90,16 +97,16 @@ export default function Home() {
 
             {/* Category Section */}
             <div>
-              <h3 className="text-sm font-medium text-primary-600 mb-3">
+              <h3 className="text-sm font-medium text-primary-600 dark:text-primary-400 mb-3">
                 Architecture Categories
               </h3>
               <div className="space-y-2">
                 <button
                   onClick={() => setFilters({ ...filters, category: 'all' })}
-                  className={`w-full text-left px-2 py-1 text-sm rounded ${
+                  className={`w-full text-left px-2 py-1 text-sm rounded transition-colors duration-200 ${
                     filters.category === 'all'
-                      ? 'bg-primary-100 text-primary-700'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                      : 'text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-dark-card'
                   }`}
                 >
                   All Architectures ({architectures.length})
@@ -108,10 +115,10 @@ export default function Home() {
                   <button
                     key={category}
                     onClick={() => setFilters({ ...filters, category })}
-                    className={`w-full text-left px-2 py-1 text-sm rounded ${
+                    className={`w-full text-left px-2 py-1 text-sm rounded transition-colors duration-200 ${
                       filters.category === category
-                        ? 'bg-primary-100 text-primary-700'
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                        : 'text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-dark-card'
                     }`}
                   >
                     {category}
@@ -130,9 +137,9 @@ export default function Home() {
             </div>
 
             {/* About Section */}
-            <div className="pt-6 border-t border-gray-200">
-              <h4 className="text-sm font-medium text-gray-900 mb-2">About</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+            <div className="pt-6 border-t border-light-border dark:border-dark-border">
+              <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">About</h4>
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
                 A curated collection of multi-agent AI architectures for researchers, developers, and AI enthusiasts. 
                 Explore innovative agent-based systems and share your own architectures with the community.
               </p>
@@ -140,9 +147,9 @@ export default function Home() {
 
             {/* Contributing Section */}
             <div>
-              <h4 className="text-sm font-medium text-gray-900 mb-2">Contributing</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                If you'd like to contribute, please fork the repository and make changes as you'd like. 
+              <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">Contributing</h4>
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
+                If you&apos;d like to contribute, please fork the repository and make changes as you&apos;d like. 
                 Pull requests are warmly welcome.
               </p>
             </div>
@@ -150,7 +157,7 @@ export default function Home() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 bg-light-bg dark:bg-dark-bg transition-colors duration-200">
           {/* Filter Controls */}
           <div className="mb-6">
             <div className="flex items-center justify-between">
@@ -158,13 +165,13 @@ export default function Home() {
                 <select
                   value={filters.sortBy}
                   onChange={(e) => setFilters({ ...filters, sortBy: e.target.value as FilterOptions['sortBy'] })}
-                  className="text-sm border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="text-sm border border-light-border dark:border-dark-border rounded px-3 py-1 bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors duration-200"
                 >
                   <option value="newest">Newest</option>
                   <option value="popular">Popular</option>
                   <option value="alphabetical">Alphabetical</option>
                 </select>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
                   {filteredArchitectures.length} of {architectures.length} architectures
                 </span>
               </div>
@@ -175,22 +182,23 @@ export default function Home() {
           <ArchitectureGrid
             architectures={filteredArchitectures}
             onArchitectureClick={handleArchitectureClick}
+            onAddArchitectureClick={handleAddArchitectureClick}
           />
 
           {/* Footer Links */}
-          <div className="mt-12 pt-8 border-t border-gray-200">
+          <div className="mt-12 pt-8 border-t border-light-border dark:border-dark-border">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-3">Links</h4>
-                <ul className="space-y-1 text-sm text-gray-600">
+                <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">Links</h4>
+                <ul className="space-y-1 text-sm text-light-text-secondary dark:text-dark-text-secondary">
                   <li>• GitHub Repository</li>
                   <li>• Documentation</li>
                   <li>• Community</li>
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-3">Resources</h4>
-                <ul className="space-y-1 text-sm text-gray-600">
+                <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">Resources</h4>
+                <ul className="space-y-1 text-sm text-light-text-secondary dark:text-dark-text-secondary">
                   <li>• Multi-Agent Systems Guide</li>
                   <li>• Best Practices</li>
                   <li>• Research Papers</li>

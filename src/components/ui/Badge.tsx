@@ -16,9 +16,9 @@ export const Badge: React.FC<BadgeProps> = ({
   const baseClasses = 'inline-flex items-center font-medium rounded-full transition-colors duration-200'
   
   const variantClasses = {
-    primary: 'bg-primary-100 text-primary-800 hover:bg-primary-200',
-    secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-    outline: 'border border-primary-300 text-primary-700 hover:bg-primary-50'
+    primary: 'bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-800',
+    secondary: 'bg-gray-100 dark:bg-dark-surface text-gray-800 dark:text-dark-text-secondary hover:bg-gray-200 dark:hover:bg-dark-card',
+    outline: 'border border-primary-300 dark:border-primary-600 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20'
   }
   
   const sizeClasses = {

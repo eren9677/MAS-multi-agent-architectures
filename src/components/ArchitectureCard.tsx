@@ -15,31 +15,31 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({
   onClick
 }) => {
   return (
-    <Card onClick={onClick} className="h-full">
-      <div className="p-4">
+    <Card onClick={onClick} className="w-[284px] h-[214px]">
+      <div className="p-3 h-full flex flex-col">
         {/* Image */}
-        <div className="relative h-32 mb-3 rounded-md overflow-hidden bg-gray-100">
+        <div className="relative h-24 mb-2 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
           <Image
             src={architecture.diagram.image}
             alt={architecture.diagram.alt}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="284px"
           />
         </div>
 
         {/* Title and Description */}
-        <div className="mb-3">
-          <h3 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-1">
+        <div className="mb-2 flex-1">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-dark-text mb-1 line-clamp-1">
             {architecture.title}
           </h3>
-          <p className="text-xs text-gray-600 line-clamp-2">
+          <p className="text-xs text-gray-600 dark:text-dark-text-secondary line-clamp-2">
             {architecture.description}
           </p>
         </div>
 
         {/* Tags */}
-        <div className="mb-3">
+        <div className="mb-2 flex-shrink-0">
           <div className="flex flex-wrap gap-1">
             {architecture.tags.slice(0, 2).map((tag) => (
               <Badge key={tag} variant="secondary" size="sm">
@@ -55,7 +55,7 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({
         </div>
 
         {/* Author and Date */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-shrink-0">
           <div className="flex items-center space-x-2">
             {architecture.author.avatar && (
               <Image
@@ -66,34 +66,56 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({
                 className="rounded-full"
               />
             )}
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-gray-600 dark:text-dark-text-secondary">
               {architecture.author.name}
             </span>
           </div>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-gray-500 dark:text-dark-text-secondary">
             {formatDate(architecture.createdAt)}
           </span>
         </div>
 
         {/* Action Icons */}
         <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="p-1 bg-white rounded shadow-sm hover:bg-gray-50">
-            <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className="p-1 bg-white dark:bg-dark-card rounded shadow-sm hover:bg-gray-50 dark:hover:bg-dark-surface">
+            <svg className="w-3 h-3 text-gray-600 dark:text-dark-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
           </button>
-          <button className="p-1 bg-white rounded shadow-sm hover:bg-gray-50">
-            <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className="p-1 bg-white dark:bg-dark-card rounded shadow-sm hover:bg-gray-50 dark:hover:bg-dark-surface">
+            <svg className="w-3 h-3 text-gray-600 dark:text-dark-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
           </button>
-          <button className="p-1 bg-white rounded shadow-sm hover:bg-gray-50">
-            <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className="p-1 bg-white dark:bg-dark-card rounded shadow-sm hover:bg-gray-50 dark:hover:bg-dark-surface">
+            <svg className="w-3 h-3 text-gray-600 dark:text-dark-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
             </svg>
           </button>
         </div>
+      </div>
+    </Card>
+  )
+}
+
+export const AddArchitectureCard: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+  return (
+    <Card onClick={onClick} className="w-[284px] h-[214px] border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500">
+      <div className="p-3 h-full flex flex-col items-center justify-center text-center">
+        {/* Plus Icon */}
+        <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-3">
+          <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </div>
+        
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-dark-text mb-1">
+          Add New Architecture
+        </h3>
+        <p className="text-xs text-gray-600 dark:text-dark-text-secondary line-clamp-2">
+          Share your creative multi-agent architecture with the community
+        </p>
       </div>
     </Card>
   )
