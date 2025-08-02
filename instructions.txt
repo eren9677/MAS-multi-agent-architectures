@@ -1,0 +1,208 @@
+# Next.js Multi-Agent Architecture Collaboration App - Development Instructions
+
+## Project Overview
+Create a static Next.js web application that serves as an open-source collaboration platform for sharing multi-agent AI architectures. The application should mirror the design aesthetics of prompt.chat from the awesome-chatgpt-prompts repository, featuring a clean, modern interface with smooth interactions.
+
+## Design Requirements
+
+### Visual Style
+- **Primary Color Scheme**: Indigo blue RGB(10, 110, 255) as the dominant color
+- **Design Language**: Clean, modern interface with smooth rounded edges throughout
+- **Layout**: Grid-based modal system for displaying architectures
+- **Typography**: Clean, readable fonts with proper hierarchy
+- **Spacing**: Generous whitespace and consistent padding/margins
+
+### UI Components
+- **Navigation Bar**: Clean header with app title and navigation links
+- **Hero Section**: Welcome message and brief description of the platform
+- **Architecture Grid**: Responsive grid layout displaying architecture cards
+- **Modal System**: Smooth overlay modals for detailed architecture views
+- **Add Button**: Prominent "Add New Architecture" button with smooth hover effects
+- **Cards**: Rounded corner cards with subtle shadows and hover animations
+
+## Technical Specifications
+
+### Framework & Setup
+- **Framework**: Next.js 14+ with App Router
+- **Styling**: Tailwind CSS for utility-first styling
+- **TypeScript**: Use TypeScript for type safety
+- **Components**: Create reusable React components
+- **Static Generation**: Use static site generation (SSG) for optimal performance
+
+### Core Features
+
+#### 1. Architecture Display System
+- Grid layout showcasing different multi-agent architectures
+- Each card should display:
+  - Architecture name/title
+  - Brief description
+  - Illustration/diagram preview
+  - Tags/categories
+  - Author information
+  - Creation date
+
+#### 2. Modal Interface
+- Smooth modal transitions (fade in/out animations)
+- Full-screen or large modal views for architecture details
+- Include:
+  - Detailed architecture diagrams
+  - Implementation instructions
+  - Code examples
+  - Use cases
+  - Performance metrics
+  - Comments/discussion section placeholder
+
+#### 3. Navigation & Filtering
+- Category filtering system
+- Search functionality
+- Sort options (newest, popular, alphabetical)
+- Responsive navigation menu
+
+#### 4. Interactive Elements
+- Smooth hover effects on cards
+- Loading states and micro-animations
+- Responsive design for mobile/tablet/desktop
+- Keyboard navigation support
+
+## Data Structure
+
+### Architecture Object Schema
+```typescript
+interface Architecture {
+  id: string
+  title: string
+  description: string
+  longDescription: string
+  author: {
+    name: string
+    avatar?: string
+    github?: string
+  }
+  category: string[]
+  tags: string[]
+  diagram: {
+    image: string
+    alt: string
+  }
+  implementation: {
+    codeExample: string
+    language: string
+  }
+  useCases: string[]
+  performance: {
+    scalability: number
+    complexity: number
+    reliability: number
+  }
+  createdAt: string
+  updatedAt: string
+  githubUrl?: string
+  documentationUrl?: string
+}
+```
+
+## File Structure
+```
+src/
+├── app/
+│   ├── page.tsx (main page)
+│   ├── layout.tsx (root layout)
+│   └── globals.css (global styles)
+├── components/
+│   ├── ui/
+│   │   ├── Modal.tsx
+│   │   ├── Card.tsx
+│   │   ├── Button.tsx
+│   │   └── Badge.tsx
+│   ├── ArchitectureGrid.tsx
+│   ├── ArchitectureCard.tsx
+│   ├── ArchitectureModal.tsx
+│   ├── Header.tsx
+│   ├── SearchBar.tsx
+│   └── FilterPanel.tsx
+├── data/
+│   └── architectures.ts (static data)
+├── types/
+│   └── index.ts (TypeScript definitions)
+└── utils/
+    └── helpers.ts (utility functions)
+```
+
+## Styling Guidelines
+
+### Color Palette
+- **Primary**: RGB(10, 110, 255) - Indigo blue
+- **Primary Light**: RGB(66, 153, 255)
+- **Primary Dark**: RGB(8, 88, 204)
+- **Background**: White (#FFFFFF)
+- **Surface**: Light gray (#F8F9FA)
+- **Text Primary**: Dark gray (#1A202C)
+- **Text Secondary**: Medium gray (#4A5568)
+- **Border**: Light gray (#E2E8F0)
+
+### Component Styling
+- **Border Radius**: Use rounded-lg (8px) for cards, rounded-md (6px) for buttons
+- **Shadows**: Subtle drop shadows with soft blur
+- **Transitions**: 200-300ms ease-in-out for hover effects
+- **Grid**: Responsive grid with proper gap spacing
+- **Typography**: Use font weights 400, 500, 600, and 700
+
+## Animation Requirements
+- Smooth card hover effects (scale: 1.02, shadow increase)
+- Modal fade-in/fade-out transitions
+- Button hover state animations
+- Loading skeleton states
+- Smooth scrolling behavior
+
+## Responsive Design
+- **Mobile**: Single column grid, collapsible navigation
+- **Tablet**: 2-column grid, adjusted spacing
+- **Desktop**: 3-4 column grid, full navigation
+- **Large Desktop**: Up to 4-5 columns with max-width container
+
+## Sample Architectures to Include
+1. **Multi-Agent Reasoning Chain**: Sequential agent collaboration
+2. **Hierarchical Agent Network**: Manager-worker agent structure
+3. **Distributed Agent Swarm**: Peer-to-peer agent communication
+4. **Specialized Agent Pipeline**: Domain-specific agent workflows
+5. **Adaptive Agent Ensemble**: Dynamic agent selection system
+
+## Performance Considerations
+- Optimize images with Next.js Image component
+- Implement lazy loading for architecture cards
+- Use static generation for fast initial loads
+- Minimize bundle size with proper imports
+- Add proper meta tags for SEO
+
+## Accessibility Features
+- Proper ARIA labels and roles
+- Keyboard navigation support
+- Focus management in modals
+- Alt text for all images
+- High contrast color ratios
+- Screen reader friendly structure
+
+## Future Dynamic Features (Preparation)
+- Comment system placeholder components
+- User authentication UI placeholders
+- Voting/rating system UI
+- Architecture submission form
+- Search and filtering backend preparation
+
+## Development Priorities
+1. Set up Next.js project with TypeScript and Tailwind
+2. Create static data structure with sample architectures
+3. Build responsive grid layout
+4. Implement modal system with smooth animations
+5. Add search and filtering functionality
+6. Optimize performance and accessibility
+7. Test across different devices and browsers
+
+## Quality Standards
+- Clean, readable code with proper TypeScript types
+- Consistent component structure and naming
+- Comprehensive error handling
+- Proper loading states
+- Mobile-first responsive design
+- Semantic HTML structure
+- Performance optimization
