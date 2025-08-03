@@ -1,61 +1,61 @@
+'use client'
+
 import React from 'react'
 import Image from 'next/image'
-import { Card } from './ui/Card'
-import { Badge } from './ui/Badge'
 import { Architecture } from '@/types'
-import { formatDate } from '@/utils/helpers'
+import { Card } from '@/components/ui/Card'
+import { Badge } from '@/components/ui/Badge'
+import { getPerformanceColor, getPerformanceLabel } from '@/utils/helpers'
 
 interface ArchitectureCardProps {
   architecture: Architecture
   onClick: () => void
 }
 
-export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({
-  architecture,
-  onClick
-}) => {
+export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture, onClick }) => {
   return (
-    <Card onClick={onClick} className="w-[284px] h-[214px]">
-      <div className="p-3 h-full flex flex-col">
+    <Card 
+      onClick={onClick} 
+      className="w-full h-64 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group"
+    >
+      <div className="p-4 h-full flex flex-col">
         {/* Image */}
-        <div className="relative h-24 mb-2 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
+        <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
           <Image
             src={architecture.diagram.image}
             alt={architecture.diagram.alt}
             fill
-            className="object-cover"
-            sizes="284px"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           />
         </div>
 
-        {/* Title and Description */}
-        <div className="mb-2 flex-1">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-dark-text mb-1 line-clamp-1">
-            {architecture.title}
-          </h3>
-          <p className="text-xs text-gray-600 dark:text-dark-text-secondary line-clamp-2">
-            {architecture.description}
-          </p>
-        </div>
+        {/* Title */}
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-dark-text mb-2 line-clamp-1">
+          {architecture.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-xs text-gray-600 dark:text-dark-text-secondary mb-3 line-clamp-2 flex-1">
+          {architecture.description}
+        </p>
 
         {/* Tags */}
-        <div className="mb-2 flex-shrink-0">
-          <div className="flex flex-wrap gap-1">
-            {architecture.tags.slice(0, 2).map((tag) => (
-              <Badge key={tag} variant="secondary" size="sm">
-                {tag}
-              </Badge>
-            ))}
-            {architecture.tags.length > 2 && (
-              <Badge variant="outline" size="sm">
-                +{architecture.tags.length - 2}
-              </Badge>
-            )}
-          </div>
+        <div className="flex flex-wrap gap-1 mb-3">
+          {architecture.tags.slice(0, 2).map((tag) => (
+            <Badge key={tag} variant="secondary" className="text-xs px-2 py-0.5">
+              {tag}
+            </Badge>
+          ))}
+          {architecture.tags.length > 2 && (
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              +{architecture.tags.length - 2}
+            </span>
+          )}
         </div>
 
         {/* Author and Date */}
-        <div className="flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center space-x-2">
             {architecture.author.avatar && (
               <Image
@@ -66,33 +66,13 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({
                 className="rounded-full"
               />
             )}
-            <span className="text-xs text-gray-600 dark:text-dark-text-secondary">
-              {architecture.author.name}
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              @{architecture.author.name.split(' ')[0].toLowerCase()}
             </span>
           </div>
-          <span className="text-xs text-gray-500 dark:text-dark-text-secondary">
-            {formatDate(architecture.createdAt)}
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            {new Date(architecture.createdAt).getFullYear()}
           </span>
-        </div>
-
-        {/* Action Icons */}
-        <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="p-1 bg-white dark:bg-dark-card rounded shadow-sm hover:bg-gray-50 dark:hover:bg-dark-surface">
-            <svg className="w-3 h-3 text-gray-600 dark:text-dark-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          </button>
-          <button className="p-1 bg-white dark:bg-dark-card rounded shadow-sm hover:bg-gray-50 dark:hover:bg-dark-surface">
-            <svg className="w-3 h-3 text-gray-600 dark:text-dark-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-          </button>
-          <button className="p-1 bg-white dark:bg-dark-card rounded shadow-sm hover:bg-gray-50 dark:hover:bg-dark-surface">
-            <svg className="w-3 h-3 text-gray-600 dark:text-dark-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-            </svg>
-          </button>
         </div>
       </div>
     </Card>
@@ -101,10 +81,13 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({
 
 export const AddArchitectureCard: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
-    <Card onClick={onClick} className="w-[284px] h-[214px] border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500">
-      <div className="p-3 h-full flex flex-col items-center justify-center text-center">
+    <Card 
+      onClick={onClick} 
+      className="w-full h-64 border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500 bg-white dark:bg-dark-card rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group"
+    >
+      <div className="p-4 h-full flex flex-col items-center justify-center text-center">
         {/* Plus Icon */}
-        <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-3">
+        <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-3 group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors duration-200">
           <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>

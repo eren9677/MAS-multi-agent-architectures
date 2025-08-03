@@ -1,18 +1,17 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import { SearchBar } from '@/components/SearchBar'
-import { ArchitectureGrid } from '@/components/ArchitectureGrid'
-import { ArchitectureModal } from '@/components/ArchitectureModal'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { Button } from '@/components/ui/Button'
+import { Architecture, FilterOptions, ModalState } from '@/types'
 import { architectures } from '@/data/architectures'
 import { filterArchitectures, getAllCategories } from '@/utils/helpers'
-import { Architecture, FilterOptions, ModalState } from '@/types'
+import { ArchitectureCard, AddArchitectureCard } from '@/components/ArchitectureCard'
+import { ArchitectureModal } from '@/components/ArchitectureModal'
+import { SearchBar } from '@/components/SearchBar'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export default function Home() {
   const [filters, setFilters] = useState<FilterOptions>({
-    category: 'all',
+    category: '',
     search: '',
     sortBy: 'newest'
   })
@@ -22,12 +21,13 @@ export default function Home() {
     architecture: null
   })
 
-  const categories = useMemo(() => getAllCategories(architectures), [])
-  
-  const filteredArchitectures = useMemo(() => 
-    filterArchitectures(architectures, filters), 
-    [filters]
-  )
+  const filteredArchitectures = useMemo(() => {
+    return filterArchitectures(architectures, filters)
+  }, [filters])
+
+  const categories = useMemo(() => {
+    return getAllCategories(architectures)
+  }, [])
 
   const handleArchitectureClick = (architecture: Architecture) => {
     setModalState({
@@ -51,80 +51,49 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg transition-colors duration-200">
       {/* Header */}
-      <header className="border-b border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg sticky top-0 z-40 transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent bg-size-200 animate-gradient-shift hover:bg-gradient-primary-dark transition-all duration-300">
+      <header className="border-b border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card">
+        <div className="max-w-7xl mx-auto px-8 py-4">
+          <div className="flex items-center justify-between">
+            {/* Left: Logo */}
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-blueish bg-clip-text text-transparent bg-size-200 animate-gradient-shift hover:bg-gradient-blueish-hover hover:animate-gradient-hover transition-all duration-500 ease-in-out cursor-pointer">
                 Multi-Agent Architectures
               </h1>
-              <span className="ml-2 text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                Open-source collaboration platform
-              </span>
+              <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">
+                World&apos;s First Multi-Agent Architecture Directory
+              </p>
             </div>
+
+            {/* Right: Utility Icons */}
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">⭐ 5 architectures</span>
+              <div className="flex items-center space-x-2 text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                <span className="text-primary-500">★</span>
+                <span>131,885</span>
+              </div>
+              <div className="w-6 h-6 text-light-text-secondary dark:text-dark-text-secondary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
               <ThemeToggle />
-              <Button variant="primary" size="sm">
-                Add Architecture
-              </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="flex">
-        {/* Left Sidebar */}
-        <aside className="w-64 bg-light-surface dark:bg-dark-surface border-r border-light-border dark:border-dark-border min-h-screen p-6 transition-colors duration-200">
-          <div className="space-y-6">
-            {/* Platform Selection */}
+      {/* Main Layout - Three Column Structure */}
+      <div className="max-w-7xl mx-auto flex">
+        {/* Left Sidebar - Fixed Width */}
+        <aside className="w-64 flex-shrink-0 border-r border-light-border dark:border-dark-border bg-light-card dark:bg-dark-card">
+          <div className="p-4 space-y-6">
+            {/* Architecture Count */}
             <div>
-              <h3 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">
-                Choose your AI platform
+              <h3 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">
+                Multi-Agent Architectures
               </h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-primary-500 text-white text-xs rounded-full">
-                  Multi-Agent
-                </span>
-                <span className="px-3 py-1 bg-gray-200 dark:bg-dark-card text-gray-700 dark:text-dark-text-secondary text-xs rounded-full">
-                  Single Agent
-                </span>
-                <span className="px-3 py-1 bg-gray-200 dark:bg-dark-card text-gray-700 dark:text-dark-text-secondary text-xs rounded-full">
-                  Hybrid
-                </span>
-              </div>
-            </div>
-
-            {/* Category Section */}
-            <div>
-              <h3 className="text-sm font-medium text-primary-600 dark:text-primary-400 mb-3">
-                Architecture Categories
-              </h3>
-              <div className="space-y-2">
-                <button
-                  onClick={() => setFilters({ ...filters, category: 'all' })}
-                  className={`w-full text-left px-2 py-1 text-sm rounded transition-colors duration-200 ${
-                    filters.category === 'all'
-                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                      : 'text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-dark-card'
-                  }`}
-                >
-                  All Architectures ({architectures.length})
-                </button>
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setFilters({ ...filters, category })}
-                    className={`w-full text-left px-2 py-1 text-sm rounded transition-colors duration-200 ${
-                      filters.category === category
-                        ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-                        : 'text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-dark-card'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary">
+                {architectures.length} architectures
+              </p>
             </div>
 
             {/* Search */}
@@ -136,8 +105,40 @@ export default function Home() {
               />
             </div>
 
+            {/* Categories */}
+            <div>
+              <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">
+                Categories
+              </h4>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setFilters({ ...filters, category: '' })}
+                  className={`w-full text-left px-2 py-1.5 text-xs rounded transition-colors duration-200 ${
+                    filters.category === ''
+                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                      : 'text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-dark-surface'
+                  }`}
+                >
+                  All Architectures
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setFilters({ ...filters, category })}
+                    className={`w-full text-left px-2 py-1.5 text-xs rounded transition-colors duration-200 ${
+                      filters.category === category
+                        ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+                        : 'text-light-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-dark-surface'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* About Section */}
-            <div className="pt-6 border-t border-light-border dark:border-dark-border">
+            <div className="pt-4 border-t border-light-border dark:border-dark-border">
               <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">About</h4>
               <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
                 A curated collection of multi-agent AI architectures for researchers, developers, and AI enthusiasts. 
@@ -156,37 +157,46 @@ export default function Home() {
           </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 p-6 bg-light-bg dark:bg-dark-bg transition-colors duration-200">
-          {/* Filter Controls */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <select
-                  value={filters.sortBy}
-                  onChange={(e) => setFilters({ ...filters, sortBy: e.target.value as FilterOptions['sortBy'] })}
-                  className="text-sm border border-light-border dark:border-dark-border rounded px-3 py-1 bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors duration-200"
-                >
-                  <option value="newest">Newest</option>
-                  <option value="popular">Popular</option>
-                  <option value="alphabetical">Alphabetical</option>
-                </select>
-                <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                  {filteredArchitectures.length} of {architectures.length} architectures
-                </span>
+        {/* Main Content - Flexible Width */}
+        <main className="flex-1 p-8 bg-light-bg dark:bg-dark-bg">
+          <div className="max-w-7xl mx-auto">
+            {/* Filter Controls */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <select
+                    value={filters.sortBy}
+                    onChange={(e) => setFilters({ ...filters, sortBy: e.target.value as FilterOptions['sortBy'] })}
+                    className="text-sm border border-light-border dark:border-dark-border rounded px-3 py-1.5 bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors duration-200"
+                  >
+                    <option value="newest">Newest</option>
+                    <option value="popular">Popular</option>
+                    <option value="alphabetical">Alphabetical</option>
+                  </select>
+                  <span className="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                    {filteredArchitectures.length} of {architectures.length} architectures
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
           {/* Architecture Grid */}
-          <ArchitectureGrid
-            architectures={filteredArchitectures}
-            onArchitectureClick={handleArchitectureClick}
-            onAddArchitectureClick={handleAddArchitectureClick}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {/* Add Architecture Card */}
+            <AddArchitectureCard onClick={handleAddArchitectureClick} />
+            
+            {/* Architecture Cards */}
+            {filteredArchitectures.map((architecture) => (
+              <ArchitectureCard
+                key={architecture.id}
+                architecture={architecture}
+                onClick={() => handleArchitectureClick(architecture)}
+              />
+            ))}
+          </div>
 
           {/* Footer Links */}
-          <div className="mt-12 pt-8 border-t border-light-border dark:border-dark-border">
+          <div className="mt-16 pt-8 border-t border-light-border dark:border-dark-border">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">Links</h4>
@@ -206,15 +216,16 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </main>
-      </div>
-
-      {/* Architecture Modal */}
-      <ArchitectureModal
-        architecture={modalState.architecture}
-        isOpen={modalState.isOpen}
-        onClose={handleModalClose}
-      />
+        </div>
+      </main>
     </div>
+
+    {/* Architecture Modal */}
+    <ArchitectureModal
+      architecture={modalState.architecture}
+      isOpen={modalState.isOpen}
+      onClose={handleModalClose}
+    />
+  </div>
   )
 } 

@@ -16,69 +16,86 @@ const config: Config = {
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
-          500: '#0a6eff', // RGB(10, 110, 255) - Main indigo blue
-          600: '#0858cc', // RGB(8, 88, 204) - Primary dark
-          700: '#4299ff', // RGB(66, 153, 255) - Primary light
+          500: '#0a6eff', // RGB(10, 110, 255)
+          600: '#2563eb',
+          700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
         },
-        // Dark mode colors
-        dark: {
-          bg: '#0f0f23',
-          surface: '#1a1a2e',
-          card: '#16213e',
-          border: '#2d3748',
-          text: '#e2e8f0',
-          'text-secondary': '#a0aec0',
-        },
-        // Light mode colors
         light: {
           bg: '#ffffff',
-          surface: '#F8F9FA',
+          surface: '#f8fafc',
           card: '#ffffff',
-          border: '#E2E8F0',
-          text: '#1A202C',
-          'text-secondary': '#4A5568',
+          border: '#e2e8f0',
+          text: '#1e293b',
+          'text-secondary': '#64748b',
         },
+        dark: {
+          bg: '#0f172a',
+          surface: '#1e293b',
+          card: '#334155',
+          border: '#475569',
+          text: '#f1f5f9',
+          'text-secondary': '#94a3b8',
+        },
+      },
+      spacing: {
+        '6': '24px',
+        '8': '32px',
+        '16': '64px',
+        '24': '96px',
+        '32': '128px',
+        '64': '256px',
       },
       animation: {
-        'fade-in': 'fadeIn 0.3s ease-in-out',
-        'fade-out': 'fadeOut 0.3s ease-in-out',
-        'scale-in': 'scaleIn 0.2s ease-out',
-        'slide-up': 'slideUp 0.3s ease-out',
-        'gradient-shift': 'gradientShift 3s ease-in-out infinite',
+        'gradient-shift': 'gradient-shift 3s ease infinite',
+        'gradient-hover': 'gradient-hover 0.5s ease-in-out',
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        'gradient-shift': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center',
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center',
+          },
         },
-        fadeOut: {
-          '0%': { opacity: '1' },
-          '100%': { opacity: '0' },
-        },
-        scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        gradientShift: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
+        'gradient-hover': {
+          '0%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center',
+          },
+          '100%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center',
+          },
         },
       },
       boxShadow: {
-        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'soft-hover': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        'dark': '0 2px 15px -3px rgba(0, 0, 0, 0.3), 0 10px 20px -2px rgba(0, 0, 0, 0.2)',
-        'dark-hover': '0 4px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
+        'soft-hover': '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'dark-hover': '0 10px 25px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)',
       },
       backgroundImage: {
-        'gradient-primary': 'linear-gradient(135deg, #0a6eff 0%, #4299ff 50%, #60a5fa 100%)',
-        'gradient-primary-dark': 'linear-gradient(135deg, #0858cc 0%, #0a6eff 50%, #4299ff 100%)',
+        'gradient-primary': 'linear-gradient(135deg, #0a6eff 0%, #3b82f6 50%, #8b5cf6 100%)',
+        'gradient-primary-dark': 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #7c3aed 100%)',
+        'gradient-blueish': 'linear-gradient(135deg, #0a6eff 0%, #60a5fa 25%, #3b82f6 50%, #1d4ed8 75%, #1e40af 100%)',
+        'gradient-blueish-hover': 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 25%, #3b82f6 50%, #60a5fa 75%, #0a6eff 100%)',
+      },
+      backgroundSize: {
+        'size-200': '200% 200%',
+      },
+      transitionProperty: {
+        'all': 'all',
+      },
+      transitionDuration: {
+        '300': '300ms',
+        '500': '500ms',
+      },
+      transitionTimingFunction: {
+        'ease': 'cubic-bezier(0.4, 0, 0.2, 1)',
+        'ease-in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
     },
   },

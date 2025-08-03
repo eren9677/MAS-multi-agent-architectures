@@ -5,7 +5,7 @@ interface ModalProps {
   onClose: () => void
   children: React.ReactNode
   title?: string
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -13,7 +13,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
   title,
-  size = 'lg'
+  size = 'xl'
 }) => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -39,12 +39,14 @@ export const Modal: React.FC<ModalProps> = ({
     sm: 'max-w-md',
     md: 'max-w-lg',
     lg: 'max-w-2xl',
-    xl: 'max-w-4xl'
+    xl: 'max-w-5xl',
+    '2xl': 'max-w-6xl',
+    '3xl': 'max-w-7xl'
   }
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-0">
         {/* Backdrop */}
         <div
           className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
@@ -54,7 +56,15 @@ export const Modal: React.FC<ModalProps> = ({
         
         {/* Modal */}
         <div
-          className={`relative w-full ${sizeClasses[size]} bg-light-card dark:bg-dark-card rounded-lg shadow-soft-hover dark:shadow-dark-hover transform transition-all duration-300 ease-in-out animate-scale-in`}
+          className={`relative w-full ${sizeClasses[size]} bg-light-card dark:bg-dark-card rounded-xl shadow-xl transform transition-all duration-300 ease-in-out`}
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}
           role="dialog"
           aria-modal="true"
           aria-labelledby={title ? 'modal-title' : undefined}
@@ -67,7 +77,7 @@ export const Modal: React.FC<ModalProps> = ({
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors duration-200"
+                className="text-gray-400 hover:text-primary-500 dark:text-gray-500 dark:hover:text-primary-400 transition-colors duration-200"
                 aria-label="Close modal"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
