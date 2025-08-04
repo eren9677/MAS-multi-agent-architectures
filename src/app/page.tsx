@@ -43,10 +43,6 @@ export default function Home() {
     })
   }
 
-  const handleAddArchitectureClick = () => {
-    // TODO: Implement add architecture functionality
-    console.log('Add architecture clicked')
-  }
 
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg transition-colors duration-200">
@@ -183,7 +179,7 @@ export default function Home() {
           {/* Architecture Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
             {/* Add Architecture Card */}
-            <AddArchitectureCard onClick={handleAddArchitectureClick} />
+            <AddArchitectureCard />
             
             {/* Architecture Cards */}
             {filteredArchitectures.map((architecture) => (

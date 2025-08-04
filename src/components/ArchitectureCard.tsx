@@ -72,7 +72,7 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
 
 export const AddArchitectureCard: React.FC = () => {
   const handleRedirect = () => {
-    window.open('https://github.com/eren9677/awesome-multi-agent-architectures/pulls', '_blank');
+    window.location.href = '/architecture-builder';
   };
 
   return (
@@ -92,9 +92,9 @@ export const AddArchitectureCard: React.FC = () => {
           Add New Architecture
         </h3>
         <p className="text-xs text-gray-600 dark:text-dark-text-secondary line-clamp-2">
-          Share your creative multi-agent architecture with the community. Submit a pull request on GitHub.
+          Create and visualize your multi-agent architecture with our builder.
         </p>
       </div>
     </Card>
   )
-} 
+}

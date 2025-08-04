@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useRef } from 'react'
+import Link from 'next/link'
 import { Button } from './ui/Button'
 
 export const Header: React.FC = () => {
@@ -70,16 +71,18 @@ export const Header: React.FC = () => {
 
           {/* CTA Button */}
           <div className="flex items-center">
-            <Button
-              variant="primary"
-              size="md"
-              className="hidden sm:inline-flex relative z-10"
-            >
-              Add Architecture
-            </Button>
+            <Link href="/architecture-builder" passHref>
+              <Button
+                variant="primary"
+                size="md"
+                className="hidden sm:inline-flex relative z-10"
+              >
+                Add Architecture
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
     </header>
   )
-} 
+}

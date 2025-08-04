@@ -1,0 +1,298 @@
+'use client'
+
+import React, { useState, useCallback, useEffect } from 'react'
+import { Button } from '@/components/ui/Button'
+import Canvas from '@/components/Canvas'
+import { VisualArchitecture, Component } from '@/types/architecture'
+
+const ArchitectureBuilder: React.FC = () => {
+  const [architecture, setArchitecture] = useState<VisualArchitecture>({
+    name: 'My Architecture',
+    type: 'microservices',
+    components: [
+      { id: 'api-gateway', type: 'gateway', position: { x: 100, y: 200 }, label: 'API Gateway' },
+      { id: 'user-service', type: 'service', position: { x: 300, y: 200 }, label: 'User Service' }
+    ],
+    connections: [
+      { from: 'api-gateway', to: 'user-service', type: 'http' }
+    ]
+  })
+
+  const [previewMode, setPreviewMode] = useState(false)
+  const [errors, setErrors] = useState<string[]>([])
+
+  // Load architecture from localStorage on mount
+  useEffect(() => {
+    const savedArchitecture = localStorage.getItem('architectureBuilder')
+    if (savedArchitecture) {
+      try {
+        setArchitecture(JSON.parse(savedArchitecture))
+      } catch (e) {
+        console.error('Failed to parse saved architecture', e)
+      }
+    }
+  }, [])
+
+  // Save architecture to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('architectureBuilder', JSON.stringify(architecture))
+  }, [architecture])
+
+  const validateArchitecture = useCallback(() => {
+    const newErrors: string[] = []
+    
+    if (!architecture.name.trim()) {
+      newErrors.push('Architecture name is required')
+    }
+    
+    if (architecture.components.length === 0) {
+      newErrors.push('At least one component is required')
+    }
+    
+    setErrors(newErrors)
+    return newErrors.length === 0
+  }, [architecture])
+
+  const handleExport = useCallback(() => {
+    if (!validateArchitecture()) {
+      return
+    }
+    
+    // Convert architecture to YAML format
+    const yamlContent = `name: "${architecture.name}"
+type: "${architecture.type}"
+components:
+${architecture.components.map(c => `  - id: "${c.id}"
+    type: "${c.type}"
+    position: {x: ${c.position.x}, y: ${c.position.y}}
+    label: "${c.label}"`).join('\n')}
+connections:
+${architecture.connections.map(conn => `  - from: "${conn.from}"
+    to: "${conn.to}"
+    type: "${conn.type}"`).join('\n')}`
+
+    // Generate GitHub issue URL with pre-filled template
+    // In a real application, these would be configurable
+    const githubUsername = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'username'
+    const githubRepo = process.env.NEXT_PUBLIC_GITHUB_REPO || 'repo'
+    
+    const title = encodeURIComponent(`[Architecture] ${architecture.name}`)
+    const body = encodeURIComponent(`## Architecture Submission
+
+### Description
+Please describe your architecture pattern and its use cases.
+
+### Architecture Code
+\`\`\`yaml
+${yamlContent}
+\`\`\`
+
+### Additional Notes
+Add any additional notes or considerations for this architecture.`)
+    
+    const url = `https://github.com/${githubUsername}/${githubRepo}/issues/new?template=architecture-submission.md&title=${title}&body=${body}`
+    window.open(url, '_blank')
+  }, [architecture, validateArchitecture])
+
+  const togglePreviewMode = useCallback(() => {
+    setPreviewMode(prev => !prev)
+  }, [])
+
+  const handleComponentMove = useCallback((id: string, position: { x: number; y: number }) => {
+    setArchitecture(prev => ({
+      ...prev,
+      components: prev.components.map(component =>
+        component.id === id ? { ...component, position } : component
+      )
+    }))
+  }, [])
+
+  const handleComponentAdd = useCallback((component: Omit<Component, 'id'>) => {
+    const newComponent: Component = {
+      ...component,
+      id: `component-${Date.now()}` // Simple ID generation
+    }
+    
+    setArchitecture(prev => ({
+      ...prev,
+      components: [...prev.components, newComponent]
+    }))
+  }, [])
+
+  const handleComponentRemove = useCallback((id: string) => {
+    setArchitecture(prev => ({
+      ...prev,
+      components: prev.components.filter(component => component.id !== id)
+    }))
+  }, [])
+
+  const handleAddComponentFromPalette = useCallback((type: string, label: string) => {
+    handleComponentAdd({
+      type,
+      position: { x: 200, y: 200 }, // Default position
+      label
+    })
+  }, [handleComponentAdd])
+
+  const handleImport = useCallback(() => {
+    const input = prompt('Paste the architecture code (JSON format) to import:')
+    if (!input) return
+    
+    try {
+      const importedArchitecture = JSON.parse(input) as VisualArchitecture
+      // Basic validation
+      if (
+        typeof importedArchitecture.name === 'string' &&
+        typeof importedArchitecture.type === 'string' &&
+        Array.isArray(importedArchitecture.components) &&
+        Array.isArray(importedArchitecture.connections)
+      ) {
+        setArchitecture(importedArchitecture)
+        alert('Architecture imported successfully!')
+      } else {
+        alert('Invalid architecture format')
+      }
+    } catch (e) {
+      alert('Invalid JSON format')
+    }
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Architecture Builder</h1>
+          <p className="text-gray-600">Create and visualize your multi-agent architecture</p>
+          <div className="mt-2 text-sm text-gray-500">
+            <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded">Tip:</span>
+            <span className="ml-2">Drag components from the palette to the canvas to build your architecture</span>
+          </div>
+        </header>
+
+        {errors.length > 0 && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <h3 className="text-red-800 font-medium mb-2">Validation Errors</h3>
+            <ul className="list-disc pl-5 space-y-1">
+              {errors.map((error, index) => (
+                <li key={index} className="text-red-600">{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
+            <h2 className="text-lg sm:text-xl font-semibold">Architecture Canvas</h2>
+            <div className="flex flex-wrap gap-2">
+              <div className="relative group">
+                <Button onClick={handleImport} variant="secondary" size="sm">
+                  Import
+                </Button>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                  Import architecture from JSON
+                </div>
+              </div>
+              <div className="relative group">
+                <Button onClick={togglePreviewMode} variant="secondary" size="sm">
+                  {previewMode ? 'Edit Mode' : 'Preview Mode'}
+                </Button>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                  {previewMode ? 'Switch back to edit mode' : 'Preview how this will look on the site'}
+                </div>
+              </div>
+              <div className="relative group">
+                <Button onClick={handleExport} variant="primary" size="sm">
+                  Export to GitHub
+                </Button>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                  Create GitHub issue with this architecture
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-2 border-dashed border-gray-300 rounded-lg h-64 sm:h-96">
+            {previewMode ? (
+              <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                <div className="text-center p-4">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-2">Architecture Preview</h3>
+                  <p className="text-gray-600 mb-4 text-sm">This is how your architecture will appear on the site</p>
+                  <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 max-w-md mx-auto">
+                    <h4 className="text-base sm:text-lg font-medium mb-2">{architecture.name}</h4>
+                    <p className="text-gray-600 text-xs sm:text-sm mb-4">Type: {architecture.type}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {architecture.components.map(component => (
+                        <span
+                          key={component.id}
+                          className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
+                        >
+                          {component.label}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Canvas
+                components={architecture.components}
+                connections={architecture.connections}
+                onComponentMove={handleComponentMove}
+                onComponentAdd={handleComponentAdd}
+                onComponentRemove={handleComponentRemove}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Architecture Code</h3>
+              <span className="text-xs text-gray-500">Read-only</span>
+            </div>
+            <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-xs">
+              <code>{JSON.stringify(architecture, null, 2)}</code>
+            </pre>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+            <h3 className="text-lg font-semibold mb-4">Component Palette</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handleAddComponentFromPalette('gateway', 'API Gateway')}
+              >
+                API Gateway
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handleAddComponentFromPalette('service', 'Service')}
+              >
+                Service
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handleAddComponentFromPalette('database', 'Database')}
+              >
+                Database
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handleAddComponentFromPalette('queue', 'Message Queue')}
+              >
+                Message Queue
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default ArchitectureBuilder
