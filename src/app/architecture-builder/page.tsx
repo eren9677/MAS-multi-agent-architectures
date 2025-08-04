@@ -3,15 +3,16 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import Canvas from '@/components/Canvas'
-import { VisualArchitecture, Component } from '@/types/architecture'
+import { Modal } from '@/components/ui/Modal'
+import { VisualArchitecture, Component, Connection } from '@/types/architecture'
 
 const ArchitectureBuilder: React.FC = () => {
   const [architecture, setArchitecture] = useState<VisualArchitecture>({
     name: 'My Architecture',
     type: 'microservices',
     components: [
-      { id: 'api-gateway', type: 'gateway', position: { x: 100, y: 200 }, label: 'API Gateway' },
-      { id: 'user-service', type: 'service', position: { x: 300, y: 200 }, label: 'User Service' }
+      { id: 'api-gateway', type: 'gateway', position: { x: 100, y: 200 }, label: 'API Gateway', color: '#dbeafe' },
+      { id: 'user-service', type: 'service', position: { x: 300, y: 200 }, label: 'User Service', color: '#dcfce7' }
     ],
     connections: [
       { from: 'api-gateway', to: 'user-service', type: 'http' }
@@ -20,6 +21,19 @@ const ArchitectureBuilder: React.FC = () => {
 
   const [previewMode, setPreviewMode] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
+  const [customComponents, setCustomComponents] = useState<Array<{ type: string; label: string; color?: string }>>([
+    { type: 'gateway', label: 'API Gateway', color: '#dbeafe' },
+    { type: 'service', label: 'Service', color: '#dcfce7' },
+    { type: 'database', label: 'Database', color: '#f0f9ff' },
+    { type: 'queue', label: 'Message Queue', color: '#fdf4ff' }
+  ])
+  const [newComponentType, setNewComponentType] = useState('')
+  const [newComponentLabel, setNewComponentLabel] = useState('')
+  const [newComponentColor, setNewComponentColor] = useState('#ffffff')
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [editingComponent, setEditingComponent] = useState<Component | null>(null)
+  const [editComponentLabel, setEditComponentLabel] = useState('')
+  const [editComponentColor, setEditComponentColor] = useState('#ffffff')
 
   // Load architecture from localStorage on mount
   useEffect(() => {
@@ -31,12 +45,26 @@ const ArchitectureBuilder: React.FC = () => {
         console.error('Failed to parse saved architecture', e)
       }
     }
+    
+    const savedCustomComponents = localStorage.getItem('customComponents')
+    if (savedCustomComponents) {
+      try {
+        setCustomComponents(JSON.parse(savedCustomComponents))
+      } catch (e) {
+        console.error('Failed to parse saved custom components', e)
+      }
+    }
   }, [])
 
   // Save architecture to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('architectureBuilder', JSON.stringify(architecture))
   }, [architecture])
+
+  // Save custom components to localStorage
+  useEffect(() => {
+    localStorage.setItem('customComponents', JSON.stringify(customComponents))
+  }, [customComponents])
 
   const validateArchitecture = useCallback(() => {
     const newErrors: string[] = []
@@ -122,17 +150,97 @@ Add any additional notes or considerations for this architecture.`)
   const handleComponentRemove = useCallback((id: string) => {
     setArchitecture(prev => ({
       ...prev,
-      components: prev.components.filter(component => component.id !== id)
+      components: prev.components.filter(component => component.id !== id),
+      connections: prev.connections.filter(
+        conn => conn.from !== id && conn.to !== id
+      )
     }))
   }, [])
 
-  const handleAddComponentFromPalette = useCallback((type: string, label: string) => {
+  const handleComponentEdit = useCallback((id: string, label: string) => {
+    setArchitecture(prev => ({
+      ...prev,
+      components: prev.components.map(component =>
+        component.id === id ? { ...component, label } : component
+      )
+    }))
+  }, [])
+
+  const handleOpenEditModal = useCallback((component: Component) => {
+    setEditingComponent(component)
+    setEditComponentLabel(component.label)
+    setEditComponentColor(component.color || '#ffffff')
+    setEditModalOpen(true)
+  }, [])
+
+  const handleSaveEditComponent = useCallback(() => {
+    if (editingComponent) {
+      setArchitecture(prev => ({
+        ...prev,
+        components: prev.components.map(component =>
+          component.id === editingComponent.id
+            ? { ...component, label: editComponentLabel, color: editComponentColor }
+            : component
+        )
+      }))
+      setEditModalOpen(false)
+      setEditingComponent(null)
+    }
+  }, [editingComponent, editComponentLabel, editComponentColor])
+
+  const handleConnectionAdd = useCallback((from: string, fromCorner: string, to: string, toCorner: string) => {
+    // Check if connection already exists (bidirectional check)
+    const connectionExists = architecture.connections.some(
+      conn =>
+        (conn.from === from && conn.to === to &&
+         conn.fromCorner === fromCorner && conn.toCorner === toCorner) ||
+        (conn.from === to && conn.to === from &&
+         conn.fromCorner === toCorner && conn.toCorner === fromCorner)
+    )
+    
+    if (!connectionExists) {
+      const newConnection: Connection = {
+        from,
+        to,
+        type: 'custom',
+        fromCorner,
+        toCorner
+      }
+      
+      setArchitecture(prev => ({
+        ...prev,
+        connections: [...prev.connections, newConnection]
+      }))
+    }
+  }, [architecture.connections])
+
+  const handleAddComponentFromPalette = useCallback((type: string, label: string, color?: string) => {
     handleComponentAdd({
       type,
       position: { x: 200, y: 200 }, // Default position
-      label
+      label,
+      color
     })
   }, [handleComponentAdd])
+
+  const handleAddCustomComponent = useCallback(() => {
+    if (newComponentType.trim() && newComponentLabel.trim()) {
+      const newComponent = {
+        type: newComponentType.trim(),
+        label: newComponentLabel.trim(),
+        color: newComponentColor
+      }
+      
+      setCustomComponents(prev => [...prev, newComponent])
+      setNewComponentType('')
+      setNewComponentLabel('')
+      setNewComponentColor('#ffffff')
+    }
+  }, [newComponentType, newComponentLabel, newComponentColor])
+
+  const handleRemoveCustomComponent = useCallback((index: number) => {
+    setCustomComponents(prev => prev.filter((_, i) => i !== index))
+  }, [])
 
   const handleImport = useCallback(() => {
     const input = prompt('Paste the architecture code (JSON format) to import:')
@@ -166,6 +274,7 @@ Add any additional notes or considerations for this architecture.`)
           <div className="mt-2 text-sm text-gray-500">
             <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded">Tip:</span>
             <span className="ml-2">Drag components from the palette to the canvas to build your architecture</span>
+            <span className="ml-2">Shift+Click on a component to start connecting it to another</span>
           </div>
         </header>
 
@@ -240,6 +349,13 @@ Add any additional notes or considerations for this architecture.`)
                 onComponentMove={handleComponentMove}
                 onComponentAdd={handleComponentAdd}
                 onComponentRemove={handleComponentRemove}
+                onComponentEdit={(id, label) => {
+                  const component = architecture.components.find(c => c.id === id);
+                  if (component) {
+                    handleOpenEditModal(component);
+                  }
+                }}
+                onConnectionAdd={handleConnectionAdd}
               />
             )}
           </div>
@@ -258,39 +374,126 @@ Add any additional notes or considerations for this architecture.`)
           
           <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
             <h3 className="text-lg font-semibold mb-4">Component Palette</h3>
-            <div className="grid grid-cols-2 gap-3">
+            
+            {/* Custom Component Creation */}
+            <div className="mb-6 p-3 bg-gray-50 rounded-md">
+              <h4 className="font-medium mb-2">Add Custom Component</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                <input
+                  type="text"
+                  placeholder="Component Type"
+                  value={newComponentType}
+                  onChange={(e) => setNewComponentType(e.target.value)}
+                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="Component Label"
+                  value={newComponentLabel}
+                  onChange={(e) => setNewComponentLabel(e.target.value)}
+                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                />
+                <input
+                  type="color"
+                  value={newComponentColor}
+                  onChange={(e) => setNewComponentColor(e.target.value)}
+                  className="border border-gray-300 rounded px-2 py-1 text-sm w-full"
+                />
+              </div>
               <Button
-                variant="secondary"
+                variant="primary"
                 size="sm"
-                onClick={() => handleAddComponentFromPalette('gateway', 'API Gateway')}
+                onClick={handleAddCustomComponent}
+                disabled={!newComponentType.trim() || !newComponentLabel.trim()}
               >
-                API Gateway
+                Add to Palette
               </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => handleAddComponentFromPalette('service', 'Service')}
-              >
-                Service
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => handleAddComponentFromPalette('database', 'Database')}
-              >
-                Database
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => handleAddComponentFromPalette('queue', 'Message Queue')}
-              >
-                Message Queue
-              </Button>
+            </div>
+            
+            {/* Custom Components List */}
+            <div className="mb-4">
+              <h4 className="font-medium mb-2">Your Components</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                {customComponents.map((component, index) => (
+                  <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                    <div>
+                      <div className="font-medium text-sm">{component.label}</div>
+                      <div className="text-xs text-gray-500">{component.type}</div>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleAddComponentFromPalette(component.type, component.label, component.color)}
+                      >
+                        Add
+                      </Button>
+                      <button
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() => handleRemoveCustomComponent(index)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Instructions */}
+            <div className="mt-4 text-xs text-gray-500">
+              <p className="mb-1">• Double-click on components to edit their properties</p>
+              <p className="mb-1">• Shift+Click on a component to connect it to another</p>
+              <p>• Click the + button on components to start connections</p>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Edit Component Modal */}
+      <Modal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        title="Edit Component"
+        size="sm"
+      >
+        {editingComponent && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Label</label>
+              <input
+                type="text"
+                value={editComponentLabel}
+                onChange={(e) => setEditComponentLabel(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Color</label>
+              <input
+                type="color"
+                value={editComponentColor}
+                onChange={(e) => setEditComponentColor(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                variant="secondary"
+                onClick={() => setEditModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleSaveEditComponent}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }
