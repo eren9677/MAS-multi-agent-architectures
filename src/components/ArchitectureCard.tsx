@@ -57,15 +57,6 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
         {/* Author and Date */}
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center space-x-2">
-            {architecture.author.avatar && (
-              <Image
-                src={architecture.author.avatar}
-                alt={architecture.author.name}
-                width={16}
-                height={16}
-                className="rounded-full"
-              />
-            )}
             <span className="text-xs text-gray-500 dark:text-gray-400">
               @{architecture.author.name.split(' ')[0].toLowerCase()}
             </span>
@@ -79,10 +70,14 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
   )
 }
 
-export const AddArchitectureCard: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+export const AddArchitectureCard: React.FC = () => {
+  const handleRedirect = () => {
+    window.open('https://github.com/eren9677/awesome-multi-agent-architectures/pulls', '_blank');
+  };
+
   return (
-    <Card 
-      onClick={onClick} 
+    <Card
+      onClick={handleRedirect}
       className="w-full h-64 border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500 bg-white dark:bg-dark-card rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group"
     >
       <div className="p-4 h-full flex flex-col items-center justify-center text-center">
@@ -97,7 +92,7 @@ export const AddArchitectureCard: React.FC<{ onClick: () => void }> = ({ onClick
           Add New Architecture
         </h3>
         <p className="text-xs text-gray-600 dark:text-dark-text-secondary line-clamp-2">
-          Share your creative multi-agent architecture with the community
+          Share your creative multi-agent architecture with the community. Submit a pull request on GitHub.
         </p>
       </div>
     </Card>

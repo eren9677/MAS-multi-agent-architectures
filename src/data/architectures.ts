@@ -64,7 +64,7 @@ export const architectures: Architecture[] = [
     category: ['Hierarchical', 'Management'],
     tags: ['hierarchy', 'management', 'delegation', 'coordination'],
     diagram: {
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Hierarchical Command Structure - Tree diagram with manager at top, workers below'
     },
     implementation: {
@@ -114,7 +114,7 @@ export const architectures: Architecture[] = [
     category: ['Distributed', 'Swarm'],
     tags: ['p2p', 'decentralized', 'swarm', 'consensus'],
     diagram: {
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&h=400&fit=crop',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Peer-to-Peer Swarm Network - Mesh network with interconnected circular nodes'
     },
     implementation: {
@@ -168,7 +168,7 @@ export const architectures: Architecture[] = [
     category: ['Pipeline', 'Specialized'],
     tags: ['pipeline', 'assembly-line', 'specialized', 'workflow'],
     diagram: {
-      image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Pipeline Assembly Line - Horizontal conveyor belt with specialized stations'
     },
     implementation: {
@@ -274,7 +274,7 @@ class AssemblyStage {
     category: ['Adaptive', 'Ensemble'],
     tags: ['adaptive', 'ensemble', 'dynamic', 'context-aware'],
     diagram: {
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&h=400&fit=crop',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Adaptive Dynamic Ensemble - Flexible circle with agents that can connect/disconnect'
     },
     implementation: {
@@ -394,7 +394,7 @@ class Tier {
     category: ['Competitive', 'Market'],
     tags: ['competitive', 'market', 'bidding', 'optimization'],
     diagram: {
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Competitive Market Model - Agents in marketplace with bidding/competition indicators'
     },
     implementation: {
@@ -450,7 +450,7 @@ class Tier {
     category: ['Collaborative', 'Democratic'],
     tags: ['collaborative', 'democratic', 'consensus', 'equal-participation'],
     diagram: {
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&h=400&fit=crop',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Collaborative Circle - Agents arranged in circle with bidirectional connections'
     },
     implementation: {
