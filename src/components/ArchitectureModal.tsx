@@ -20,19 +20,19 @@ export const ArchitectureModal: React.FC<ArchitectureModalProps> = ({
   if (!architecture) return null
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
-      <div className="space-y-6">
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <div className="space-y-4">
         {/* Header */}
-        <div className="border-b border-gray-200 pb-4">
+        <div className="border-b border-gray-200 pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
                 {architecture.title}
               </h2>
-              <p className="text-gray-600 mb-4">
+              <p className="text-sm text-gray-600 mb-3">
                 {architecture.longDescription}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {architecture.category.map((cat) => (
                   <Badge key={cat} variant="primary">
                     {cat}

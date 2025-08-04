@@ -16,7 +16,7 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
   return (
     <Card 
       onClick={onClick} 
-      className="w-full h-64 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group"
+      className="w-full h-64 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-lg cursor-pointer transition-all duration-200 ease hover:shadow-lg dark:hover:shadow-dark-hover group"
     >
       <div className="p-4 h-full flex flex-col">
         {/* Image */}
