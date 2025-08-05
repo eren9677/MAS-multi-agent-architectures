@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Architecture } from '@/types'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
+import { ArchitecturePreview } from '@/components/ArchitecturePreview'
 import { getPerformanceColor, getPerformanceLabel } from '@/utils/helpers'
 
 interface ArchitectureCardProps {
@@ -16,18 +17,30 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
   return (
     <Card 
       onClick={onClick} 
-      className="w-full h-64 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-lg cursor-pointer transition-all duration-200 ease hover:shadow-lg dark:hover:shadow-dark-hover group"
+      className="w-full h-80 bg-white dark:bg-dark-card border border-gray-200 dark:border-dark-border rounded-lg cursor-pointer transition-all duration-200 ease hover:shadow-lg dark:hover:shadow-dark-hover group"
     >
       <div className="p-4 h-full flex flex-col">
-        {/* Image */}
-        <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
-          <Image
-            src={architecture.diagram.image}
-            alt={architecture.diagram.alt}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          />
+        {/* Visual Preview or Image */}
+        <div className="relative w-full h-48 mb-3 rounded-md overflow-hidden">
+          {architecture.visual ? (
+            <ArchitecturePreview
+              architecture={architecture.visual}
+              width={300}
+              height={150}
+              showTitle={false}
+              showType={false}
+              showComponents={false}
+              className="h-full"
+            />
+          ) : (
+            <Image
+              src={architecture.diagram.image}
+              alt={architecture.diagram.alt}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            />
+          )}
         </div>
 
         {/* Title */}
@@ -78,7 +91,7 @@ export const AddArchitectureCard: React.FC = () => {
   return (
     <Card
       onClick={handleRedirect}
-      className="w-full h-64 border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500 bg-white dark:bg-dark-card rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group"
+      className="w-full h-80 border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500 bg-white dark:bg-dark-card rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group"
     >
       <div className="p-4 h-full flex flex-col items-center justify-center text-center">
         {/* Plus Icon */}

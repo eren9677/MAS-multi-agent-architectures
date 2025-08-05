@@ -554,5 +554,203 @@ class Tier {
     updatedAt: '2024-01-30',
     githubUrl: 'https://github.com/example/feedback-loop',
     documentationUrl: 'https://docs.example.com/feedback-loop'
+  },
+  {
+    id: 'supervisor-agent-architecture',
+    title: 'Supervisor-Agent Architecture',
+    description: 'In a Supervisor-Agent architecture, one agent acts as the central "supervisor" or "orchestrator." This supervisor agent is responsible for receiving a task, breaking it down into smaller sub-tasks, and delegating those sub-tasks to specialized "worker" agents. The supervisor then monitors the progress of the worker agents and synthesizes their outputs to produce the final result. This architecture is easy to start with and is effective for workflows that can be clearly broken down into distinct steps.',
+    longDescription: 'The Supervisor-Agent architecture features a central supervisor agent that orchestrates specialized worker agents. The supervisor receives tasks, decomposes them into manageable sub-tasks, and delegates them to appropriate worker agents based on their specializations. As worker agents complete their assignments, the supervisor monitors progress and collects results, ultimately synthesizing outputs to generate the final solution. This architecture is particularly effective for complex workflows that can be clearly partitioned into distinct, specialized steps, making it an excellent starting point for multi-agent systems.',
+    author: {
+      name: 'Dr. Michael Roberts',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+      github: 'michael-roberts-ai'
+    },
+    category: ['Hierarchical', 'Orchestration'],
+    tags: ['supervisor', 'orchestrator', 'delegation', 'task-management', 'workflow'],
+    diagram: {
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      alt: 'Supervisor-Agent Architecture - Central supervisor with connections to specialized worker agents'
+    },
+    implementation: {
+      codeExample: `class SupervisorAgent {
+  constructor(workers) {
+    this.workers = workers;
+    this.taskQueue = [];
   }
-] 
+  
+  async processTask(task) {
+    // Decompose task into subtasks
+    const subtasks = this.decomposeTask(task);
+    
+    // Delegate subtasks to appropriate workers
+    const promises = subtasks.map(subtask => {
+      const worker = this.selectWorker(subtask.type);
+      return worker.process(subtask);
+    });
+    
+    // Collect and synthesize results
+    const results = await Promise.all(promises);
+    return this.synthesizeResults(results);
+  }
+  
+  selectWorker(taskType) {
+    // Logic to select appropriate worker based on task type
+    return this.workers.find(worker => worker.specialties.includes(taskType));
+  }
+}`,
+      language: 'javascript'
+    },
+    useCases: [
+      'Content Creation: A supervisor agent can manage a team of agents including a "researcher" to gather information, a "writer" to draft the content, and an "editor" to proofread and format it.',
+      'Customer Support: A supervisor agent can route a customer query to the appropriate specialized agent, such as a "billing inquiries" agent or a "technical support" agent.',
+      'Data Analysis: A supervisor can oversee a "data gathering" agent, a "data cleaning" agent, and a "data visualization" agent to generate a report.'
+    ],
+    performance: {
+      scalability: 7,
+      complexity: 6,
+      reliability: 8
+    },
+    createdAt: '2024-02-01',
+    updatedAt: '2024-02-01',
+    githubUrl: 'https://github.com/example/supervisor-agent',
+    documentationUrl: 'https://docs.example.com/supervisor-agent',
+    visual: {
+      name: "Supervisor-Agent Architecture",
+      type: "supervisor-agent",
+      components: [
+        {
+          id: "api-gateway",
+          type: "input",
+          position: {
+            x: 301,
+            y: 24
+          },
+          label: "User Request",
+          color: "#53d5fd"
+        },
+        {
+          id: "user-service",
+          type: "agent",
+          position: {
+            x: 297,
+            y: 154
+          },
+          label: "Supervisor Agent",
+          color: "#e392fe"
+        },
+        {
+          id: "component-1754402084967-sde0h8o5v",
+          type: "agent",
+          position: {
+            x: 21,
+            y: 300
+          },
+          label: "Researcher Agent",
+          color: "#ffe4a8"
+        },
+        {
+          id: "component-1754402094901-1kj9kyi2m",
+          type: "agent",
+          position: {
+            x: 427,
+            y: 354
+          },
+          label: "Editor Agent",
+          color: "#ffe4a8"
+        },
+        {
+          id: "component-1754402097646-awfvubwit",
+          type: "agent",
+          position: {
+            x: 209,
+            y: 356
+          },
+          label: "Writer Agent",
+          color: "#ffe4a8"
+        },
+        {
+          id: "component-1754402315721-iwxuq8hsk",
+          type: "output",
+          position: {
+            x: 582,
+            y: 167
+          },
+          label: "Final Output",
+          color: "#94e3fe"
+        }
+      ],
+      connections: [
+        {
+          id: "conn-1",
+          from: "api-gateway",
+          to: "user-service",
+          type: "http",
+          name: "files"
+        },
+        {
+          id: "conn-1754402129993-lle7bh1eh",
+          name: "Order",
+          from: "user-service",
+          to: "component-1754402084967-sde0h8o5v",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754402132303-ahyardjh2",
+          name: "Order",
+          from: "user-service",
+          to: "component-1754402097646-awfvubwit",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754402134812-kqvvukodz",
+          name: "Order",
+          from: "user-service",
+          to: "component-1754402094901-1kj9kyi2m",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754402179140-mvgsqmpah",
+          name: "Response",
+          from: "component-1754402084967-sde0h8o5v",
+          to: "user-service",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754402212514-hzd1li4kb",
+          name: "Response",
+          from: "component-1754402097646-awfvubwit",
+          to: "user-service",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754402223852-arjqdqk05",
+          name: "Response",
+          from: "component-1754402094901-1kj9kyi2m",
+          to: "user-service",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754402323973-h48l5hubg",
+          name: "files",
+          from: "user-service",
+          to: "component-1754402315721-iwxuq8hsk",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        }
+      ]
+    }
+  }
+]

@@ -1,3 +1,5 @@
+import { VisualArchitecture } from './architecture';
+
 export interface Architecture {
   id: string
   title: string
@@ -28,6 +30,7 @@ export interface Architecture {
   updatedAt: string
   githubUrl?: string
   documentationUrl?: string
+  visual?: VisualArchitecture
 }
 
 export interface FilterOptions {
