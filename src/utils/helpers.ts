@@ -31,8 +31,8 @@ export const filterArchitectures = (
       break
     case 'popular':
       filtered.sort((a, b) => {
-        const aScore = a.performance.scalability + a.performance.reliability
-        const bScore = b.performance.scalability + b.performance.reliability
+        const aScore = a.performance ? a.performance.scalability + a.performance.reliability : 0
+        const bScore = b.performance ? b.performance.scalability + b.performance.reliability : 0
         return bScore - aScore
       })
       break

@@ -21,7 +21,7 @@ export interface Architecture {
     language: string
   }
   useCases: string[]
-  performance: {
+  performance?: {
     scalability: number
     complexity: number
     reliability: number

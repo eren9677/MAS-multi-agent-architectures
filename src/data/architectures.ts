@@ -605,11 +605,6 @@ class Tier {
       'Customer Support: A supervisor agent can route a customer query to the appropriate specialized agent, such as a "billing inquiries" agent or a "technical support" agent.',
       'Data Analysis: A supervisor can oversee a "data gathering" agent, a "data cleaning" agent, and a "data visualization" agent to generate a report.'
     ],
-    performance: {
-      scalability: 7,
-      complexity: 6,
-      reliability: 8
-    },
     createdAt: '2024-02-01',
     updatedAt: '2024-02-01',
     githubUrl: 'https://github.com/example/supervisor-agent',

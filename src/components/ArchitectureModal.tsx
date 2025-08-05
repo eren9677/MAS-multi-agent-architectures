@@ -101,38 +101,40 @@ export const ArchitectureModal: React.FC<ArchitectureModalProps> = ({
         </div>
 
         {/* Performance Metrics */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">Performance Metrics</h3>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className={`text-2xl font-bold ${getPerformanceColor(architecture.performance.scalability)}`}>
-                {architecture.performance.scalability}/10
+        {architecture.performance && (
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Performance Metrics</h3>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className={`text-2xl font-bold ${getPerformanceColor(architecture.performance.scalability)}`}>
+                  {architecture.performance.scalability}/10
+                </div>
+                <div className="text-sm text-gray-600">Scalability</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {getPerformanceLabel(architecture.performance.scalability)}
+                </div>
               </div>
-              <div className="text-sm text-gray-600">Scalability</div>
-              <div className="text-xs text-gray-500 mt-1">
-                {getPerformanceLabel(architecture.performance.scalability)}
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className={`text-2xl font-bold ${getPerformanceColor(architecture.performance.complexity)}`}>
+                  {architecture.performance.complexity}/10
+                </div>
+                <div className="text-sm text-gray-600">Complexity</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {getPerformanceLabel(architecture.performance.complexity)}
+                </div>
               </div>
-            </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className={`text-2xl font-bold ${getPerformanceColor(architecture.performance.complexity)}`}>
-                {architecture.performance.complexity}/10
-              </div>
-              <div className="text-sm text-gray-600">Complexity</div>
-              <div className="text-xs text-gray-500 mt-1">
-                {getPerformanceLabel(architecture.performance.complexity)}
-              </div>
-            </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className={`text-2xl font-bold ${getPerformanceColor(architecture.performance.reliability)}`}>
-                {architecture.performance.reliability}/10
-              </div>
-              <div className="text-sm text-gray-600">Reliability</div>
-              <div className="text-xs text-gray-500 mt-1">
-                {getPerformanceLabel(architecture.performance.reliability)}
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className={`text-2xl font-bold ${getPerformanceColor(architecture.performance.reliability)}`}>
+                  {architecture.performance.reliability}/10
+                </div>
+                <div className="text-sm text-gray-600">Reliability</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {getPerformanceLabel(architecture.performance.reliability)}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Use Cases */}
         <div>
