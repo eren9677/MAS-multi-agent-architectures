@@ -138,18 +138,23 @@ const getBestConnectionSides = (fromComponent: Component, toComponent: Component
 }
 
 const generateSmoothPath = (fromPoint: {x: number, y: number}, toPoint: {x: number, y: number}, isSelfConnection = false, index = 0) => {
-  const offset = index * 15; // Offset for multiple connections
+  const offset = index * 40; // Increased spacing between multiple connections for better visibility
 
   if (isSelfConnection) {
-    // Create a loop for self-connections, increasing size for each subsequent connection
-    const loopSize = 40 + offset;
-    const midX = fromPoint.x + loopSize;
-    const midY1 = fromPoint.y - loopSize;
-    const midY2 = toPoint.y - loopSize;
+    // Create a larger, more visible loop for self-connections
+    const baseLoopSize = 80; // Increased base size for better visibility
+    const loopSize = baseLoopSize + (index * 50); // More spacing between multiple self-connections
+    const loopHeight = 60 + (index * 30); // Vary height for multiple self-connections
     
-    return `M ${fromPoint.x} ${fromPoint.y} 
-            C ${fromPoint.x + loopSize / 2} ${midY1} 
-              ${toPoint.x + loopSize / 2} ${midY2} 
+    // Create a more prominent loop that extends further from the component
+    const controlX1 = fromPoint.x + loopSize;
+    const controlY1 = fromPoint.y - loopHeight;
+    const controlX2 = toPoint.x + loopSize;
+    const controlY2 = toPoint.y - loopHeight;
+    
+    return `M ${fromPoint.x} ${fromPoint.y}
+            C ${controlX1} ${controlY1}
+              ${controlX2} ${controlY2}
               ${toPoint.x} ${toPoint.y}`;
   }
 
@@ -158,19 +163,19 @@ const generateSmoothPath = (fromPoint: {x: number, y: number}, toPoint: {x: numb
   const distance = Math.sqrt(dx * dx + dy * dy)
   
   // Control point offset based on distance
-  const controlOffset = Math.min(distance * 0.3, 60)
+  const controlOffset = Math.min(distance * 0.3, 80) // Increased max control offset
   
   // Determine control points based on direction
   let cp1x, cp1y, cp2x, cp2y
   
   if (Math.abs(dx) > Math.abs(dy)) {
-    // Horizontal flow
+    // Horizontal flow - increased spacing for multiple connections
     cp1x = fromPoint.x + (dx > 0 ? controlOffset : -controlOffset)
     cp1y = fromPoint.y + offset
     cp2x = toPoint.x + (dx > 0 ? -controlOffset : controlOffset)
     cp2y = toPoint.y + offset
   } else {
-    // Vertical flow
+    // Vertical flow - increased spacing for multiple connections
     cp1x = fromPoint.x + offset
     cp1y = fromPoint.y + (dy > 0 ? controlOffset : -controlOffset)
     cp2x = toPoint.x + offset
@@ -444,13 +449,13 @@ const Canvas: React.FC<CanvasProps> = ({
 
         const pathData = generateSmoothPath(fromPoint, toPoint, isSelfConnection, index);
 
-        // Calculate label position, slightly offset for multiple connections
-        const labelOffset = index * 15;
+        // Calculate label position with better spacing for multiple connections
+        const labelOffset = index * 40; // Increased label spacing to match connection spacing
         const labelX = isSelfConnection
-          ? fromPoint.x + 40 + labelOffset
+          ? fromPoint.x + 80 + (index * 50) // Position labels further out for self-connections
           : (fromPoint.x + toPoint.x) / 2;
         const labelY = isSelfConnection
-          ? fromPoint.y - 40
+          ? fromPoint.y - 60 - (index * 30) // Position labels higher for self-connections
           : (fromPoint.y + toPoint.y) / 2 + labelOffset - 8;
         
         const color = CONNECTION_COLORS[index % CONNECTION_COLORS.length];
