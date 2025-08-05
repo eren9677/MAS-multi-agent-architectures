@@ -235,6 +235,12 @@ const Canvas: React.FC<CanvasProps> = ({
     const target = e.target as HTMLElement
     const componentElement = target.closest('[data-component-id]') as HTMLElement
     
+    // If clicking on any SVG element, don't interfere - let SVG handle it
+    if (target.tagName === 'circle' || target.tagName === 'path' || target.tagName === 'text' || target.tagName === 'rect') {
+      // Don't prevent default, let the SVG element handle the event
+      return
+    }
+    
     // Check if clicking on a component (but not connection buttons)
     if (componentElement && !target.closest('button')) {
       const componentId = componentElement.getAttribute('data-component-id')!
@@ -254,7 +260,6 @@ const Canvas: React.FC<CanvasProps> = ({
       })
     } else {
       // If not clicking on a component, always allow canvas panning
-      // This includes clicks on SVG paths, empty space, etc.
       setDragState({
         type: 'canvas',
         startPos: { x: e.clientX, y: e.clientY }
@@ -468,8 +473,7 @@ const Canvas: React.FC<CanvasProps> = ({
               fontWeight="bold"
               fill="#334155"
               textAnchor="middle"
-              className="pointer-events-auto cursor-pointer select-none"
-              onClick={() => onConnectionEdit(conn)}
+              className="select-none"
             >
               {conn.name}
             </text>
@@ -578,6 +582,26 @@ const Canvas: React.FC<CanvasProps> = ({
             height: CANVAS_BOUNDS.maxY,
             left: 0,
             top: 0
+          }}
+          onClick={(e) => {
+            const target = e.target as SVGElement
+            console.log('SVG clicked, target:', target.tagName, target)
+            
+            // Check if clicked element is a connection path or text
+            if (target.tagName === 'path' || target.tagName === 'text') {
+              // Find the parent g element to get the connection data
+              const gElement = target.closest('g')
+              if (gElement) {
+                const connectionId = gElement.getAttribute('data-connection-id')
+                if (connectionId) {
+                  const connection = connections.find(c => c.id === connectionId)
+                  if (connection) {
+                    console.log('Connection found:', connection)
+                    onConnectionEdit(connection)
+                  }
+                }
+              }
+            }
           }}
         >
           <defs>

@@ -56,7 +56,7 @@ export const Modal: React.FC<ModalProps> = ({
         
         {/* Modal */}
         <div
-          className={`relative w-full ${sizeClasses[size]} bg-light-card dark:bg-dark-card rounded-xl shadow-xl transform transition-all duration-300 ease-in-out`}
+          className={`relative w-full ${sizeClasses[size]} bg-white dark:bg-gray-800 rounded-xl shadow-xl transform transition-all duration-300 ease-in-out`}
           style={{
             position: 'fixed',
             top: '50%',
@@ -71,8 +71,8 @@ export const Modal: React.FC<ModalProps> = ({
         >
           {/* Header */}
           {title && (
-            <div className="flex items-center justify-between p-6 border-b border-light-border dark:border-dark-border">
-              <h2 id="modal-title" className="text-xl font-semibold text-light-text dark:text-dark-text">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-600">
+              <h2 id="modal-title" className="text-xl font-semibold text-gray-900 dark:text-white">
                 {title}
               </h2>
               <button

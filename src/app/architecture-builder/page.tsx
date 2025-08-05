@@ -322,6 +322,16 @@ Add any additional notes or considerations for this architecture.`)
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
             <h2 className="text-lg sm:text-xl font-semibold">Architecture Canvas</h2>
             <div className="flex flex-wrap gap-2">
+              {architecture.connections.map(conn => (
+                <button
+                  key={conn.id}
+                  onClick={() => handleOpenConnectionEditModal(conn)}
+                  className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm transition-colors"
+                  title={`Edit connection: ${conn.name}`}
+                >
+                  ✎ {conn.name}
+                </button>
+              ))}
               <div className="relative group">
                 <Button onClick={handleImport} variant="secondary" size="sm">
                   Import
