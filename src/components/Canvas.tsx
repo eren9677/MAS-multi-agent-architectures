@@ -174,7 +174,8 @@ const Canvas: React.FC<CanvasProps> = ({
     const target = e.target as HTMLElement
     const componentElement = target.closest('[data-component-id]') as HTMLElement
     
-    if (componentElement) {
+    // Check if clicking on a component (but not connection buttons)
+    if (componentElement && !target.closest('button')) {
       const componentId = componentElement.getAttribute('data-component-id')!
       const component = components.find(c => c.id === componentId)
       if (!component) return
@@ -190,7 +191,9 @@ const Canvas: React.FC<CanvasProps> = ({
           y: canvasPos.y - component.position.y
         }
       })
-    } else if (e.target === canvasRef.current) {
+    } else {
+      // If not clicking on a component, always allow canvas panning
+      // This includes clicks on SVG paths, empty space, etc.
       setDragState({
         type: 'canvas',
         startPos: { x: e.clientX, y: e.clientY }
@@ -467,7 +470,8 @@ const Canvas: React.FC<CanvasProps> = ({
           className="absolute inset-0 w-full h-full pointer-events-none"
           style={{
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
-            transformOrigin: '0 0'
+            transformOrigin: '0 0',
+            zIndex: 1
           }}
         >
           <defs>
@@ -498,12 +502,24 @@ const Canvas: React.FC<CanvasProps> = ({
           {tempConnection}
         </svg>
 
+        {/* Invisible background layer to capture clicks for panning */}
+        <div
+          className="absolute inset-0 w-full h-full"
+          style={{
+            transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
+            transformOrigin: '0 0',
+            zIndex: 0,
+            backgroundColor: 'transparent'
+          }}
+        />
+
         {/* Components Layer */}
         <div
           className="absolute inset-0"
           style={{
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
-            transformOrigin: '0 0'
+            transformOrigin: '0 0',
+            zIndex: 2
           }}
         >
           {components.map(component => (
