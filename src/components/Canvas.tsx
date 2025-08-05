@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 
 // Types
@@ -10,9 +11,11 @@ interface Component {
 }
 
 interface Connection {
+  id: string
   from: string
   to: string
   type: string
+  name: string
   fromCorner?: string
   toCorner?: string
 }
@@ -25,6 +28,7 @@ interface CanvasProps {
   onComponentRemove: (id: string) => void
   onComponentEdit?: (id: string, label: string) => void
   onConnectionAdd?: (from: string, fromCorner: string, to: string, toCorner: string) => void
+  onConnectionEdit: (connection: Connection) => void
 }
 
 // Constants
@@ -33,12 +37,14 @@ const COMPONENT_HEIGHT = 60
 const CONNECTION_POINT_SIZE = 8
 const MIN_SCALE = 0.25
 const MAX_SCALE = 3
+const CONNECTION_COLORS = ['#4f46e5', '#db2777', '#059669', '#d97706', '#6d28d9'];
+
 
 // Canvas boundaries - define the working area
 const CANVAS_BOUNDS = {
   minX: 0,
   minY: 0,
-  maxX: 2000,
+  maxX: 3000,
   maxY: 1500
 }
 const GRID_SIZE = 50 // Grid spacing for visual reference
@@ -131,20 +137,20 @@ const getBestConnectionSides = (fromComponent: Component, toComponent: Component
   }
 }
 
-const generateSmoothPath = (fromPoint: {x: number, y: number}, toPoint: {x: number, y: number}, isSelfConnection = false) => {
+const generateSmoothPath = (fromPoint: {x: number, y: number}, toPoint: {x: number, y: number}, isSelfConnection = false, index = 0) => {
+  const offset = index * 15; // Offset for multiple connections
+
   if (isSelfConnection) {
-    // Create a loop for self-connections
-    const loopSize = 40
-    const midX = fromPoint.x + loopSize
-    const midY = fromPoint.y - loopSize
+    // Create a loop for self-connections, increasing size for each subsequent connection
+    const loopSize = 40 + offset;
+    const midX = fromPoint.x + loopSize;
+    const midY1 = fromPoint.y - loopSize;
+    const midY2 = toPoint.y - loopSize;
     
     return `M ${fromPoint.x} ${fromPoint.y} 
-            C ${fromPoint.x + loopSize/2} ${fromPoint.y} 
-              ${midX} ${midY} 
-              ${midX} ${midY}
-            C ${midX} ${midY} 
-              ${toPoint.x - loopSize/2} ${toPoint.y} 
-              ${toPoint.x} ${toPoint.y}`
+            C ${fromPoint.x + loopSize / 2} ${midY1} 
+              ${toPoint.x + loopSize / 2} ${midY2} 
+              ${toPoint.x} ${toPoint.y}`;
   }
 
   const dx = toPoint.x - fromPoint.x
@@ -160,14 +166,14 @@ const generateSmoothPath = (fromPoint: {x: number, y: number}, toPoint: {x: numb
   if (Math.abs(dx) > Math.abs(dy)) {
     // Horizontal flow
     cp1x = fromPoint.x + (dx > 0 ? controlOffset : -controlOffset)
-    cp1y = fromPoint.y
+    cp1y = fromPoint.y + offset
     cp2x = toPoint.x + (dx > 0 ? -controlOffset : controlOffset)
-    cp2y = toPoint.y
+    cp2y = toPoint.y + offset
   } else {
     // Vertical flow
-    cp1x = fromPoint.x
+    cp1x = fromPoint.x + offset
     cp1y = fromPoint.y + (dy > 0 ? controlOffset : -controlOffset)
-    cp2x = toPoint.x
+    cp2x = toPoint.x + offset
     cp2y = toPoint.y + (dy > 0 ? -controlOffset : controlOffset)
   }
   
@@ -181,7 +187,8 @@ const Canvas: React.FC<CanvasProps> = ({
   onComponentAdd,
   onComponentRemove,
   onComponentEdit,
-  onConnectionAdd
+  onConnectionAdd,
+  onConnectionEdit
 }) => {
   // State management
   const canvasRef = useRef<HTMLDivElement>(null)
@@ -323,13 +330,7 @@ const Canvas: React.FC<CanvasProps> = ({
         const toComp = components.find(c => c.id === targetComponentId)
         
         if (fromComp && toComp) {
-          // Check if connection already exists
-          const connectionExists = connections.some(conn => 
-            (conn.from === connectionState.fromComponentId && conn.to === targetComponentId) ||
-            (conn.from === targetComponentId && conn.to === connectionState.fromComponentId)
-          )
-          
-          if (!connectionExists && onConnectionAdd) {
+          if (onConnectionAdd) {
             onConnectionAdd(connectionState.fromComponentId, 'auto', targetComponentId, 'auto')
           }
         }
@@ -339,7 +340,7 @@ const Canvas: React.FC<CanvasProps> = ({
     }
     
     setDragState({ type: 'none' })
-  }, [connectionState, connections, onConnectionAdd, components, screenToCanvas])
+  }, [connectionState, onConnectionAdd, components, screenToCanvas])
 
   const handleConnectionStart = useCallback((e: React.MouseEvent, componentId: string) => {
     e.stopPropagation()
@@ -412,52 +413,71 @@ const Canvas: React.FC<CanvasProps> = ({
 
   // Render connections with stable positioning
   const renderedConnections = useMemo(() => {
-    return connections.map((conn, index) => {
-      const fromComponent = components.find(c => c.id === conn.from)
-      const toComponent = components.find(c => c.id === conn.to)
-      
-      if (!fromComponent || !toComponent) return null
-      
-      const isSelfConnection = fromComponent.id === toComponent.id
-      const { fromSide, toSide } = getBestConnectionSides(fromComponent, toComponent)
-      
-      const fromPoint = getConnectionPoint(fromComponent, fromSide as any)
-      const toPoint = getConnectionPoint(toComponent, toSide as any)
-      
-      const pathData = generateSmoothPath(fromPoint, toPoint, isSelfConnection)
-      
-      // Calculate label position
-      const labelX = isSelfConnection 
-        ? fromPoint.x + 40 
-        : (fromPoint.x + toPoint.x) / 2
-      const labelY = isSelfConnection 
-        ? fromPoint.y - 40 
-        : (fromPoint.y + toPoint.y) / 2 - 8
+    const connectionGroups: { [key: string]: Connection[] } = {};
 
-      return (
-        <g key={`${conn.from}-${conn.to}-${index}`}>
-          <path
-            d={pathData}
-            stroke="#4f46e5"
-            strokeWidth={2}
-            fill="none"
-            markerEnd="url(#arrowhead)"
-            className="transition-all duration-200 hover:stroke-indigo-600 hover:stroke-width-3"
-          />
-          <text
-            x={labelX}
-            y={labelY}
-            fontSize={10}
-            fill="#6b7280"
-            textAnchor="middle"
-            className="pointer-events-none select-none"
-          >
-            {conn.type}
-          </text>
-        </g>
-      )
-    })
-  }, [components, connections])
+    connections.forEach(conn => {
+      // Normalize the key so that A->B and B->A are grouped together for path offsetting, but not for rendering direction.
+      const key = [conn.from, conn.to].sort().join('-');
+      if (!connectionGroups[key]) {
+        connectionGroups[key] = [];
+      }
+      connectionGroups[key].push(conn);
+    });
+
+    return Object.values(connectionGroups).flatMap(group => {
+      return group.map((conn, index) => {
+        const fromComponent = components.find(c => c.id === conn.from);
+        const toComponent = components.find(c => c.id === conn.to);
+
+        if (!fromComponent || !toComponent) return null;
+
+        const isSelfConnection = fromComponent.id === toComponent.id;
+        const { fromSide, toSide } = getBestConnectionSides(fromComponent, toComponent);
+
+        const fromPoint = getConnectionPoint(fromComponent, fromSide as any);
+        const toPoint = getConnectionPoint(toComponent, toSide as any);
+
+        const pathData = generateSmoothPath(fromPoint, toPoint, isSelfConnection, index);
+
+        // Calculate label position, slightly offset for multiple connections
+        const labelOffset = index * 15;
+        const labelX = isSelfConnection
+          ? fromPoint.x + 40 + labelOffset
+          : (fromPoint.x + toPoint.x) / 2;
+        const labelY = isSelfConnection
+          ? fromPoint.y - 40
+          : (fromPoint.y + toPoint.y) / 2 + labelOffset - 8;
+        
+        const color = CONNECTION_COLORS[index % CONNECTION_COLORS.length];
+        const markerId = `arrowhead-${index % CONNECTION_COLORS.length}`;
+
+        return (
+          <g key={conn.id}>
+            <path
+              d={pathData}
+              stroke={color}
+              strokeWidth={2}
+              fill="none"
+              markerEnd={`url(#${markerId})`}
+              className="transition-all duration-200 hover:stroke-width-3"
+            />
+            <text
+              x={labelX}
+              y={labelY}
+              fontSize={12}
+              fontWeight="bold"
+              fill="#334155"
+              textAnchor="middle"
+              className="pointer-events-auto cursor-pointer select-none"
+              onClick={() => onConnectionEdit(conn)}
+            >
+              {conn.name}
+            </text>
+          </g>
+        );
+      });
+    });
+  }, [components, connections, onConnectionEdit]);
 
   // Render temporary connection
   const tempConnection = useMemo(() => {
@@ -549,7 +569,7 @@ const Canvas: React.FC<CanvasProps> = ({
         {/* SVG Layer for connections and grid */}
         <svg
           ref={svgRef}
-          className="absolute pointer-events-none"
+          className="absolute"
           style={{
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
             transformOrigin: '0 0',
@@ -561,17 +581,20 @@ const Canvas: React.FC<CanvasProps> = ({
           }}
         >
           <defs>
-            <marker
-              id="arrowhead"
-              markerWidth="10"
-              markerHeight="10"
-              refX="9"
-              refY="3"
-              orient="auto"
-              markerUnits="strokeWidth"
-            >
-              <path d="M0,0 L0,6 L9,3 z" fill="#4f46e5" />
-            </marker>
+            {CONNECTION_COLORS.map((color, index) => (
+              <marker
+                key={index}
+                id={`arrowhead-${index}`}
+                markerWidth="10"
+                markerHeight="7"
+                refX="9"
+                refY="3.5"
+                orient="auto"
+                markerUnits="strokeWidth"
+              >
+                <path d="M0,0 L0,7 L9,3.5 z" fill={color} />
+              </marker>
+            ))}
             <marker
               id="arrowhead-temp"
               markerWidth="10"

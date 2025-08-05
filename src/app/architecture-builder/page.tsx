@@ -1,3 +1,4 @@
+
 'use client'
 
 import React, { useState, useCallback, useEffect } from 'react'
@@ -16,8 +17,8 @@ const ArchitectureBuilder: React.FC = () => {
       { id: 'database', type: 'database', position: { x: 500, y: 200 }, label: 'Database', color: '#f0f9ff' }
     ],
     connections: [
-      { from: 'api-gateway', to: 'user-service', type: 'http' },
-      { from: 'user-service', to: 'database', type: 'query' }
+      { id: 'conn-1', from: 'api-gateway', to: 'user-service', type: 'http', name: 'Request' },
+      { id: 'conn-2', from: 'user-service', to: 'database', type: 'query', name: 'GetUser' }
     ]
   })
 
@@ -36,6 +37,9 @@ const ArchitectureBuilder: React.FC = () => {
   const [editingComponent, setEditingComponent] = useState<Component | null>(null)
   const [editComponentLabel, setEditComponentLabel] = useState('')
   const [editComponentColor, setEditComponentColor] = useState('#ffffff')
+  const [editConnectionModalOpen, setEditConnectionModalOpen] = useState(false)
+  const [editingConnection, setEditingConnection] = useState<Connection | null>(null)
+  const [editConnectionName, setEditConnectionName] = useState('')
 
   // Load architecture from localStorage on mount
   useEffect(() => {
@@ -102,9 +106,11 @@ ${architecture.components.map(c => `  - id: "${c.id}"
     position: {x: ${c.position.x}, y: ${c.position.y}}
     label: "${c.label}"`).join('\n')}
 connections:
-${architecture.connections.map(conn => `  - from: "${conn.from}"
+${architecture.connections.map(conn => `  - id: "${conn.id}"
+    from: "${conn.from}"
     to: "${conn.to}"
-    type: "${conn.type}"`).join('\n')}`
+    type: "${conn.type}"
+    name: "${conn.name}"`).join('\n')}`
 
     // Generate GitHub issue URL with pre-filled template
     // In a real application, these would be configurable
@@ -198,33 +204,43 @@ Add any additional notes or considerations for this architecture.`)
   }, [editingComponent, editComponentLabel, editComponentColor])
 
   const handleConnectionAdd = useCallback((from: string, fromCorner: string, to: string, toCorner: string) => {
-    // Check if connection already exists (bidirectional check)
-    const connectionExists = architecture.connections.some(
-      conn =>
-        (conn.from === from && conn.to === to &&
-         conn.fromCorner === fromCorner && conn.toCorner === toCorner) ||
-        (conn.from === to && conn.to === from &&
-         conn.fromCorner === toCorner && conn.toCorner === fromCorner)
-    )
+    const newConnection = createConnection(from, to, 'custom', `Connection ${architecture.connections.length + 1}`, fromCorner, toCorner);
     
-    if (!connectionExists) {
-      const newConnection = createConnection(from, to, 'custom', fromCorner, toCorner)
-      
+    setArchitecture(prev => ({
+      ...prev,
+      connections: [...prev.connections, newConnection]
+    }));
+    
+    // Validate architecture after adding connection
+    setTimeout(() => {
+      if (validateArchitecture(architecture)) {
+        console.log('Architecture data integrity maintained');
+      } else {
+        console.error('Architecture data integrity compromised');
+      }
+    }, 0);
+  }, [architecture]);
+
+  const handleOpenConnectionEditModal = useCallback((connection: Connection) => {
+    setEditingConnection(connection);
+    setEditConnectionName(connection.name);
+    setEditConnectionModalOpen(true);
+  }, []);
+
+  const handleSaveEditConnection = useCallback(() => {
+    if (editingConnection) {
       setArchitecture(prev => ({
         ...prev,
-        connections: [...prev.connections, newConnection]
-      }))
-      
-      // Validate architecture after adding connection
-      setTimeout(() => {
-        if (validateArchitecture(architecture)) {
-          console.log('Architecture data integrity maintained')
-        } else {
-          console.error('Architecture data integrity compromised')
-        }
-      }, 0)
+        connections: prev.connections.map(conn =>
+          conn.id === editingConnection.id
+            ? { ...conn, name: editConnectionName }
+            : conn
+        )
+      }));
+      setEditConnectionModalOpen(false);
+      setEditingConnection(null);
     }
-  }, [architecture.connections, architecture])
+  }, [editingConnection, editConnectionName]);
 
   const handleAddComponentFromPalette = useCallback((type: string, label: string, color?: string) => {
     handleComponentAdd({
@@ -369,6 +385,7 @@ Add any additional notes or considerations for this architecture.`)
                   }
                 }}
                 onConnectionAdd={handleConnectionAdd}
+                onConnectionEdit={handleOpenConnectionEditModal}
               />
             )}
           </div>
@@ -501,6 +518,42 @@ Add any additional notes or considerations for this architecture.`)
               <Button
                 variant="primary"
                 onClick={handleSaveEditComponent}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Edit Connection Modal */}
+      <Modal
+        isOpen={editConnectionModalOpen}
+        onClose={() => setEditConnectionModalOpen(false)}
+        title="Edit Connection"
+        size="sm"
+      >
+        {editingConnection && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Connection Name</label>
+              <input
+                type="text"
+                value={editConnectionName}
+                onChange={(e) => setEditConnectionName(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                variant="secondary"
+                onClick={() => setEditConnectionModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleSaveEditConnection}
               >
                 Save
               </Button>
