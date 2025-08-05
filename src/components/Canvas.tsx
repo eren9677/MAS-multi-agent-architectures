@@ -34,6 +34,15 @@ const CONNECTION_POINT_SIZE = 8
 const MIN_SCALE = 0.25
 const MAX_SCALE = 3
 
+// Canvas boundaries - define the working area
+const CANVAS_BOUNDS = {
+  minX: 0,
+  minY: 0,
+  maxX: 2000,
+  maxY: 1500
+}
+const GRID_SIZE = 50 // Grid spacing for visual reference
+
 // Utility functions
 const getComponentCenter = (component: Component) => ({
   x: component.position.x + COMPONENT_WIDTH / 2,
@@ -48,6 +57,51 @@ const getConnectionPoint = (component: Component, side: 'top' | 'right' | 'botto
     left: { x: component.position.x, y: component.position.y + COMPONENT_HEIGHT / 2 }
   }
   return points[side]
+}
+
+// Constrain component position within canvas bounds
+const constrainPosition = (position: { x: number; y: number }) => ({
+  x: Math.max(CANVAS_BOUNDS.minX, Math.min(CANVAS_BOUNDS.maxX - COMPONENT_WIDTH, position.x)),
+  y: Math.max(CANVAS_BOUNDS.minY, Math.min(CANVAS_BOUNDS.maxY - COMPONENT_HEIGHT, position.y))
+})
+
+// Generate grid lines for visual reference
+const generateGridLines = () => {
+  const lines = []
+  
+  // Vertical lines
+  for (let x = CANVAS_BOUNDS.minX; x <= CANVAS_BOUNDS.maxX; x += GRID_SIZE) {
+    lines.push(
+      <line
+        key={`v-${x}`}
+        x1={x}
+        y1={CANVAS_BOUNDS.minY}
+        x2={x}
+        y2={CANVAS_BOUNDS.maxY}
+        stroke="#e2e8f0"
+        strokeWidth={x % (GRID_SIZE * 4) === 0 ? 1 : 0.5}
+        opacity={x % (GRID_SIZE * 4) === 0 ? 0.3 : 0.15}
+      />
+    )
+  }
+  
+  // Horizontal lines
+  for (let y = CANVAS_BOUNDS.minY; y <= CANVAS_BOUNDS.maxY; y += GRID_SIZE) {
+    lines.push(
+      <line
+        key={`h-${y}`}
+        x1={CANVAS_BOUNDS.minX}
+        y1={y}
+        x2={CANVAS_BOUNDS.maxX}
+        y2={y}
+        stroke="#e2e8f0"
+        strokeWidth={y % (GRID_SIZE * 4) === 0 ? 1 : 0.5}
+        opacity={y % (GRID_SIZE * 4) === 0 ? 0.3 : 0.15}
+      />
+    )
+  }
+  
+  return lines
 }
 
 const getBestConnectionSides = (fromComponent: Component, toComponent: Component) => {
@@ -215,10 +269,10 @@ const Canvas: React.FC<CanvasProps> = ({
 
     if (dragState.type === 'component' && dragState.componentId && dragState.componentOffset) {
       const canvasPos = screenToCanvas(e.clientX, e.clientY)
-      const newPosition = {
+      const newPosition = constrainPosition({
         x: canvasPos.x - dragState.componentOffset.x,
         y: canvasPos.y - dragState.componentOffset.y
-      }
+      })
       onComponentMove(dragState.componentId, newPosition)
     } else if (dragState.type === 'canvas' && dragState.startPos) {
       const deltaX = e.clientX - dragState.startPos.x
@@ -264,14 +318,20 @@ const Canvas: React.FC<CanvasProps> = ({
       }
       
       if (targetComponentId) {
-        // Check if connection already exists
-        const connectionExists = connections.some(conn => 
-          (conn.from === connectionState.fromComponentId && conn.to === targetComponentId) ||
-          (conn.from === targetComponentId && conn.to === connectionState.fromComponentId)
-        )
+        // Ensure both components are within bounds before creating connection
+        const fromComp = components.find(c => c.id === connectionState.fromComponentId)
+        const toComp = components.find(c => c.id === targetComponentId)
         
-        if (!connectionExists && onConnectionAdd) {
-          onConnectionAdd(connectionState.fromComponentId, 'auto', targetComponentId, 'auto')
+        if (fromComp && toComp) {
+          // Check if connection already exists
+          const connectionExists = connections.some(conn => 
+            (conn.from === connectionState.fromComponentId && conn.to === targetComponentId) ||
+            (conn.from === targetComponentId && conn.to === connectionState.fromComponentId)
+          )
+          
+          if (!connectionExists && onConnectionAdd) {
+            onConnectionAdd(connectionState.fromComponentId, 'auto', targetComponentId, 'auto')
+          }
         }
       }
       
@@ -467,6 +527,9 @@ const Canvas: React.FC<CanvasProps> = ({
         <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm text-slate-600 shadow-lg">
           Zoom: {Math.round(viewState.scale * 100)}% • Hold Ctrl+Scroll to zoom
         </div>
+        <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm text-slate-600 shadow-lg">
+          Canvas: {CANVAS_BOUNDS.maxX}×{CANVAS_BOUNDS.maxY}px
+        </div>
       </div>
 
       {/* Main canvas */}
@@ -483,7 +546,7 @@ const Canvas: React.FC<CanvasProps> = ({
                  dragState.type === 'canvas' ? 'grabbing' : 'grab'
         }}
       >
-        {/* SVG Layer for connections */}
+        {/* SVG Layer for connections and grid */}
         <svg
           ref={svgRef}
           className="absolute pointer-events-none"
@@ -491,9 +554,8 @@ const Canvas: React.FC<CanvasProps> = ({
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
             transformOrigin: '0 0',
             zIndex: 1,
-            // Make SVG large enough to cover all possible connection areas
-            width: `${Math.max(2000, 100 / viewState.scale)}%`,
-            height: `${Math.max(2000, 100 / viewState.scale)}%`,
+            width: CANVAS_BOUNDS.maxX,
+            height: CANVAS_BOUNDS.maxY,
             left: 0,
             top: 0
           }}
@@ -522,33 +584,55 @@ const Canvas: React.FC<CanvasProps> = ({
               <path d="M0,0 L0,6 L9,3 z" fill="#6366f1" />
             </marker>
           </defs>
+          
+          {/* Canvas boundary */}
+          <rect
+            x={CANVAS_BOUNDS.minX}
+            y={CANVAS_BOUNDS.minY}
+            width={CANVAS_BOUNDS.maxX - CANVAS_BOUNDS.minX}
+            height={CANVAS_BOUNDS.maxY - CANVAS_BOUNDS.minY}
+            fill="none"
+            stroke="#cbd5e1"
+            strokeWidth={2}
+            strokeDasharray="10,5"
+            opacity={0.5}
+          />
+          
+          {/* Grid lines */}
+          {generateGridLines()}
+          
+          {/* Connections */}
           {renderedConnections}
           {tempConnection}
         </svg>
 
-        {/* Invisible background layer to capture clicks for panning */}
+        {/* Canvas boundary background */}
         <div
-          className="absolute inset-0 w-full h-full"
+          className="absolute bg-white/50"
           style={{
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
             transformOrigin: '0 0',
             zIndex: 0,
-            backgroundColor: 'transparent',
-            // Ensure this layer extends beyond the visible area when zoomed out
-            width: `${100 / viewState.scale}%`,
-            height: `${100 / viewState.scale}%`,
-            minWidth: '200vw',
-            minHeight: '200vh'
+            left: CANVAS_BOUNDS.minX,
+            top: CANVAS_BOUNDS.minY,
+            width: CANVAS_BOUNDS.maxX - CANVAS_BOUNDS.minX,
+            height: CANVAS_BOUNDS.maxY - CANVAS_BOUNDS.minY,
+            border: '2px dashed #cbd5e1',
+            borderRadius: '8px'
           }}
         />
 
         {/* Components Layer */}
         <div
-          className="absolute inset-0"
+          className="absolute"
           style={{
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
             transformOrigin: '0 0',
-            zIndex: 2
+            zIndex: 2,
+            left: 0,
+            top: 0,
+            width: CANVAS_BOUNDS.maxX,
+            height: CANVAS_BOUNDS.maxY
           }}
         >
           {components.map(component => (
@@ -628,11 +712,20 @@ const Canvas: React.FC<CanvasProps> = ({
 
           {/* Empty state */}
           {components.length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg">
+            <div 
+              className="absolute flex items-center justify-center"
+              style={{
+                left: CANVAS_BOUNDS.maxX / 2 - 150,
+                top: CANVAS_BOUNDS.maxY / 2 - 100,
+                width: 300,
+                height: 200
+              }}
+            >
+              <div className="text-center p-8 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-2 border-dashed border-slate-300">
                 <div className="text-4xl mb-4">🏗️</div>
                 <h3 className="text-lg font-semibold text-slate-800 mb-2">Start Building</h3>
-                <p className="text-slate-600">Drag components from the palette to begin</p>
+                <p className="text-slate-600 text-sm">Drag components from the palette</p>
+                <p className="text-slate-500 text-xs mt-2">Stay within the dashed boundary</p>
               </div>
             </div>
           )}
