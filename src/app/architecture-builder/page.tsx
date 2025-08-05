@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import Canvas from '@/components/Canvas'
 import { Modal } from '@/components/ui/Modal'
-import { VisualArchitecture, Component, Connection } from '@/types/architecture'
+import { VisualArchitecture, Component, Connection, validateArchitecture, createConnection, createComponent } from '@/types/architecture'
 
 const ArchitectureBuilder: React.FC = () => {
   const [architecture, setArchitecture] = useState<VisualArchitecture>({
@@ -12,10 +12,12 @@ const ArchitectureBuilder: React.FC = () => {
     type: 'microservices',
     components: [
       { id: 'api-gateway', type: 'gateway', position: { x: 100, y: 200 }, label: 'API Gateway', color: '#dbeafe' },
-      { id: 'user-service', type: 'service', position: { x: 300, y: 200 }, label: 'User Service', color: '#dcfce7' }
+      { id: 'user-service', type: 'service', position: { x: 300, y: 200 }, label: 'User Service', color: '#dcfce7' },
+      { id: 'database', type: 'database', position: { x: 500, y: 200 }, label: 'Database', color: '#f0f9ff' }
     ],
     connections: [
-      { from: 'api-gateway', to: 'user-service', type: 'http' }
+      { from: 'api-gateway', to: 'user-service', type: 'http' },
+      { from: 'user-service', to: 'database', type: 'query' }
     ]
   })
 
@@ -66,7 +68,7 @@ const ArchitectureBuilder: React.FC = () => {
     localStorage.setItem('customComponents', JSON.stringify(customComponents))
   }, [customComponents])
 
-  const validateArchitecture = useCallback(() => {
+  const validateArchitectureForm = useCallback(() => {
     const newErrors: string[] = []
     
     if (!architecture.name.trim()) {
@@ -77,12 +79,17 @@ const ArchitectureBuilder: React.FC = () => {
       newErrors.push('At least one component is required')
     }
     
+    // Use the validateArchitecture function from types
+    if (!validateArchitecture(architecture)) {
+      newErrors.push('Architecture data integrity check failed')
+    }
+    
     setErrors(newErrors)
     return newErrors.length === 0
   }, [architecture])
 
   const handleExport = useCallback(() => {
-    if (!validateArchitecture()) {
+    if (!validateArchitectureForm()) {
       return
     }
     
@@ -136,10 +143,12 @@ Add any additional notes or considerations for this architecture.`)
   }, [])
 
   const handleComponentAdd = useCallback((component: Omit<Component, 'id'>) => {
-    const newComponent: Component = {
-      ...component,
-      id: `component-${Date.now()}` // Simple ID generation
-    }
+    const newComponent = createComponent(
+      component.type,
+      component.position,
+      component.label,
+      component.color
+    )
     
     setArchitecture(prev => ({
       ...prev,
@@ -199,20 +208,23 @@ Add any additional notes or considerations for this architecture.`)
     )
     
     if (!connectionExists) {
-      const newConnection: Connection = {
-        from,
-        to,
-        type: 'custom',
-        fromCorner,
-        toCorner
-      }
+      const newConnection = createConnection(from, to, 'custom', fromCorner, toCorner)
       
       setArchitecture(prev => ({
         ...prev,
         connections: [...prev.connections, newConnection]
       }))
+      
+      // Validate architecture after adding connection
+      setTimeout(() => {
+        if (validateArchitecture(architecture)) {
+          console.log('Architecture data integrity maintained')
+        } else {
+          console.error('Architecture data integrity compromised')
+        }
+      }, 0)
     }
-  }, [architecture.connections])
+  }, [architecture.connections, architecture])
 
   const handleAddComponentFromPalette = useCallback((type: string, label: string, color?: string) => {
     handleComponentAdd({
@@ -274,7 +286,8 @@ Add any additional notes or considerations for this architecture.`)
           <div className="mt-2 text-sm text-gray-500">
             <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded">Tip:</span>
             <span className="ml-2">Drag components from the palette to the canvas to build your architecture</span>
-            <span className="ml-2">Shift+Click on a component to start connecting it to another</span>
+            <span className="ml-2">Click the + button or connection points to start connecting components</span>
+            <span className="ml-2">Components can connect to themselves and multiple other components</span>
           </div>
         </header>
 
@@ -443,8 +456,9 @@ Add any additional notes or considerations for this architecture.`)
             {/* Instructions */}
             <div className="mt-4 text-xs text-gray-500">
               <p className="mb-1">• Double-click on components to edit their properties</p>
-              <p className="mb-1">• Shift+Click on a component to connect it to another</p>
-              <p>• Click the + button on components to start connections</p>
+              <p className="mb-1">• Click the + button or connection points to start connections</p>
+              <p className="mb-1">• Components can connect to themselves (self-connections)</p>
+              <p>• No limit on the number of connections between components</p>
             </div>
           </div>
         </div>
