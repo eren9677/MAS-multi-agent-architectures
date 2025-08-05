@@ -268,11 +268,49 @@ const Canvas: React.FC<CanvasProps> = ({
   }, [])
 
   const handleWheel = useCallback((e: React.WheelEvent) => {
+    // Only zoom if Ctrl key is held or if it's a pinch gesture (deltaY with ctrlKey)
+    // This prevents accidental zooming during page scroll
+    if (!e.ctrlKey && !e.metaKey) {
+      return // Let the page scroll normally
+    }
+    
     e.preventDefault()
+    e.stopPropagation()
+    
     const delta = e.deltaY > 0 ? -0.1 : 0.1
     const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, viewState.scale + delta))
     
     // Scale around mouse position
+    const rect = canvasRef.current?.getBoundingClientRect()
+    if (rect) {
+      const mouseX = e.clientX - rect.left
+      const mouseY = e.clientY - rect.top
+      
+      const scaleRatio = newScale / viewState.scale
+      const newOffsetX = mouseX - (mouseX - viewState.offsetX) * scaleRatio
+      const newOffsetY = mouseY - (mouseY - viewState.offsetY) * scaleRatio
+      
+      setViewState({
+        scale: newScale,
+        offsetX: newOffsetX,
+        offsetY: newOffsetY
+      })
+    }
+  }, [viewState])
+
+  // Alternative zoom handler for when mouse is specifically over canvas
+  const handleCanvasWheel = useCallback((e: React.WheelEvent) => {
+    // Only zoom when mouse is directly over the canvas and user holds Ctrl/Cmd
+    if (!e.ctrlKey && !e.metaKey) {
+      return
+    }
+    
+    e.preventDefault()
+    e.stopPropagation()
+    
+    const delta = e.deltaY > 0 ? -0.15 : 0.15
+    const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, viewState.scale + delta))
+    
     const rect = canvasRef.current?.getBoundingClientRect()
     if (rect) {
       const mouseX = e.clientX - rect.left
@@ -405,7 +443,7 @@ const Canvas: React.FC<CanvasProps> = ({
           </div>
         )}
         <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-sm text-slate-600 shadow-lg">
-          Zoom: {Math.round(viewState.scale * 100)}%
+          Zoom: {Math.round(viewState.scale * 100)}% • Hold Ctrl+Scroll to zoom
         </div>
       </div>
 
@@ -417,7 +455,7 @@ const Canvas: React.FC<CanvasProps> = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={() => setDragState({ type: 'none' })}
-        onWheel={handleWheel}
+        onWheel={handleCanvasWheel}
         style={{
           cursor: connectionState.isConnecting ? 'crosshair' : 
                  dragState.type === 'canvas' ? 'grabbing' : 'grab'
