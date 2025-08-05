@@ -4,7 +4,8 @@ import { Modal } from './ui/Modal'
 import { Button } from './ui/Button'
 import { Badge } from './ui/Badge'
 import { Architecture } from '@/types'
-import { formatDate, getPerformanceColor, getPerformanceLabel } from '@/utils/helpers'
+import { InteractiveCanvas } from './InteractiveCanvas'
+import { getPerformanceColor, getPerformanceLabel } from '@/utils/helpers'
 
 interface ArchitectureModalProps {
   architecture: Architecture | null
@@ -64,14 +65,23 @@ export const ArchitectureModal: React.FC<ArchitectureModalProps> = ({
         {/* Diagram */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Architecture Diagram</h3>
-          <div className="relative h-64 rounded-lg overflow-hidden bg-gray-100">
-            <Image
-              src={architecture.diagram.image}
-              alt={architecture.diagram.alt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+          <div className="h-96 rounded-lg overflow-hidden">
+            {architecture.visual ? (
+              <InteractiveCanvas
+                components={architecture.visual.components}
+                connections={architecture.visual.connections}
+              />
+            ) : (
+              <div className="relative h-full rounded-lg overflow-hidden bg-gray-100">
+                <Image
+                  src={architecture.diagram.image}
+                  alt={architecture.diagram.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
+            )}
           </div>
         </div>
 
