@@ -239,20 +239,39 @@ const Canvas: React.FC<CanvasProps> = ({
 
   const handleMouseUp = useCallback((e: React.MouseEvent) => {
     if (connectionState.isConnecting && connectionState.fromComponentId) {
+      const canvasPos = screenToCanvas(e.clientX, e.clientY)
+      
+      // First try to find component via DOM element (most reliable for direct clicks)
       const target = e.target as HTMLElement
       const componentElement = target.closest('[data-component-id]') as HTMLElement
       
+      let targetComponentId: string | null = null
+      
       if (componentElement) {
-        const toComponentId = componentElement.getAttribute('data-component-id')!
-        
+        targetComponentId = componentElement.getAttribute('data-component-id')!
+      } else {
+        // If no DOM element found, check if canvas coordinates hit any component
+        // This handles cases where user clicks in scaled/zoomed areas
+        for (const component of components) {
+          if (canvasPos.x >= component.position.x &&
+              canvasPos.x <= component.position.x + COMPONENT_WIDTH &&
+              canvasPos.y >= component.position.y &&
+              canvasPos.y <= component.position.y + COMPONENT_HEIGHT) {
+            targetComponentId = component.id
+            break
+          }
+        }
+      }
+      
+      if (targetComponentId) {
         // Check if connection already exists
         const connectionExists = connections.some(conn => 
-          (conn.from === connectionState.fromComponentId && conn.to === toComponentId) ||
-          (conn.from === toComponentId && conn.to === connectionState.fromComponentId)
+          (conn.from === connectionState.fromComponentId && conn.to === targetComponentId) ||
+          (conn.from === targetComponentId && conn.to === connectionState.fromComponentId)
         )
         
         if (!connectionExists && onConnectionAdd) {
-          onConnectionAdd(connectionState.fromComponentId, 'auto', toComponentId, 'auto')
+          onConnectionAdd(connectionState.fromComponentId, 'auto', targetComponentId, 'auto')
         }
       }
       
@@ -260,7 +279,7 @@ const Canvas: React.FC<CanvasProps> = ({
     }
     
     setDragState({ type: 'none' })
-  }, [connectionState, connections, onConnectionAdd])
+  }, [connectionState, connections, onConnectionAdd, components, screenToCanvas])
 
   const handleConnectionStart = useCallback((e: React.MouseEvent, componentId: string) => {
     e.stopPropagation()
@@ -467,11 +486,16 @@ const Canvas: React.FC<CanvasProps> = ({
         {/* SVG Layer for connections */}
         <svg
           ref={svgRef}
-          className="absolute inset-0 w-full h-full pointer-events-none"
+          className="absolute pointer-events-none"
           style={{
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
             transformOrigin: '0 0',
-            zIndex: 1
+            zIndex: 1,
+            // Make SVG large enough to cover all possible connection areas
+            width: `${Math.max(2000, 100 / viewState.scale)}%`,
+            height: `${Math.max(2000, 100 / viewState.scale)}%`,
+            left: 0,
+            top: 0
           }}
         >
           <defs>
@@ -509,7 +533,12 @@ const Canvas: React.FC<CanvasProps> = ({
             transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
             transformOrigin: '0 0',
             zIndex: 0,
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            // Ensure this layer extends beyond the visible area when zoomed out
+            width: `${100 / viewState.scale}%`,
+            height: `${100 / viewState.scale}%`,
+            minWidth: '200vw',
+            minHeight: '200vh'
           }}
         />
 
