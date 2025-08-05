@@ -4,6 +4,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import Canvas from '@/components/Canvas'
+import { PreviewCanvas } from '@/components/PreviewCanvas'
 import { Modal } from '@/components/ui/Modal'
 import { VisualArchitecture, Component, Connection, validateArchitecture, createConnection, createComponent } from '@/types/architecture'
 
@@ -24,6 +25,7 @@ const ArchitectureBuilder: React.FC = () => {
 
   const [previewMode, setPreviewMode] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
+  const [copyStatus, setCopyStatus] = useState<string>('')
   const [customComponents, setCustomComponents] = useState<Array<{ type: string; label: string; color?: string }>>([
     { type: 'gateway', label: 'API Gateway', color: '#dbeafe' },
     { type: 'service', label: 'Service', color: '#dcfce7' },
@@ -36,6 +38,7 @@ const ArchitectureBuilder: React.FC = () => {
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingComponent, setEditingComponent] = useState<Component | null>(null)
   const [editComponentLabel, setEditComponentLabel] = useState('')
+  const [editComponentType, setEditComponentType] = useState('')
   const [editComponentColor, setEditComponentColor] = useState('#ffffff')
   const [editConnectionModalOpen, setEditConnectionModalOpen] = useState(false)
   const [editingConnection, setEditingConnection] = useState<Connection | null>(null)
@@ -184,6 +187,7 @@ Add any additional notes or considerations for this architecture.`)
   const handleOpenEditModal = useCallback((component: Component) => {
     setEditingComponent(component)
     setEditComponentLabel(component.label)
+    setEditComponentType(component.type)
     setEditComponentColor(component.color || '#ffffff')
     setEditModalOpen(true)
   }, [])
@@ -194,14 +198,14 @@ Add any additional notes or considerations for this architecture.`)
         ...prev,
         components: prev.components.map(component =>
           component.id === editingComponent.id
-            ? { ...component, label: editComponentLabel, color: editComponentColor }
+            ? { ...component, label: editComponentLabel, type: editComponentType, color: editComponentColor }
             : component
         )
       }))
       setEditModalOpen(false)
       setEditingComponent(null)
     }
-  }, [editingComponent, editComponentLabel, editComponentColor])
+  }, [editingComponent, editComponentLabel, editComponentType, editComponentColor])
 
   const handleConnectionAdd = useCallback((from: string, fromCorner: string, to: string, toCorner: string) => {
     const newConnection = createConnection(from, to, 'custom', `Connection ${architecture.connections.length + 1}`, fromCorner, toCorner);
@@ -293,6 +297,18 @@ Add any additional notes or considerations for this architecture.`)
     }
   }, [])
 
+  const handleCopyCode = useCallback(() => {
+    const codeToCopy = JSON.stringify(architecture, null, 2)
+    navigator.clipboard.writeText(codeToCopy).then(() => {
+      setCopyStatus('Copied!')
+      setTimeout(() => setCopyStatus(''), 2000)
+    }).catch(err => {
+      setCopyStatus('Failed to copy')
+      console.error('Failed to copy: ', err)
+      setTimeout(() => setCopyStatus(''), 2000)
+    })
+  }, [architecture])
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
       <div className="max-w-6xl mx-auto">
@@ -372,14 +388,27 @@ Add any additional notes or considerations for this architecture.`)
           
           <div className="border-2 border-dashed border-gray-300 rounded-lg h-64 sm:h-96">
             {previewMode ? (
-              <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                <div className="text-center p-4">
+              <div className="w-full h-full flex flex-col bg-gray-50 p-4 overflow-auto">
+                <div className="text-center mb-6">
                   <h3 className="text-lg sm:text-xl font-semibold mb-2">Architecture Preview</h3>
-                  <p className="text-gray-600 mb-4 text-sm">This is how your architecture will appear on the site</p>
-                  <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 max-w-md mx-auto">
-                    <h4 className="text-base sm:text-lg font-medium mb-2">{architecture.name}</h4>
-                    <p className="text-gray-600 text-xs sm:text-sm mb-4">Type: {architecture.type}</p>
-                    <div className="flex flex-wrap gap-2">
+                  <p className="text-gray-600 text-sm">This is how your architecture will appear on the site</p>
+                </div>
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm max-w-3xl w-full">
+                    <div className="mb-6 text-center">
+                      <h4 className="text-lg font-medium mb-2">{architecture.name}</h4>
+                      <p className="text-gray-600 text-sm mb-4">Type: {architecture.type}</p>
+                    </div>
+                    <div className="flex justify-center mb-6">
+                      <PreviewCanvas
+                        components={architecture.components}
+                        connections={architecture.connections}
+                        width={450}
+                        height={200}
+                        className="border border-gray-100"
+                      />
+                    </div>
+                    <div className="flex flex-wrap gap-2 justify-center">
                       {architecture.components.map(component => (
                         <span
                           key={component.id}
@@ -416,7 +445,19 @@ Add any additional notes or considerations for this architecture.`)
           <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Architecture Code</h3>
-              <span className="text-xs text-gray-500">Read-only</span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyCode}
+                  className="flex items-center gap-1 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded transition-colors"
+                  title="Copy architecture code"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  {copyStatus || 'Copy'}
+                </button>
+                <span className="text-xs text-gray-500">Read-only</span>
+              </div>
             </div>
             <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-xs">
               <code>{JSON.stringify(architecture, null, 2)}</code>
@@ -517,6 +558,15 @@ Add any additional notes or considerations for this architecture.`)
                 type="text"
                 value={editComponentLabel}
                 onChange={(e) => setEditComponentLabel(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+              <input
+                type="text"
+                value={editComponentType}
+                onChange={(e) => setEditComponentType(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
               />
             </div>

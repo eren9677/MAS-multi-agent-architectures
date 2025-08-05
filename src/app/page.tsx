@@ -8,6 +8,7 @@ import { ArchitectureCard, AddArchitectureCard } from '@/components/Architecture
 import { ArchitectureModal } from '@/components/ArchitectureModal'
 import { SearchBar } from '@/components/SearchBar'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { ArchitectureCodePreview } from '@/components/ArchitecturePreview'
 
 export default function Home() {
   const [filters, setFilters] = useState<FilterOptions>({
@@ -146,9 +147,21 @@ export default function Home() {
             <div>
               <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">Contributing</h4>
               <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
-                If you&apos;d like to contribute, please fork the repository and make changes as you&apos;d like. 
+                If you&apos;d like to contribute, please fork the repository and make changes as you&apos;d like.
                 Pull requests are warmly welcome.
               </p>
+            </div>
+
+            {/* Architecture Code Preview Demo */}
+            <div>
+              <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">Try Architecture Preview</h4>
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed mb-3">
+                Paste architecture JSON code below to see it rendered as a visual diagram.
+              </p>
+              <ArchitectureCodePreview
+                placeholder="Paste architecture JSON here..."
+                className="text-xs"
+              />
             </div>
           </div>
         </aside>

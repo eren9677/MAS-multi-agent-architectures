@@ -110,10 +110,14 @@ const generateGridLines = () => {
   return lines
 }
 
-const getBestConnectionSides = (fromComponent: Component, toComponent: Component) => {
+const getBestConnectionSides = (fromComponent: Component, toComponent: Component, index = 0, fromCorner?: string, toCorner?: string) => {
   if (fromComponent.id === toComponent.id) {
-    // Self-connection: right to left with a loop
-    return { fromSide: 'right', toSide: 'left' }
+    // For self-connections, always use the user's chosen corner if available
+    if (fromCorner && fromCorner !== 'auto') {
+      return { fromSide: fromCorner, toSide: fromCorner };
+    }
+    // Default to top if no specific corner chosen
+    return { fromSide: 'top', toSide: 'top' };
   }
 
   const fromCenter = getComponentCenter(fromComponent)
@@ -137,25 +141,56 @@ const getBestConnectionSides = (fromComponent: Component, toComponent: Component
   }
 }
 
-const generateSmoothPath = (fromPoint: {x: number, y: number}, toPoint: {x: number, y: number}, isSelfConnection = false, index = 0) => {
+const generateSmoothPath = (fromPoint: {x: number, y: number}, toPoint: {x: number, y: number}, isSelfConnection = false, index = 0, fromSide?: string, toSide?: string) => {
   const offset = index * 40; // Increased spacing between multiple connections for better visibility
 
   if (isSelfConnection) {
-    // Create a larger, more visible loop for self-connections
-    const baseLoopSize = 80; // Increased base size for better visibility
-    const loopSize = baseLoopSize + (index * 50); // More spacing between multiple self-connections
-    const loopHeight = 60 + (index * 30); // Vary height for multiple self-connections
+    // Create a loop based on the actual connection side chosen by user
+    const baseLoopSize = 80 + (index * 30);
+    let controlX1, controlY1, controlX2, controlY2;
     
-    // Create a more prominent loop that extends further from the component
-    const controlX1 = fromPoint.x + loopSize;
-    const controlY1 = fromPoint.y - loopHeight;
-    const controlX2 = toPoint.x + loopSize;
-    const controlY2 = toPoint.y - loopHeight;
+    // Create loop based on the side where connection starts/ends
+    switch (fromSide) {
+      case 'top':
+        // Loop goes upward from top
+        controlX1 = fromPoint.x - (baseLoopSize / 2);
+        controlY1 = fromPoint.y - baseLoopSize;
+        controlX2 = fromPoint.x + (baseLoopSize / 2);
+        controlY2 = fromPoint.y - baseLoopSize;
+        break;
+      case 'right':
+        // Loop goes rightward from right
+        controlX1 = fromPoint.x + baseLoopSize;
+        controlY1 = fromPoint.y - (baseLoopSize / 2);
+        controlX2 = fromPoint.x + baseLoopSize;
+        controlY2 = fromPoint.y + (baseLoopSize / 2);
+        break;
+      case 'bottom':
+        // Loop goes downward from bottom
+        controlX1 = fromPoint.x + (baseLoopSize / 2);
+        controlY1 = fromPoint.y + baseLoopSize;
+        controlX2 = fromPoint.x - (baseLoopSize / 2);
+        controlY2 = fromPoint.y + baseLoopSize;
+        break;
+      case 'left':
+        // Loop goes leftward from left
+        controlX1 = fromPoint.x - baseLoopSize;
+        controlY1 = fromPoint.y + (baseLoopSize / 2);
+        controlX2 = fromPoint.x - baseLoopSize;
+        controlY2 = fromPoint.y - (baseLoopSize / 2);
+        break;
+      default:
+        // Default right loop
+        controlX1 = fromPoint.x + baseLoopSize;
+        controlY1 = fromPoint.y - (baseLoopSize / 2);
+        controlX2 = fromPoint.x + baseLoopSize;
+        controlY2 = fromPoint.y + (baseLoopSize / 2);
+    }
     
     return `M ${fromPoint.x} ${fromPoint.y}
             C ${controlX1} ${controlY1}
               ${controlX2} ${controlY2}
-              ${toPoint.x} ${toPoint.y}`;
+              ${fromPoint.x} ${fromPoint.y}`;
   }
 
   const dx = toPoint.x - fromPoint.x
@@ -442,12 +477,12 @@ const Canvas: React.FC<CanvasProps> = ({
         if (!fromComponent || !toComponent) return null;
 
         const isSelfConnection = fromComponent.id === toComponent.id;
-        const { fromSide, toSide } = getBestConnectionSides(fromComponent, toComponent);
+        const { fromSide, toSide } = getBestConnectionSides(fromComponent, toComponent, index, conn.fromCorner, conn.toCorner);
 
         const fromPoint = getConnectionPoint(fromComponent, fromSide as any);
-        const toPoint = getConnectionPoint(toComponent, toSide as any);
+        const toPoint = isSelfConnection ? fromPoint : getConnectionPoint(toComponent, toSide as any);
 
-        const pathData = generateSmoothPath(fromPoint, toPoint, isSelfConnection, index);
+        const pathData = generateSmoothPath(fromPoint, toPoint, isSelfConnection, index, fromSide, toSide);
 
         // Calculate label position to follow the connection path
         const offset = index * 40; // Same offset as used in generateSmoothPath
@@ -455,9 +490,30 @@ const Canvas: React.FC<CanvasProps> = ({
         let labelX, labelY;
         
         if (isSelfConnection) {
-          // For self-connections, position labels further out
-          labelX = fromPoint.x + 80 + (index * 50);
-          labelY = fromPoint.y - 60 - (index * 30);
+          // For self-connections, position labels on the loop based on the connection side
+          const baseLoopSize = 80 + (index * 30);
+          
+          switch (fromSide) {
+            case 'top':
+              labelX = fromPoint.x;
+              labelY = fromPoint.y - baseLoopSize / 2;
+              break;
+            case 'right':
+              labelX = fromPoint.x + baseLoopSize / 2;
+              labelY = fromPoint.y;
+              break;
+            case 'bottom':
+              labelX = fromPoint.x;
+              labelY = fromPoint.y + baseLoopSize / 2;
+              break;
+            case 'left':
+              labelX = fromPoint.x - baseLoopSize / 2;
+              labelY = fromPoint.y;
+              break;
+            default:
+              labelX = fromPoint.x;
+              labelY = fromPoint.y - baseLoopSize / 2;
+          }
         } else {
           // For regular connections, follow the same offset logic as the path
           const dx = toPoint.x - fromPoint.x;
@@ -720,13 +776,13 @@ const Canvas: React.FC<CanvasProps> = ({
               {/* Component content */}
               <div className="p-3 h-full flex flex-col justify-center">
                 <div
-                  className="font-semibold text-sm text-slate-800 truncate text-center"
+                  className="font-semibold text-sm text-slate-800 text-center"
                   title={component.label}
                   onDoubleClick={() => onComponentEdit?.(component.id, component.label)}
                 >
                   {component.label}
                 </div>
-                <div className="text-xs text-slate-500 truncate text-center mt-1" title={component.type}>
+                <div className="text-xs text-slate-500 text-center mt-1" title={component.type}>
                   {component.type}
                 </div>
               </div>
