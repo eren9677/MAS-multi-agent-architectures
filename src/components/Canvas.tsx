@@ -449,14 +449,30 @@ const Canvas: React.FC<CanvasProps> = ({
 
         const pathData = generateSmoothPath(fromPoint, toPoint, isSelfConnection, index);
 
-        // Calculate label position with better spacing for multiple connections
-        const labelOffset = index * 40; // Increased label spacing to match connection spacing
-        const labelX = isSelfConnection
-          ? fromPoint.x + 80 + (index * 50) // Position labels further out for self-connections
-          : (fromPoint.x + toPoint.x) / 2;
-        const labelY = isSelfConnection
-          ? fromPoint.y - 60 - (index * 30) // Position labels higher for self-connections
-          : (fromPoint.y + toPoint.y) / 2 + labelOffset - 8;
+        // Calculate label position to follow the connection path
+        const offset = index * 40; // Same offset as used in generateSmoothPath
+        
+        let labelX, labelY;
+        
+        if (isSelfConnection) {
+          // For self-connections, position labels further out
+          labelX = fromPoint.x + 80 + (index * 50);
+          labelY = fromPoint.y - 60 - (index * 30);
+        } else {
+          // For regular connections, follow the same offset logic as the path
+          const dx = toPoint.x - fromPoint.x;
+          const dy = toPoint.y - fromPoint.y;
+          
+          if (Math.abs(dx) > Math.abs(dy)) {
+            // Horizontal connection - offset Y coordinate to match the path
+            labelX = (fromPoint.x + toPoint.x) / 2;
+            labelY = (fromPoint.y + toPoint.y) / 2 + offset - 8;
+          } else {
+            // Vertical connection - offset X coordinate to match the path, plus small Y offset to prevent overlap
+            labelX = (fromPoint.x + toPoint.x) / 2 + offset;
+            labelY = (fromPoint.y + toPoint.y) / 2 + (index * 15) - 8; // Add small Y spacing for readability
+          }
+        }
         
         const color = CONNECTION_COLORS[index % CONNECTION_COLORS.length];
         const markerId = `arrowhead-${index % CONNECTION_COLORS.length}`;
