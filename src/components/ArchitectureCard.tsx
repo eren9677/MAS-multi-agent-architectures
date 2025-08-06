@@ -71,7 +71,7 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center space-x-2">
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              @{architecture.author.name.split(' ')[0].toLowerCase()}
+              @{architecture.author.github}
             </span>
           </div>
           <span className="text-xs text-gray-400 dark:text-gray-500">

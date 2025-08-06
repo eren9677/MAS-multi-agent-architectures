@@ -608,7 +608,7 @@ class Tier {
     createdAt: '2024-02-01',
     updatedAt: '2024-02-01',
     githubUrl: 'https://github.com/example/supervisor-agent',
-    documentationUrl: 'https://docs.example.com/supervisor-agent',
+    documentationUrl: 'https://langchain-ai.github.io/langgraph/tutorials/multi_agent/agent_supervisor/',
     visual: {
       name: "Supervisor-Agent Architecture",
       type: "supervisor-agent",

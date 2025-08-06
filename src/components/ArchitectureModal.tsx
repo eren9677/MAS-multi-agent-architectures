@@ -168,7 +168,7 @@ export const ArchitectureModal: React.FC<ArchitectureModalProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="text-sm text-gray-500">
-                Contributed by @{architecture.author.name.split(' ')[0].toLowerCase()}
+                Contributed by @{architecture.author.github}
               </div>
             </div>
             <Button variant="primary" onClick={onClose}>
