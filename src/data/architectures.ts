@@ -952,6 +952,104 @@ class ReportGen { async process(d) { return generateReport(d); } }
     }
   },
   {
+    id: 'market-based-bidding',
+    title: 'Market-Based (Bidding) Architecture',
+    description: 'Auctioneer broadcasts tasks; contractor agents bid; best bid wins based on predefined criteria.',
+    longDescription: 'In a market-based architecture, tasks are not assigned directly. A Client or Auctioneer agent broadcasts a task to a network of Contractor agents, which then bid on the task with capability, confidence, or cost. The Auctioneer selects the best bid based on criteria such as lowest cost, highest confidence, or fastest completion time, and awards the task to the winning agent.',
+    author: {
+      name: 'Community',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+      github: 'madebyagents-community'
+    },
+    category: ['Competitive', 'Market'],
+    tags: ['bidding', 'auction', 'market-based', 'allocation', 'contract-net'],
+    diagram: {
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      alt: 'Market-Based Bidding - Auctioneer broadcasting, contractors bidding, winner awarded'
+    },
+    implementation: {
+      codeExample: `class Auctioneer {
+  constructor(contractors, chooser = (bids) => bids.sort((a,b) => a.cost - b.cost)[0]) {
+    this.contractors = contractors;
+    this.chooseWinner = chooser;
+  }
+  async run(task) {
+    await Promise.all(this.contractors.map(c => c.notifyTask(task)));
+    const bids = (await Promise.all(this.contractors.map(c => c.submitBid(task)))).filter(Boolean);
+    const winner = this.chooseWinner(bids);
+    return await winner.agent.execute(task);
+  }
+}`,
+      language: 'javascript'
+    },
+    useCases: [
+      'Dynamic Resource Allocation: VMs bid to run a task based on current load/capabilities',
+      'Decentralized Task Routing: travel planning sub-tasks bid by specialized agents',
+      'E-commerce and Supply Chains: shippers bid for delivery with cheapest/fastest selection'
+    ],
+    performance: {
+      scalability: 9,
+      complexity: 6,
+      reliability: 8
+    },
+    createdAt: '2025-08-06',
+    updatedAt: '2025-08-06',
+    githubUrl: 'https://github.com/example/market-based-bidding',
+    documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
+    visual: {
+      name: "Market-Based (Bidding) Architecture",
+      type: "bidding",
+      components: [
+        {
+          id: "client-agent",
+          type: "agent",
+          position: { x: 68.5, y: 191.5 },
+          label: "Client Agent",
+          color: "#53d5fd"
+        },
+        {
+          id: "auctioneer-agent",
+          type: "agent",
+          position: { x: 317.5, y: 318.25 },
+          label: "Auctioneer Agent",
+          color: "#fffbb9"
+        },
+        {
+          id: "contractor-a",
+          type: "agent",
+          position: { x: 302, y: 48 },
+          label: "Contractor A",
+          color: "#fffbb9"
+        },
+        {
+          id: "contractor-b",
+          type: "agent",
+          position: { x: 821, y: 186.5 },
+          label: "Contractor B (Winner)",
+          color: "#c4ffc4"
+        },
+        {
+          id: "contractor-c",
+          type: "agent",
+          position: { x: 297, y: 493 },
+          label: "Contractor C",
+          color: "#fffbb9"
+        }
+      ],
+      connections: [
+        { id: "conn-1", from: "client-agent", to: "auctioneer-agent", type: "request", name: "Announce Task" },
+        { id: "conn-2", from: "auctioneer-agent", to: "contractor-a", type: "broadcast", name: "Call for Bids" },
+        { id: "conn-3", from: "auctioneer-agent", to: "contractor-b", type: "broadcast", name: "Call for Bids" },
+        { id: "conn-4", from: "auctioneer-agent", to: "contractor-c", type: "broadcast", name: "Call for Bids" },
+        { id: "conn-5", from: "contractor-a", to: "auctioneer-agent", type: "bid", name: "Submit Bid" },
+        { id: "conn-6", from: "contractor-b", to: "auctioneer-agent", type: "bid", name: "Submit Bid" },
+        { id: "conn-7", from: "contractor-c", to: "auctioneer-agent", type: "bid", name: "Submit Bid" },
+        { id: "conn-8", from: "auctioneer-agent", to: "contractor-b", type: "award", name: "Award Task" },
+        { id: "conn-9", from: "contractor-b", to: "client-agent", type: "result", name: "Task Result" }
+      ]
+    }
+  },
+  {
     id: 'hierarchical-architecture',
     title: 'Hierarchical Architecture',
     description: 'Multi-level supervision where top-level supervisors manage lower-level supervisors who manage worker agents.',
@@ -1109,4 +1207,306 @@ class ReportGen { async process(d) { return generateReport(d); } }
       ]
     }
   }
+  ,
+  {
+    id: 'tool-augmented-agent-network',
+    title: 'Tool-Augmented Agent Network',
+    description: 'Agents are designed to interact with external tools (APIs, databases, code interpreters) to ground reasoning and perform real-world actions.',
+    longDescription: 'In a Tool-Augmented architecture, agents are not limited to communicating with each other; they are explicitly designed to interact with a set of external, non-agentive "tools." These tools can be anything from code interpreters and calculators to databases and third-party APIs (e.g., Google Search, weather services). An orchestrating agent, or the agents themselves, can reason about which tool is required to accomplish a specific sub-task. This dramatically extends the agent system\'s capabilities beyond its inherent knowledge, allowing it to ground its reasoning in real-world data and perform complex actions. This is a foundational architecture for most modern, practical AI agent systems.',
+    author: {
+      name: 'Community',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'madebyagents-community'
+    },
+    category: ['Tool-Augmented', 'Orchestration'],
+    tags: ['tools', 'apis', 'databases', 'react', 'toolformer', 'grounding'],
+    diagram: {
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      alt: 'Tool-Augmented Agent Network - Orchestrator agent invoking external tools and producing final result'
+    },
+    implementation: {
+      codeExample: `class ToolAugmentedAgent {
+  constructor(tools) {
+    this.tools = tools; // e.g., { webSearch, codeInterpreter, database }
+  }
+  async decideAndAct(task) {
+    // Simple ReAct-style loop (pseudo)
+    const plan = await this.reason(task);
+    for (const step of plan) {
+      if (step.tool && this.tools[step.tool]) {
+        step.result = await this.tools[step.tool].execute(step.input);
+      } else {
+        step.result = await this.internalReason(step.input);
+      }
+    }
+    return this.summarize(plan);
+  }
+}`,
+      language: 'javascript'
+    },
+    useCases: [
+      'Advanced Research and Analysis: Use Web Search to find sources, Web Scraper to extract data, and Code Interpreter with pandas to analyze.',
+      'Automated Software Development: Use File System to write code, Terminal to run tests, and Git to commit changes.',
+      'Intelligent Personal Assistants: Use Calendar API to schedule, Maps API for directions, and Email API to send invites.'
+    ],
+    performance: {
+      scalability: 8,
+      complexity: 6,
+      reliability: 9
+    },
+    createdAt: '2025-08-06',
+    updatedAt: '2025-08-06',
+    githubUrl: 'https://github.com/example/tool-augmented-agent-network',
+    documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
+    visual: {
+      name: "Tool-Augmented Agent Network",
+      type: "tool-augmented",
+      components: [
+        {
+          id: "user-goal",
+          type: "input",
+          position: { "x": 50, "y": 250 },
+          label: "User Goal",
+          color: "#53d5fd"
+        },
+        {
+          id: "orchestrator-agent",
+          type: "agent",
+          position: { "x": 250, "y": 250 },
+          label: "Orchestrator Agent",
+          color: "#fffbb9"
+        },
+        {
+          id: "web-search-tool",
+          type: "tool",
+          position: { "x": 500, "y": 100 },
+          label: "Web Search API",
+          color: "#d1b3ff"
+        },
+        {
+          id: "code-interpreter-tool",
+          type: "tool",
+          position: { "x": 500, "y": 250 },
+          label: "Code Interpreter",
+          color: "#d1b3ff"
+        },
+        {
+          id: "database-tool",
+          type: "tool",
+          position: { "x": 500, "y": 400 },
+          label: "Database",
+          color: "#d1b3ff"
+        },
+        {
+          id: "final-result",
+          type: "output",
+          position: { "x": 750, "y": 250 },
+          label: "Final Result",
+          color: "#96fdb2"
+        }
+      ],
+      connections: [
+        { id: "conn-1", from: "user-goal", to: "orchestrator-agent", type: "request", name: "Goal" },
+        { id: "conn-2", from: "orchestrator-agent", to: "web-search-tool", type: "api-call", name: "Uses Tool" },
+        { id: "conn-3", from: "orchestrator-agent", to: "code-interpreter-tool", type: "api-call", name: "Uses Tool" },
+        { id: "conn-4", from: "orchestrator-agent", to: "database-tool", type: "api-call", name: "Uses Tool" },
+        { id: "conn-5", from: "orchestrator-agent", to: "final-result", type: "result", name: "Output" }
+      ]
+    }
+  },
+  {
+    id: 'critic-refinement-loop',
+    title: 'Critic & Refinement Loop Architecture',
+    description: 'Creator agent produces output; Critic reviews and provides feedback; loop continues until approval or iteration limit.',
+    longDescription: 'This architecture introduces a "Critic" agent whose sole purpose is to review the output of a "Creator" agent and provide constructive feedback. The Creator agent then takes this feedback and refines its work in a loop until the output meets a certain quality standard, is approved by the Critic, or a maximum number of iterations is reached. This pattern is fundamental for improving the quality and accuracy of generated content or plans.',
+    author: {
+      name: 'Community',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'madebyagents-community'
+    },
+    category: ['Iterative', 'Quality'],
+    tags: ['critic', 'refinement', 'feedback-loop', 'review'],
+    diagram: {
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      alt: 'Critic & Refinement Loop - Creator and Critic in a feedback loop until approval'
+    },
+    implementation: {
+      codeExample: `class CriticRefinementLoop {
+  constructor(creator, critic, maxIters = 3, accept = (r) => r?.approved === true) {
+    this.creator = creator;
+    this.critic = critic;
+    this.maxIters = maxIters;
+    this.accept = accept;
+  }
+
+  async run(task) {
+    let draft = await this.creator.generate(task);
+    for (let i = 0; i < this.maxIters; i++) {
+      const review = await this.critic.review(draft, task);
+      if (this.accept(review)) {
+        return { output: draft, review, iterations: i + 1, approved: true };
+      }
+      draft = await this.creator.refine(draft, review, task);
+    }
+    const finalReview = await this.critic.review(draft, task);
+    return { output: draft, review: finalReview, iterations: this.maxIters, approved: this.accept(finalReview) };
+  }
+}`,
+      language: 'javascript'
+    },
+    useCases: [
+      'Code Generation: A "Developer" agent writes code, and a "Code Reviewer" agent checks for bugs, style violations, and inefficiencies. The Developer agent then refixes the code based on the feedback.',
+      'High-Quality Content Creation: A "Writer" agent drafts an article, and an "Editor" agent checks for factual accuracy, tone, and grammatical errors. The writer then revises the draft.',
+      'Automated Scientific Discovery: A "Hypothesis" agent proposes a theory, and a "Validator" agent designs an experiment to test it, providing feedback that refines the hypothesis.'
+    ],
+    performance: {
+      scalability: 7,
+      complexity: 5,
+      reliability: 9
+    },
+    createdAt: '2025-08-06',
+    updatedAt: '2025-08-06',
+    githubUrl: 'https://github.com/example/critic-refinement-loop',
+    documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
+    visual: {
+      name: "Critic & Refinement Loop Architecture",
+      type: "refinement-loop",
+      components: [
+        {
+          id: "initial-task",
+          type: "input",
+          position: { x: 103, y: 152 },
+          label: "Initial Task",
+          color: "#53d5fd"
+        },
+        {
+          id: "creator-agent",
+          type: "agent",
+          position: { x: 338, y: 152 },
+          label: "Creator Agent",
+          color: "#fffbb9"
+        },
+        {
+          id: "critic-agent",
+          type: "agent",
+          position: { x: 320, y: 340 },
+          label: "Critic Agent",
+          color: "#fffbb9"
+        },
+        {
+          id: "final-output",
+          type: "output",
+          position: { x: 600, y: 340 },
+          label: "Final Output",
+          color: "#96fdb2"
+        }
+      ],
+      connections: [
+        { id: "conn-1", from: "initial-task", to: "creator-agent", type: "request", name: "Generate" },
+        { id: "conn-2", from: "creator-agent", to: "critic-agent", type: "dataflow", name: "Initial Draft" },
+        { id: "conn-3", from: "critic-agent", to: "creator-agent", type: "feedback", name: "Feedback & Refinements" },
+        { id: "conn-4", from: "critic-agent", to: "final-output", type: "approval", name: "Final Approval" }
+      ]
+    }
+  }
+ ,
+ {
+   id: 'human-in-the-loop',
+   title: 'Human-in-the-Loop (HITL) Architecture',
+   description: 'Autonomous agents collaborate with humans at critical checkpoints for approval, judgment, or handling sensitive actions.',
+   longDescription: 'Human-in-the-Loop (HITL) is a design pattern that strategically combines human intelligence with AI automation. The multi-agent system operates autonomously but pauses and consults a human at critical junctures. Triggers for intervention include low confidence, subjective judgment, sensitive data handling, or final approval for irreversible actions. HITL leverages human common sense, ethics, and creativity together with machine speed and data processing to produce robust, safe, and trustworthy outcomes.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Safety', 'Governance', 'Workflow'],
+   tags: ['human-in-the-loop', 'approval', 'review', 'oversight', 'safety'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'HITL - Autonomous agent requests human approval before final action'
+   },
+   implementation: {
+     codeExample: `class HITLPipeline {
+  constructor(agent, { approve, onReview, confidenceThreshold = 0.7 }) {
+    this.agent = agent;
+    this.approve = approve;         // async (context) => boolean
+    this.onReview = onReview;       // async (draft, context) => { approved: boolean, notes?: string, edits?: any }
+    this.confidenceThreshold = confidenceThreshold;
+  }
+  async run(task) {
+    const draft = await this.agent.process(task);
+    const needsReview = (draft.confidence ?? 0) < this.confidenceThreshold || draft.requiresApproval === true;
+    if (!needsReview) {
+      return { output: draft, approved: true, via: 'auto' };
+    }
+    const review = await this.onReview?.(draft, task) ?? { approved: false };
+    if (!review.approved) {
+      // allow human to request changes and agent to refine
+      const refined = await this.agent.refine?.(draft, review, task) ?? draft;
+      const finalApproval = await this.approve({ draft: refined, task, review });
+      if (!finalApproval) return { output: refined, approved: false, via: 'rejected' };
+      return { output: refined, approved: true, via: 'manual-approve' };
+    }
+    const finalApproval = await this.approve({ draft, task, review });
+    return { output: draft, approved: !!finalApproval, via: 'manual-approve' };
+  }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Medical Diagnosis: AI suggests diagnosis; clinician reviews and confirms before treatment.',
+     'High-Stakes Financial Transactions: System proposes significant trade; human analyst must approve to execute.',
+     'Content Moderation: Agents flag content; human moderator makes final decision to reduce false positives.'
+   ],
+   performance: {
+     scalability: 7,
+     complexity: 5,
+     reliability: 10
+   },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: 'https://github.com/example/hitl-architecture',
+   documentationUrl: 'https://www.ibm.com/think/topics/human-in-the-loop',
+   visual: {
+     name: "Human-in-the-Loop Architecture",
+     type: "human-in-the-loop",
+     components: [
+       {
+         id: "start-task",
+         type: "input",
+         position: { "x": 50, "y": 250 },
+         label: "Start Task",
+         color: "#53d5fd"
+       },
+       {
+         id: "agent-1",
+         type: "agent",
+         position: { "x": 250, "y": 250 },
+         label: "Automated Agent",
+         color: "#fffbb9"
+       },
+       {
+         id: "human-review",
+         type: "human",
+         position: { "x": 500, "y": 250 },
+         label: "Human Review",
+         color: "#ffb3ba"
+       },
+       {
+         id: "final-action",
+         type: "output",
+         position: { "x": 750, "y": 250 },
+         label: "Final Action",
+         color: "#96fdb2"
+       }
+     ],
+     connections: [
+       { id: "conn-1", from: "start-task", to: "agent-1", type: "dataflow", name: "Process" },
+       { id: "conn-2", from: "agent-1", to: "human-review", type: "request", name: "Needs Approval / Low Confidence" },
+       { id: "conn-3", from: "human-review", to: "agent-1", type: "feedback", name: "Reject / Modify" },
+       { id: "conn-4", from: "human-review", to: "final-action", type: "approval", name: "Approve & Execute" }
+     ]
+   }
+ }
 ]
