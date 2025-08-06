@@ -1509,4 +1509,1523 @@ class ReportGen { async process(d) { return generateReport(d); } }
      ]
    }
  }
+,
+{
+  id: 'foraging-architecture',
+  title: 'Foraging Architecture',
+  description: 'Decentralized swarm of forager agents explore broadly; discoveries attract others to exploit rich areas.',
+  longDescription: 'The Foraging Architecture is a decentralized pattern inspired by the natural behavior of social insects like ants or bees. Multiple independent agents ("foragers") explore a large search space (e.g., the internet, a database, a file system) in parallel to find specific information or resources. When a forager agent finds a valuable resource, it communicates this discovery back to the swarm—often including the "scent" or location—attracting other agents to exploit it more thoroughly. This creates an efficient, self-organizing search-and-exploitation mechanism that excels at finding needles in a haystack.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Distributed', 'Swarm'],
+  tags: ['foraging', 'swarm-intelligence', 'ant-colony', 'explore-exploit', 'decentralized'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Foraging Architecture - Multiple forager agents exploring and converging on a rich resource'
+  },
+  implementation: {
+    codeExample: `class ForagingSwarm {
+ constructor(agents, pheromones = new Map(), evaporation = 0.05) {
+   this.agents = agents;            // array of forager agents
+   this.pheromones = pheromones;    // key: location/resourceId, value: intensity
+   this.evaporation = evaporation;  // pheromone evaporation rate
+ }
+
+ stepEvaporation() {
+   for (const [k, v] of this.pheromones.entries()) {
+     const nv = v * (1 - this.evaporation);
+     if (nv < 0.001) this.pheromones.delete(k);
+     else this.pheromones.set(k, nv);
+   }
+ }
+
+ pheromoneWeightedChoice(options) {
+   // options: [{ id, scoreHint }]
+   const weights = options.map(o => (this.pheromones.get(o.id) ?? 0.01) + (o.scoreHint ?? 0));
+   const total = weights.reduce((a, b) => a + b, 0);
+   const r = Math.random() * total;
+   let acc = 0;
+   for (let i = 0; i < options.length; i++) {
+     acc += weights[i];
+     if (r <= acc) return options[i];
+   }
+   return options[options.length - 1];
+ }
+
+ async runStep(searchSpace) {
+   // Each agent explores; upon discovery, deposit pheromone to attract others
+   const discoveries = await Promise.all(this.agents.map(a => a.explore(searchSpace)));
+   for (const d of discoveries.filter(Boolean)) {
+     const key = d.location ?? d.id ?? JSON.stringify(d);
+     const boost = d.value ?? 1;
+     this.pheromones.set(key, (this.pheromones.get(key) ?? 0) + boost);
+   }
+   this.stepEvaporation();
+   return discoveries.filter(Boolean);
+ }
+}`,
+    language: 'javascript'
+  },
+  useCases: [
+    'Distributed Web Scraping: Many agents crawl; rich sources attract more crawlers.',
+    'Cybersecurity Threat Hunting: Agents search for IOCs; detections attract focused analysis.',
+    'Scientific Discovery: Agents scan massive datasets; significant anomalies get swarmed for validation.'
+  ],
+  performance: {
+    scalability: 10,
+    complexity: 6,
+    reliability: 8
+  },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: 'https://github.com/example/foraging-architecture',
+  documentationUrl: 'https://www.sciencedirect.com/book/9781558605954/swarm-intelligence',
+  visual: {
+    name: "Foraging Architecture",
+    type: "foraging",
+    components: [
+      {
+        id: "search-space",
+        type: "input",
+        position: { "x": 50, "y": 250 },
+        label: "Large Search Space (e.g., Web)",
+        color: "#53d5fd"
+      },
+      {
+        id: "forager-1",
+        type: "agent",
+        position: { "x": 300, "y": 100 },
+        label: "Forager Agent 1",
+        color: "#fffbb9"
+      },
+      {
+        id: "forager-2",
+        type: "agent",
+        position: { "x": 300, "y": 250 },
+        label: "Forager Agent 2",
+        color: "#fffbb9"
+      },
+      {
+        id: "forager-3",
+        type: "agent",
+        position: { "x": 300, "y": 400 },
+        label: "Forager Agent 3",
+        color: "#fffbb9"
+      },
+      {
+        id: "resource-found",
+        type: "tool",
+        position: { "x": 550, "y": 175 },
+        label: "Valuable Resource Found",
+        color: "#d1b3ff"
+      },
+      {
+        id: "results-pool",
+        type: "output",
+        position: { "x": 800, "y": 250 },
+        label: "Aggregated Results",
+        color: "#96fdb2"
+      }
+    ],
+    connections: [
+      { id: "conn-1", from: "search-space", to: "forager-1", type: "search", name: "Explore" },
+      { id: "conn-2", from: "search-space", to: "forager-2", type: "search", name: "Explore" },
+      { id: "conn-3", from: "search-space", to: "forager-3", type: "search", name: "Explore" },
+      { id: "conn-4", from: "forager-1", to: "resource-found", type: "discovery", name: "Finds Resource" },
+      { id: "conn-5", from: "resource-found", to: "forager-2", type: "signal", name: "Signal Scent" },
+      { id: "conn-6", from: "resource-found", to: "forager-3", type: "signal", name: "Signal Scent" },
+      { id: "conn-7", from: "forager-1", to: "results-pool", type: "report", name: "Report Data" },
+      { id: "conn-8", from: "forager-2", to: "results-pool", type: "report", name: "Report Data" },
+      { id: "conn-9", from: "forager-3", to: "results-pool", type: "report", name: "Report Data" }
+    ]
+  }
+},
+{
+  id: 'group-architecture',
+  title: 'Group Architecture',
+  description: 'Agents organized into teams with rich intra-group communication and structured inter-group coordination via liaisons.',
+  longDescription: 'A Group Architecture (also called Team-based or Coalition) organizes agents into subgroups. Within a group, communication is fluid and context-rich (all-to-all or local broadcast). Between groups, communication is structured and less frequent, typically handled by designated liaison/leader agents. This enables specialization per group while reducing system-wide communication overhead and information overload.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Collaborative', 'Structured'],
+  tags: ['group', 'team', 'coalition', 'liaison', 'coordination'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Group Architecture - Teams with internal dense communication and inter-team liaison links'
+  },
+  implementation: {
+    codeExample: `class GroupCoordinator {
+  constructor(groups) {
+    // groups: { name, lead, members: Agent[] }
+    this.groups = groups;
+  }
+  async disseminate(task) {
+    // Send task to each group's lead; leads coordinate internally
+    return Promise.all(this.groups.map(async (g) => {
+      const plan = await g.lead.plan(task, g.members);
+      const results = await Promise.all(g.members.map(m => m.execute(plan[m.id] ?? task)));
+      return { group: g.name, results };
+    }));
+  }
+  async synchronize(leadsMessage) {
+    // Structured inter-group sync via leads only
+    await Promise.all(this.groups.map(g => g.lead.sync(leadsMessage)));
+  }
+}`,
+    language: 'javascript'
+  },
+  useCases: [
+    'Software Engineering (Virtual Company): Frontend, Backend, and QA teams collaborate internally; team leads integrate across teams.',
+    'Complex Research Reports: Data Collection, Analysis, and Report Writing teams work in parallel; leaders synthesize the final report.',
+    'Robotics Control: Mapping team and Retrieval team coordinate via liaisons for mission objectives.'
+  ],
+  performance: {
+    scalability: 8,
+    complexity: 6,
+    reliability: 9
+  },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: 'https://github.com/example/group-architecture',
+  documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/#group-chat',
+  visual: {
+    name: "Group Architecture",
+    type: "group",
+    components: [
+      {
+        id: "main-task",
+        type: "input",
+        position: { "x": 450, "y": 50 },
+        label: "Complex Problem",
+        color: "#53d5fd"
+      },
+      {
+        id: "frontend-agent-1",
+        type: "agent",
+        position: { "x": 100, "y": 200 },
+        label: "Frontend Agent 1",
+        color: "#add8e6"
+      },
+      {
+        id: "frontend-agent-2",
+        type: "agent",
+        position: { "x": 100, "y": 300 },
+        label: "Frontend Agent 2",
+        color: "#add8e6"
+      },
+      {
+        id: "backend-agent-1",
+        type: "agent",
+        position: { "x": 800, "y": 200 },
+        label: "Backend Agent 1",
+        color: "#f08080"
+      },
+      {
+        id: "backend-agent-2",
+        type: "agent",
+        position: { "x": 800, "y": 300 },
+        label: "Backend Agent 2",
+        color: "#f08080"
+      },
+      {
+        id: "liaison-frontend",
+        type: "agent",
+        position: { "x": 350, "y": 250 },
+        label: "Frontend Lead",
+        color: "#add8e6"
+      },
+      {
+        id: "liaison-backend",
+        type: "agent",
+        position: { "x": 550, "y": 250 },
+        label: "Backend Lead",
+        color: "#f08080"
+      }
+    ],
+    connections: [
+      { id: "conn-1", from: "main-task", to: "liaison-frontend", type: "delegation", name: "Task" },
+      { id: "conn-2", from: "main-task", to: "liaison-backend", type: "delegation", name: "Task" },
+      { id: "conn-3", from: "liaison-frontend", to: "frontend-agent-1", type: "communication", name: "Group Chat" },
+      { id: "conn-4", from: "liaison-frontend", to: "frontend-agent-2", type: "communication", name: "Group Chat" },
+      { id: "conn-5", from: "frontend-agent-1", to: "frontend-agent-2", type: "communication", name: "Peer Talk" },
+      { id: "conn-6", from: "liaison-backend", to: "backend-agent-1", type: "communication", name: "Group Chat" },
+      { id: "conn-7", from: "liaison-backend", to: "backend-agent-2", type: "communication", name: "Group Chat" },
+      { id: "conn-8", from: "backend-agent-1", to: "backend-agent-2", type: "communication", name: "Peer Talk" },
+      { id: "conn-9", from: "liaison-frontend", to: "liaison-backend", type: "coordination", name: "API Sync" }
+    ]
+  }
+},
+{
+  id: 'mixture-of-agents',
+  title: 'Mixture of Agents',
+  description: 'Heterogeneous agents with different specializations collaborate via an orchestrator to solve complex problems.',
+  longDescription: 'A Mixture of Agents architecture is fundamentally about heterogeneity. It involves creating a system where agents with different specializations, capabilities, underlying models, or even programming languages are combined to solve a complex problem. Instead of relying on a team of identical agents, this model leverages the idea that diverse expertise leads to a more robust and powerful solution. The core challenge lies in creating a communication and coordination protocol that allows these disparate agents to work together effectively.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Heterogeneous', 'Orchestration', 'Ensemble'],
+  tags: ['mixture-of-agents', 'heterogeneous', 'specialization', 'coordination', 'orchestrator'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Mixture of Agents - Orchestrator coordinating heterogeneous specialist agents'
+  },
+  implementation: {
+    codeExample: `class OrchestratedMixture {
+  constructor(agents, router = (task, agents) => agents) {
+    // agents: { id, name, specialties: string[], process: (task, ctx) => Promise<any> }[]
+    this.agents = agents;
+    this.router = router; // decides which subset of agents to consult per subtask
+  }
+
+  async solve(problem) {
+    const context = { traces: [] };
+    // Decompose problem into modality-specific subtasks (simplified)
+    const subtasks = this.decompose(problem);
+
+    const results = await Promise.all(subtasks.map(async (st) => {
+      const chosen = await this.router(st, this.agents);
+      const partials = await Promise.all(
+        chosen.map(a => a.process(st, context).then(out => ({ agent: a.name, out })))
+      );
+      context.traces.push({ subtask: st, partials });
+      return { subtask: st, partials };
+    }));
+
+    return this.synthesize(results, context);
+  }
+
+  decompose(problem) {
+    // Example: break into text/image/data analysis based on fields present
+    const tasks = [];
+    if (problem.text) tasks.push({ type: 'nlp', input: problem.text });
+    if (problem.image) tasks.push({ type: 'vision', input: problem.image });
+    if (problem.data) tasks.push({ type: 'data', input: problem.data });
+    if (tasks.length === 0) tasks.push({ type: 'generic', input: problem });
+    return tasks;
+  }
+
+  synthesize(results, context) {
+    // Simple synthesis: merge insights
+    const insights = {};
+    for (const r of results) {
+      insights[r.subtask.type] = r.partials.map(p => ({ agent: p.agent, insight: p.out }));
+    }
+    return { insights, traces: context.traces };
+  }
+}`,
+    language: 'javascript'
+  },
+  useCases: [
+    'Financial Forecasting: Quantitative Analyst + News Analyst (NLP) + Risk Assessment combine signals.',
+    'Complex Problem-Solving: Creative Brainstormer + Logical Validator + Planner iterate to a plan.',
+    'Product Design: User Researcher analyzes feedback + UI/UX Designer proposes mockups + Technical Architect assesses feasibility.'
+  ],
+  performance: {
+    scalability: 8,
+    complexity: 7,
+    reliability: 9
+  },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: 'https://github.com/example/mixture-of-agents',
+  documentationUrl: 'https://huggingface.co/blog/moe',
+  visual: {
+    name: 'Mixture of Agents',
+    type: 'heterogeneous',
+    components: [
+      {
+        id: 'problem-input',
+        type: 'input',
+        position: { x: 50, y: 250 },
+        label: 'Complex Problem',
+        color: '#53d5fd'
+      },
+      {
+        id: 'orchestrator',
+        type: 'agent',
+        position: { x: 300, y: 250 },
+        label: 'Orchestrator',
+        color: '#fffbb9'
+      },
+      {
+        id: 'nlp-agent',
+        type: 'agent',
+        position: { x: 550, y: 100 },
+        label: 'NLP Specialist Agent',
+        color: '#c1ffc1'
+      },
+      {
+        id: 'vision-agent',
+        type: 'agent',
+        position: { x: 550, y: 250 },
+        label: 'Computer Vision Agent',
+        color: '#add8e6'
+      },
+      {
+        id: 'data-agent',
+        type: 'agent',
+        position: { x: 550, y: 400 },
+        label: 'Data Analyst Agent',
+        color: '#f08080'
+      },
+      {
+        id: 'final-solution',
+        type: 'output',
+        position: { x: 800, y: 250 },
+        label: 'Synthesized Solution',
+        color: '#96fdb2'
+      }
+    ],
+    connections: [
+      { id: 'conn-1', from: 'problem-input', to: 'orchestrator', type: 'request', name: 'Solve' },
+      { id: 'conn-2', from: 'orchestrator', to: 'nlp-agent', type: 'query', name: 'Analyze text' },
+      { id: 'conn-3', from: 'orchestrator', to: 'vision-agent', type: 'query', name: 'Analyze image' },
+      { id: 'conn-4', from: 'orchestrator', to: 'data-agent', type: 'query', name: 'Analyze data' },
+      { id: 'conn-5', from: 'nlp-agent', to: 'orchestrator', type: 'response', name: 'Text insights' },
+      { id: 'conn-6', from: 'vision-agent', to: 'orchestrator', type: 'response', name: 'Image insights' },
+      { id: 'conn-7', from: 'data-agent', to: 'orchestrator', type: 'response', name: 'Data insights' },
+      { id: 'conn-8', from: 'orchestrator', to: 'final-solution', type: 'result', name: 'Finalize' }
+    ]
+  }
+}
+,
+{
+  id: 'concurrent-workflows',
+  title: 'Concurrent Workflows',
+  description: 'Multiple agents work on the same task in parallel, coordinating while processing independently to reduce total time.',
+  longDescription: 'The concurrent pattern enables multiple agents to work on the same task in parallel. Each agent processes the input independently, allowing for simultaneous execution of different aspects of a complex task. This architecture maximizes efficiency by leveraging parallelism, where agents coordinate their efforts while working concurrently to achieve a common goal, significantly reducing overall processing time.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Concurrent', 'Parallel'],
+  tags: ['parallelism', 'concurrency', 'coordinator', 'aggregation'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Concurrent Workflows - Coordinator dispatches to parallel agents, aggregator collects results'
+  },
+  implementation: {
+    codeExample: `class ConcurrentWorkflow {
+  constructor(agents, { aggregator } = {}) {
+    this.agents = agents; // array of worker agents
+    this.aggregator = aggregator || ((results) => results);
+  }
+
+  async run(task) {
+    // Dispatch the same task to all agents concurrently
+    const promises = this.agents.map(agent => agent.process(task));
+    const results = await Promise.all(promises);
+    return this.aggregator(results);
+  }
+}`,
+    language: 'javascript'
+  },
+  useCases: [
+    'Parallel Content Generation: multiple writers produce sections simultaneously and merge results',
+    'Data Enrichment: run different enrichment models in parallel (NER, sentiment, categorization)',
+    'Multimodal Analysis: parallel agents analyze text, image, and structured data concurrently'
+  ],
+  performance: {
+    scalability: 9,
+    complexity: 4,
+    reliability: 8
+  },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: 'https://github.com/example/concurrent-workflows',
+  documentationUrl: 'https://devblogs.microsoft.com/semantic-kernel/semantic-kernel-multi-agent-orchestration/',
+  visual: {
+    name: 'Concurrent Workflows',
+    type: 'concurrent',
+    components: [
+      {
+        id: 'coordinator',
+        type: 'coordinator',
+        position: { x: 300, y: 100 },
+        label: 'Task Coordinator',
+        color: '#ef4444'
+      },
+      {
+        id: 'agent-a',
+        type: 'worker',
+        position: { x: 100, y: 250 },
+        label: 'Agent A',
+        color: '#22c55e'
+      },
+      {
+        id: 'agent-b',
+        type: 'worker',
+        position: { x: 250, y: 250 },
+        label: 'Agent B',
+        color: '#22c55e'
+      },
+      {
+        id: 'agent-c',
+        type: 'worker',
+        position: { x: 400, y: 250 },
+        label: 'Agent C',
+        color: '#22c55e'
+      },
+      {
+        id: 'agent-d',
+        type: 'worker',
+        position: { x: 550, y: 250 },
+        label: 'Agent D',
+        color: '#22c55e'
+      },
+      {
+        id: 'aggregator',
+        type: 'aggregator',
+        position: { x: 300, y: 400 },
+        label: 'Result Aggregator',
+        color: '#3b82f6'
+      }
+    ],
+    connections: [
+      { id: 'conn-1', from: 'coordinator', to: 'agent-a', type: 'parallel', name: 'Task A' },
+      { id: 'conn-2', from: 'coordinator', to: 'agent-b', type: 'parallel', name: 'Task B' },
+      { id: 'conn-3', from: 'coordinator', to: 'agent-c', type: 'parallel', name: 'Task C' },
+      { id: 'conn-4', from: 'coordinator', to: 'agent-d', type: 'parallel', name: 'Task D' },
+      { id: 'conn-5', from: 'agent-a', to: 'aggregator', type: 'result', name: 'Result A' },
+      { id: 'conn-6', from: 'agent-b', to: 'aggregator', type: 'result', name: 'Result B' },
+      { id: 'conn-7', from: 'agent-c', to: 'aggregator', type: 'result', name: 'Result C' },
+      { id: 'conn-8', from: 'agent-d', to: 'aggregator', type: 'result', name: 'Result D' }
+    ]
+  }
+}
+,
+{
+  id: 'agent-rearrange',
+  title: 'Agent Rearrange',
+  description: 'Agents dynamically add, remove, or adapt based on changing tasks and performance signals while preserving overall system integrity.',
+  longDescription: 'Multi-agent systems can adjust to varying environments by adding, removing or adapting agents in dynamic configurations. In this architecture, agents continuously rearrange themselves based on changing task requirements, environmental conditions, and system performance metrics. Prioritize modular components that can be reconfigured independently without compromising system integrity. This approach enables individual agents to evolve while preserving collective functionality.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Dynamic', 'Adaptive'],
+  tags: ['dynamic', 'rearrange', 'orchestrator', 'monitoring', 'agent-pool'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Agent Rearrange - Orchestrator dynamically provisions agents from a pool based on monitoring feedback'
+  },
+  implementation: {
+    codeExample: `class DynamicOrchestrator {
+  constructor({ pool, monitor, policy }) {
+    this.pool = pool;       // provides acquire/release of agents
+    this.monitor = monitor; // reports metrics and status
+    this.policy = policy;   // decides reconfiguration actions
+    this.active = new Set(); // active agents
+  }
+
+  async assign(task) {
+    // Decide reconfiguration based on current metrics
+    const snapshot = await this.monitor.snapshot();
+    const action = await this.policy.decide({ task, active: [...this.active], metrics: snapshot });
+
+    if (action?.type === 'scaleUp') {
+      const agent = await this.pool.acquire(action.capability);
+      if (agent) this.active.add(agent);
+    } else if (action?.type === 'scaleDown') {
+      const victim = [...this.active].find(a => a.id === action.agentId);
+      if (victim) { this.active.delete(victim); await this.pool.release(victim); }
+    } else if (action?.type === 'replace') {
+      const victim = [...this.active].find(a => a.id === action.agentId);
+      if (victim) { this.active.delete(victim); await this.pool.release(victim); }
+      const agent = await this.pool.acquire(action.capability);
+      if (agent) this.active.add(agent);
+    }
+
+    // Dispatch task to active agents concurrently
+    const results = await Promise.all(
+      [...this.active].map(a => a.process(task).catch(err => ({ agent: a.id, error: String(err?.message || err) })))
+    );
+
+    await this.monitor.report({ task, results, active: [...this.active].map(a => a.id) });
+    return this.aggregate(results);
+  }
+
+  aggregate(results) {
+    // Example aggregation (can be majority vote, weighted merge, etc.)
+    return { results, meta: { activeCount: [...this.active].length } };
+  }
+}`,
+    language: 'javascript'
+  },
+  useCases: [
+    'Variable Load Production: scale agents up/down from a pool based on throughput/latency targets',
+    'Self-Healing Pipelines: replace underperforming or failing agents on the fly',
+    'Context-Sensitive Tasks: dynamically introduce specialists when signals indicate new requirements'
+  ],
+  performance: {
+    scalability: 9,
+    complexity: 6,
+    reliability: 9
+  },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: 'https://github.com/example/agent-rearrange',
+  documentationUrl: 'https://galileo.ai/blog/stability-strategies-dynamic-multi-agents',
+  visual: {
+    name: 'Agent Rearrange',
+    type: 'dynamic',
+    components: [
+      { id: 'orchestrator', type: 'orchestrator', position: { x: 300, y: 100 }, label: 'Dynamic Orchestrator', color: '#ef4444' },
+      { id: 'agent-pool', type: 'pool', position: { x: 150, y: 250 }, label: 'Agent Pool', color: '#64748b' },
+      { id: 'active-agent-1', type: 'active', position: { x: 300, y: 250 }, label: 'Active Agent 1', color: '#22c55e' },
+      { id: 'active-agent-2', type: 'active', position: { x: 450, y: 250 }, label: 'Active Agent 2', color: '#22c55e' },
+      { id: 'monitor', type: 'monitor', position: { x: 300, y: 400 }, label: 'Performance Monitor', color: '#3b82f6' }
+    ],
+    connections: [
+      { id: 'conn-1', from: 'orchestrator', to: 'active-agent-1', type: 'assignment', name: 'Task Assignment' },
+      { id: 'conn-2', from: 'orchestrator', to: 'active-agent-2', type: 'assignment', name: 'Task Assignment' },
+      { id: 'conn-3', from: 'agent-pool', to: 'orchestrator', type: 'dynamic', name: 'Agent Provisioning' },
+      { id: 'conn-4', from: 'monitor', to: 'orchestrator', type: 'feedback', name: 'Performance Data' },
+      { id: 'conn-5', from: 'active-agent-1', to: 'monitor', type: 'reporting', name: 'Status Report' },
+      { id: 'conn-6', from: 'active-agent-2', to: 'monitor', type: 'reporting', name: 'Status Report' }
+    ]
+  }
+}
+,
+{
+  id: 'graph-workflow',
+  title: 'Graph Workflow (DAG)',
+  description: 'Agents are nodes and connections are edges; control flow is managed by edges and agents communicate by updating shared graph state.',
+  longDescription: 'In this approach, each agent is a node in the graph, and their connections are represented as an edge. The control flow is managed by edges, and they communicate by adding to the graph\'s state. This architecture represents complex workflows as directed acyclic graphs (DAG) where agents can have multiple dependencies and parallel execution paths, enabling sophisticated coordination patterns that go beyond simple sequential or hierarchical structures.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Graph', 'Workflow', 'DAG'],
+  tags: ['graph', 'dag', 'control-flow', 'dependencies', 'parallel'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Graph Workflow - DAG of agents with converging and parallel paths'
+  },
+  implementation: {
+    codeExample: `class GraphWorkflowEngine {
+  constructor(nodes, edges) {
+    // nodes: { id, process: (state) => Promise<void> }[]
+    // edges: { from, to }[] forming a DAG
+    this.nodes = new Map(nodes.map(n => [n.id, n]));
+    this.edges = edges;
+    this.inDegree = new Map();
+    for (const n of nodes) this.inDegree.set(n.id, 0);
+    for (const e of edges) this.inDegree.set(e.to, (this.inDegree.get(e.to) ?? 0) + 1);
+  }
+
+  async run(initialState = {}) {
+    const state = { ...initialState, graph: { log: [] } };
+    const ready = [];
+    for (const [id, deg] of this.inDegree.entries()) if (deg === 0) ready.push(id);
+
+    // Kahn-style topological traversal with parallel execution of ready nodes
+    const visited = new Set();
+    while (ready.length) {
+      const batch = [...ready];
+      ready.length = 0;
+
+      await Promise.all(batch.map(async id => {
+        if (visited.has(id)) return;
+        const node = this.nodes.get(id);
+        await node.process(state); // nodes can append to state.graph.log etc.
+        visited.add(id);
+        for (const e of this.edges.filter(x => x.from === id)) {
+          const deg = this.inDegree.get(e.to) - 1;
+          this.inDegree.set(e.to, deg);
+          if (deg === 0) ready.push(e.to);
+        }
+      }));
+    }
+    return state;
+  }
+}`,
+    language: 'javascript'
+  },
+  useCases: [
+    'Complex CI/CD Pipelines: validation and security checks gate business logic; branches join later nodes',
+    'Data Processing DAGs: multiple preprocessing paths converge into transformation and formatting nodes',
+    'Enterprise Workflows: approval chains and logging run in parallel and merge to finalization'
+  ],
+  performance: {
+    scalability: 9,
+    complexity: 7,
+    reliability: 9
+  },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: 'https://github.com/example/graph-workflow',
+  documentationUrl: 'https://blog.langchain.com/langgraph-multi-agent-workflows/',
+  visual: {
+    name: 'Graph Workflow',
+    type: 'graph',
+    components: [
+      { id: 'start-node', type: 'start', position: { x: 100, y: 200 }, label: 'Start', color: '#10b981' },
+      { id: 'agent-1', type: 'processor', position: { x: 250, y: 100 }, label: 'Data Validator', color: '#3b82f6' },
+      { id: 'agent-2', type: 'processor', position: { x: 250, y: 300 }, label: 'Security Checker', color: '#8b5cf6' },
+      { id: 'agent-3', type: 'processor', position: { x: 400, y: 200 }, label: 'Business Logic', color: '#06b6d4' },
+      { id: 'agent-4', type: 'processor', position: { x: 550, y: 150 }, label: 'Formatter', color: '#f59e0b' },
+      { id: 'agent-5', type: 'processor', position: { x: 550, y: 250 }, label: 'Logger', color: '#ef4444' },
+      { id: 'end-node', type: 'end', position: { x: 700, y: 200 }, label: 'End', color: '#dc2626' }
+    ],
+    connections: [
+      { id: 'conn-1', from: 'start-node', to: 'agent-1', type: 'flow', name: 'Input Data' },
+      { id: 'conn-2', from: 'start-node', to: 'agent-2', type: 'flow', name: 'Security Check' },
+      { id: 'conn-3', from: 'agent-1', to: 'agent-3', type: 'flow', name: 'Valid Data' },
+      { id: 'conn-4', from: 'agent-2', to: 'agent-3', type: 'flow', name: 'Security OK' },
+      { id: 'conn-5', from: 'agent-3', to: 'agent-4', type: 'flow', name: 'Processed Data' },
+      { id: 'conn-6', from: 'agent-3', to: 'agent-5', type: 'flow', name: 'Log Data' },
+      { id: 'conn-7', from: 'agent-4', to: 'end-node', type: 'flow', name: 'Formatted Output' },
+      { id: 'conn-8', from: 'agent-5', to: 'end-node', type: 'flow', name: 'Log Complete' }
+    ]
+  }
+}
+,
+{
+ id: 'interactive-group-chat',
+ title: 'Interactive Group Chat',
+ description: 'Enhanced group chat with dynamic speaker selection, context-aware agent routing, and adaptive interaction management.',
+ longDescription: 'Enhanced version of the group chat pattern with dynamic speaker selection and sophisticated interaction management. This architecture implements advanced conversation flow control, context-aware agent selection, and adaptive interaction patterns that respond to the evolving discussion. The system intelligently determines which agent should contribute next based on the conversation state, expertise requirements, and collaborative dynamics.',
+ author: {
+   name: 'Community',
+   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+   github: 'madebyagents-community'
+ },
+ category: ['Collaborative', 'Adaptive'],
+ tags: ['group-chat', 'dynamic-speaker-selection', 'context-aware', 'moderation', 'autogen'],
+ diagram: {
+   image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+   alt: 'Interactive Group Chat - Intelligent moderator with context analyzer and dynamic speaker selection'
+ },
+ implementation: {
+   codeExample: `class InteractiveGroupChat {
+ constructor({ moderator, analyzer, selector, participants }) {
+   this.moderator = moderator;      // decides when to analyze/select
+   this.analyzer = analyzer;        // updates conversation state
+   this.selector = selector;        // picks next speaker based on state and expertise
+   this.participants = participants; // id -> agent
+   this.state = { turns: [], context: {} };
+ }
+ async step(message) {
+   // moderator triggers context analysis
+   const analysis = await this.analyzer.update(this.state, message);
+   Object.assign(this.state.context, analysis?.context ?? {});
+   this.state.turns.push(message);
+
+   // selector chooses best next speaker
+   const nextId = await this.selector.choose(this.state, Object.keys(this.participants));
+   const agent = this.participants[nextId];
+   const reply = await agent.respond(message, this.state);
+   return { speaker: nextId, reply };
+ }
+}`,
+   language: 'javascript'
+ },
+ useCases: [
+   'Technical Discussions: route to Domain Expert, then Critic for review, Synthesizer to summarize',
+   'Product Brainstorms: facilitator guides flow; selector invites most relevant voice per turn',
+   'Customer Support Escalations: analyzer detects intent; selector picks best specialized agent to answer'
+ ],
+ performance: {
+   scalability: 8,
+   complexity: 6,
+   reliability: 9
+ },
+ createdAt: '2025-08-06',
+ updatedAt: '2025-08-06',
+ githubUrl: null,
+ documentationUrl: 'https://microsoft.github.io/autogen/0.2/docs/Use-Cases/agent_chat/',
+ visual: {
+   name: 'Interactive Group Chat',
+   type: 'adaptive-collaborative',
+   components: [
+     {
+       id: 'intelligent-moderator',
+       type: 'moderator',
+       position: { x: 300, y: 50 },
+       label: 'Intelligent Moderator',
+       color: '#ef4444'
+     },
+     {
+       id: 'context-analyzer',
+       type: 'analyzer',
+       position: { x: 150, y: 150 },
+       label: 'Context Analyzer',
+       color: '#f59e0b'
+     },
+     {
+       id: 'speaker-selector',
+       type: 'selector',
+       position: { x: 450, y: 150 },
+       label: 'Dynamic Speaker Selector',
+       color: '#f59e0b'
+     },
+     {
+       id: 'conversation-state',
+       type: 'state',
+       position: { x: 300, y: 200 },
+       label: 'Conversation State',
+       color: '#64748b'
+     },
+     {
+       id: 'expert-agent',
+       type: 'participant',
+       position: { x: 100, y: 350 },
+       label: 'Domain Expert',
+       color: '#22c55e'
+     },
+     {
+       id: 'critic-agent',
+       type: 'participant',
+       position: { x: 250, y: 350 },
+       label: 'Critical Reviewer',
+       color: '#dc2626'
+     },
+     {
+       id: 'synthesizer-agent',
+       type: 'participant',
+       position: { x: 400, y: 350 },
+       label: 'Synthesizer',
+       color: '#3b82f6'
+     },
+     {
+       id: 'facilitator-agent',
+       type: 'participant',
+       position: { x: 550, y: 350 },
+       label: 'Facilitator',
+       color: '#8b5cf6'
+     }
+   ],
+   connections: [
+     { id: 'conn-1', from: 'intelligent-moderator', to: 'context-analyzer', type: 'analysis-request', name: 'Analyze Context' },
+     { id: 'conn-2', from: 'intelligent-moderator', to: 'speaker-selector', type: 'selection-request', name: 'Select Speaker' },
+     { id: 'conn-3', from: 'context-analyzer', to: 'conversation-state', type: 'update', name: 'Context Update' },
+     { id: 'conn-4', from: 'speaker-selector', to: 'conversation-state', type: 'selection', name: 'Speaker Selection' },
+     { id: 'conn-5', from: 'conversation-state', to: 'expert-agent', type: 'dynamic', name: 'Contextual Interaction' },
+     { id: 'conn-6', from: 'conversation-state', to: 'critic-agent', type: 'dynamic', name: 'Contextual Interaction' },
+     { id: 'conn-7', from: 'conversation-state', to: 'synthesizer-agent', type: 'dynamic', name: 'Contextual Interaction' },
+     { id: 'conn-8', from: 'conversation-state', to: 'facilitator-agent', type: 'dynamic', name: 'Contextual Interaction' }
+   ]
+ }
+}
+,
+{
+ id: 'agent-registry',
+ title: 'Agent Registry',
+ description: 'Centralized repository pattern to catalog, manage, and dynamically invoke agents based on system needs.',
+ longDescription: 'A centralized repository pattern where agents are cataloged, managed, and dynamically invoked based on current system needs. This architecture provides a service discovery mechanism that maintains metadata about available agents, their capabilities, current status, and performance metrics. The registry enables dynamic agent lifecycle management, allowing systems to discover, instantiate, and coordinate agents on-demand while maintaining scalability and flexibility.',
+ author: {
+   name: 'Community',
+   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+   github: 'madebyagents-community'
+ },
+ category: ['Orchestration', 'Infrastructure'],
+ tags: ['registry', 'service-discovery', 'lifecycle', 'capabilities', 'dynamic-invocation'],
+ diagram: {
+   image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+   alt: 'Agent Registry - Central registry core with discovery, lifecycle manager, and registered agents'
+ },
+ implementation: {
+   codeExample: `class AgentRegistry {
+ constructor() {
+   this.agents = new Map(); // id -> { capabilities: string[], status, metrics, factory? }
+   this.heartbeats = new Map(); // id -> lastSeen
+ }
+ register({ id, capabilities = [], metadata = {} }) {
+   this.agents.set(id, { capabilities, status: 'idle', metrics: {}, ...metadata });
+   this.heartbeats.set(id, Date.now());
+ }
+ heartbeat(id, status) {
+   if (this.agents.has(id)) {
+     this.heartbeats.set(id, Date.now());
+     if (status) this.agents.get(id).status = status;
+   }
+ }
+ discover({ requires = [] } = {}) {
+   // simple filter by capabilities
+   return [...this.agents.entries()]
+     .filter(([_, a]) => requires.every(r => (a.capabilities || []).includes(r)))
+     .map(([id, a]) => ({ id, ...a }));
+ }
+ async invoke(id, payload) {
+   const agent = this.agents.get(id);
+   if (!agent?.factory) throw new Error('No factory/handle for agent ' + id);
+   const instance = await agent.factory();
+   return instance.process(payload);
+ }
+}`,
+   language: 'javascript'
+ },
+ useCases: [
+   'Service Discovery: clients query registry to find NLP/Data/Vision agents by capability',
+   'Dynamic Provisioning: lifecycle manager spins agents up/down based on demand',
+   'Observability: track agent health, status, and performance metrics centrally'
+ ],
+ performance: {
+   scalability: 9,
+   complexity: 5,
+   reliability: 9
+ },
+ createdAt: '2025-08-06',
+ updatedAt: '2025-08-06',
+ githubUrl: null,
+ documentationUrl: 'https://google.github.io/adk-docs/agents/multi-agents/',
+ visual: {
+   name: 'Agent Registry',
+   type: 'registry',
+   components: [
+     {
+       id: 'registry-core',
+       type: 'registry',
+       position: { x: 300, y: 100 },
+       label: 'Agent Registry Core',
+       color: '#ef4444'
+     },
+     {
+       id: 'discovery-service',
+       type: 'discovery',
+       position: { x: 150, y: 200 },
+       label: 'Discovery Service',
+       color: '#f59e0b'
+     },
+     {
+       id: 'lifecycle-manager',
+       type: 'manager',
+       position: { x: 450, y: 200 },
+       label: 'Lifecycle Manager',
+       color: '#f59e0b'
+     },
+     {
+       id: 'metadata-store',
+       type: 'database',
+       position: { x: 300, y: 250 },
+       label: 'Agent Metadata Store',
+       color: '#64748b'
+     },
+     {
+       id: 'registered-agent-1',
+       type: 'registered',
+       position: { x: 100, y: 400 },
+       label: 'NLP Agent',
+       color: '#22c55e'
+     },
+     {
+       id: 'registered-agent-2',
+       type: 'registered',
+       position: { x: 250, y: 400 },
+       label: 'Data Agent',
+       color: '#22c55e'
+     },
+     {
+       id: 'registered-agent-3',
+       type: 'registered',
+       position: { x: 400, y: 400 },
+       label: 'Vision Agent',
+       color: '#22c55e'
+     },
+     {
+       id: 'client-system',
+       type: 'client',
+       position: { x: 550, y: 400 },
+       label: 'Client System',
+       color: '#3b82f6'
+     }
+   ],
+ connections: [
+     { id: 'conn-1', from: 'registry-core', to: 'discovery-service', type: 'service', name: 'Discovery Request' },
+     { id: 'conn-2', from: 'registry-core', to: 'lifecycle-manager', type: 'management', name: 'Lifecycle Control' },
+     { id: 'conn-3', from: 'registry-core', to: 'metadata-store', type: 'data', name: 'Metadata Query' },
+     { id: 'conn-4', from: 'registered-agent-1', to: 'registry-core', type: 'registration', name: 'Register/Heartbeat' },
+     { id: 'conn-5', from: 'registered-agent-2', to: 'registry-core', type: 'registration', name: 'Register/Heartbeat' },
+     { id: 'conn-6', from: 'registered-agent-3', to: 'registry-core', type: 'registration', name: 'Register/Heartbeat' },
+     { id: 'conn-7', from: 'client-system', to: 'discovery-service', type: 'query', name: 'Agent Discovery' },
+     { id: 'conn-8', from: 'lifecycle-manager', to: 'registered-agent-1', type: 'invocation', name: 'Dynamic Invocation' }
+   ]
+ }
+}
+,
+{
+ id: 'spreadsheet',
+ title: 'SpreadSheet',
+ description: 'A tabular data management architecture that organizes and tracks agent outputs in structured formats similar to spreadsheet applications.',
+ longDescription: 'A tabular data management architecture that organizes and tracks agent outputs in structured formats similar to spreadsheet applications. This pattern is designed for handling large-scale operations where systematic data collection, processing, and analysis are required. Agents contribute data that gets organized into rows and columns, enabling bulk operations, data validation, reporting, and comprehensive tracking of multi-agent system outputs across various dimensions and metrics.',
+ author: {
+   name: 'Community',
+   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+   github: 'madebyagents-community'
+ },
+ category: ['Tabular', 'Data Management'],
+ tags: ['spreadsheet', 'tabular', 'data-validation', 'reporting', 'tracking'],
+ diagram: {
+   image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+   alt: 'Spreadsheet-like architecture with coordinator, schema, validator, tabular store and agents'
+ },
+ implementation: {
+   codeExample: `class TabularCoordinator {
+ constructor({ schema, validator, store }) {
+   this.schema = schema;       // defines columns, types, constraints
+   this.validator = validator; // validates rows/bulk updates
+   this.store = store;         // CRUD over rows
+ }
+
+ async insertRow(row) {
+   const normalized = this.schema.applyDefaults(row);
+   const errors = this.validator.validate(normalized, this.schema.definition);
+   if (errors.length) throw new Error('Validation failed: ' + JSON.stringify(errors));
+   return this.store.insert(normalized);
+ }
+
+ async bulkUpdate(filter, patch) {
+   // validate patch against schema (partial)
+   const errors = this.validator.validatePatch(patch, this.schema.definition);
+   if (errors.length) throw new Error('Patch invalid: ' + JSON.stringify(errors));
+   return this.store.updateMany(filter, patch);
+ }
+
+ async query(where, options = {}) {
+   return this.store.query(where, options);
+ }
+
+ async report(aggregationSpec) {
+   // e.g., groupBy, sum, avg, count on columns
+   return this.store.aggregate(aggregationSpec);
+ }
+}`,
+   language: 'javascript'
+ },
+ useCases: [
+   'Batch result collection and curation for multi-agent runs across prompts, datasets, or tasks',
+   'Operational dashboards: track agent outputs with statuses, owners, timestamps, and metrics',
+   'Quality pipelines: validate and correct data at scale with auditable changes',
+   'Reporting and analytics: aggregations over large tabular agent outputs'
+ ],
+ performance: {
+   scalability: 9,
+   complexity: 5,
+   reliability: 9
+ },
+ createdAt: '2025-08-06',
+ updatedAt: '2025-08-06',
+ githubUrl: null,
+ documentationUrl: 'https://www.aalpha.net/blog/how-to-build-multi-agent-ai-system/',
+ visual: {
+   name: 'SpreadSheet',
+   type: 'tabular',
+   components: [
+     {
+       id: 'data-coordinator',
+       type: 'coordinator',
+       position: { x: 300, y: 50 },
+       label: 'Data Coordinator',
+       color: '#ef4444'
+     },
+     {
+       id: 'schema-manager',
+       type: 'schema',
+       position: { x: 150, y: 150 },
+       label: 'Schema Manager',
+       color: '#f59e0b'
+     },
+     {
+       id: 'data-validator',
+       type: 'validator',
+       position: { x: 450, y: 150 },
+       label: 'Data Validator',
+       color: '#f59e0b'
+     },
+     {
+       id: 'tabular-store',
+       type: 'database',
+       position: { x: 300, y: 250 },
+       label: 'Tabular Data Store',
+       color: '#64748b'
+     },
+     {
+       id: 'collector-agent-1',
+       type: 'collector',
+       position: { x: 100, y: 400 },
+       label: 'Data Collector 1',
+       color: '#22c55e'
+     },
+     {
+       id: 'collector-agent-2',
+       type: 'collector',
+       position: { x: 200, y: 400 },
+       label: 'Data Collector 2',
+       color: '#22c55e'
+     },
+     {
+       id: 'processor-agent',
+       type: 'processor',
+       position: { x: 300, y: 400 },
+       label: 'Data Processor',
+       color: '#3b82f6'
+     },
+     {
+       id: 'analyzer-agent',
+       type: 'analyzer',
+       position: { x: 400, y: 400 },
+       label: 'Data Analyzer',
+       color: '#8b5cf6'
+     },
+     {
+       id: 'reporter-agent',
+       type: 'reporter',
+       position: { x: 500, y: 400 },
+       label: 'Report Generator',
+       color: '#06b6d4'
+     }
+   ],
+   connections: [
+     {
+       id: 'conn-1',
+       from: 'data-coordinator',
+       to: 'schema-manager',
+       type: 'schema-request',
+       name: 'Schema Definition'
+     },
+     {
+       id: 'conn-2',
+       from: 'data-coordinator',
+       to: 'data-validator',
+       type: 'validation-request',
+       name: 'Data Validation'
+     },
+     {
+       id: 'conn-3',
+       from: 'data-coordinator',
+       to: 'tabular-store',
+       type: 'data-operation',
+       name: 'CRUD Operations'
+     },
+     {
+       id: 'conn-4',
+       from: 'collector-agent-1',
+       to: 'tabular-store',
+       type: 'row-insert',
+       name: 'Insert Row Data'
+     },
+     {
+       id: 'conn-5',
+       from: 'collector-agent-2',
+       to: 'tabular-store',
+       type: 'row-insert',
+       name: 'Insert Row Data'
+     },
+     {
+       id: 'conn-6',
+       from: 'processor-agent',
+       to: 'tabular-store',
+       type: 'bulk-update',
+       name: 'Bulk Processing'
+     },
+     {
+       id: 'conn-7',
+       from: 'analyzer-agent',
+       to: 'tabular-store',
+       type: 'query',
+       name: 'Data Analysis'
+     },
+     {
+       id: 'conn-8',
+       from: 'reporter-agent',
+       to: 'tabular-store',
+       type: 'aggregation',
+       name: 'Generate Reports'
+     }
+   ]
+ }
+}
+,
+{
+ id: 'heavy',
+ title: 'Heavy',
+ description: 'A high-performance architecture for computationally intensive, large-scale workloads with coordinated multi-agent execution.',
+ longDescription: 'A high-performance architecture designed for computationally intensive tasks that require significant processing power and coordination among multiple agents. This pattern focuses on handling large-scale data processing, complex simulations, and resource-intensive workflows by distributing computational load across multiple specialized agents with robust coordination mechanisms, fault tolerance, and performance optimization strategies.',
+ author: {
+   name: 'Community',
+   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+   github: 'madebyagents-community'
+ },
+ category: ['High-Performance', 'Parallel', 'Orchestration'],
+ tags: ['high-performance', 'compute', 'partitioning', 'monitoring', 'aggregation', 'fault-tolerance'],
+ diagram: {
+   image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+   alt: 'Heavy compute architecture with master controller, resource manager, performance monitor, partitioner, compute clusters, and aggregator'
+ },
+ implementation: {
+   codeExample: `class HeavyOrchestrator {
+ constructor({ resourceManager, monitor, partitioner, clusters, aggregator, retry = 1 }) {
+   this.resourceManager = resourceManager;
+   this.monitor = monitor;
+   this.partitioner = partitioner;
+   this.clusters = clusters;      // { id: { execute(chunk) } }
+   this.aggregator = aggregator;  // { combine(partials) }
+   this.retry = retry;
+ }
+
+ async run(task) {
+   // Allocate resources and partition work
+   await this.resourceManager.allocate(task);
+   const chunks = await this.partitioner.split(task);
+
+   // Dispatch chunks in parallel across clusters with basic retry
+   const execOne = async (chunk, attempt = 0) => {
+     const target = this.selectCluster(chunk);
+     const start = Date.now();
+     try {
+       const res = await target.execute(chunk);
+       await this.monitor.report({ cluster: target.id, ok: true, durMs: Date.now() - start });
+       return res;
+     } catch (e) {
+       await this.monitor.report({ cluster: target.id, ok: false, error: String(e), attempt });
+       if (attempt < this.retry) return execOne(chunk, attempt + 1);
+       // fallback: try another cluster once
+       const alt = this.selectAlternate(target.id);
+       if (alt) return alt.execute(chunk);
+       throw e;
+     }
+   };
+
+   const partials = await Promise.all(chunks.map(execOne));
+   const result = await this.aggregator.combine(partials);
+   await this.resourceManager.release(task);
+   return result;
+ }
+
+ selectCluster(chunk) {
+   // naive: choose least loaded cluster
+   const ranked = Object.values(this.clusters).sort((a, b) => (a.load ?? 0) - (b.load ?? 0));
+   return ranked[0] || Object.values(this.clusters)[0];
+ }
+
+ selectAlternate(excludeId) {
+   return Object.values(this.clusters).find(c => c.id !== excludeId);
+ }
+}`,
+   language: 'javascript'
+ },
+ useCases: [
+   'Large-scale data processing (ETL, distributed transformations, feature computation)',
+   'Complex simulations and scientific computing with partitioned workloads',
+   'Batch inference over massive datasets using distributed compute clusters',
+   'High-throughput pipelines requiring monitoring, retries, and aggregation'
+ ],
+ performance: {
+   scalability: 10,
+   complexity: 7,
+   reliability: 9
+ },
+ createdAt: '2025-08-06',
+ updatedAt: '2025-08-06',
+ githubUrl: null,
+ documentationUrl: 'https://www.aalpha.net/blog/how-to-build-multi-agent-ai-system/',
+ visual: {
+   name: 'Heavy',
+   type: 'high-performance',
+   components: [
+     {
+       id: 'master-controller',
+       type: 'controller',
+       position: { x: 300, y: 50 },
+       label: 'Master Controller',
+       color: '#ef4444'
+     },
+     {
+       id: 'resource-manager',
+       type: 'resource',
+       position: { x: 150, y: 150 },
+       label: 'Resource Manager',
+       color: '#f59e0b'
+     },
+     {
+       id: 'performance-monitor',
+       type: 'monitor',
+       position: { x: 450, y: 150 },
+       label: 'Performance Monitor',
+       color: '#f59e0b'
+     },
+     {
+       id: 'task-partitioner',
+       type: 'partitioner',
+       position: { x: 300, y: 200 },
+       label: 'Task Partitioner',
+       color: '#64748b'
+     },
+     {
+       id: 'compute-cluster-1',
+       type: 'cluster',
+       position: { x: 100, y: 350 },
+       label: 'Compute Cluster 1',
+       color: '#22c55e'
+     },
+     {
+       id: 'compute-cluster-2',
+       type: 'cluster',
+       position: { x: 250, y: 350 },
+       label: 'Compute Cluster 2',
+       color: '#22c55e'
+     },
+     {
+       id: 'compute-cluster-3',
+       type: 'cluster',
+       position: { x: 400, y: 350 },
+       label: 'Compute Cluster 3',
+       color: '#22c55e'
+     },
+     {
+       id: 'result-aggregator',
+       type: 'aggregator',
+       position: { x: 550, y: 350 },
+       label: 'Result Aggregator',
+       color: '#3b82f6'
+     }
+   ],
+   connections: [
+     {
+       id: 'conn-1',
+       from: 'master-controller',
+       to: 'resource-manager',
+       type: 'resource-allocation',
+       name: 'Resource Allocation'
+     },
+     {
+       id: 'conn-2',
+       from: 'master-controller',
+       to: 'performance-monitor',
+       type: 'monitoring',
+       name: 'Performance Tracking'
+     },
+     {
+       id: 'conn-3',
+       from: 'master-controller',
+       to: 'task-partitioner',
+       type: 'task-division',
+       name: 'Task Partitioning'
+     },
+     {
+       id: 'conn-4',
+       from: 'task-partitioner',
+       to: 'compute-cluster-1',
+       type: 'workload',
+       name: 'Heavy Computation'
+     },
+     {
+       id: 'conn-5',
+       from: 'task-partitioner',
+       to: 'compute-cluster-2',
+       type: 'workload',
+       name: 'Heavy Computation'
+     },
+     {
+       id: 'conn-6',
+       from: 'task-partitioner',
+       to: 'compute-cluster-3',
+       type: 'workload',
+       name: 'Heavy Computation'
+     },
+     {
+       id: 'conn-7',
+       from: 'compute-cluster-1',
+       to: 'result-aggregator',
+       type: 'results',
+       name: 'Partial Results'
+     },
+     {
+       id: 'conn-8',
+       from: 'compute-cluster-2',
+       to: 'result-aggregator',
+       type: 'results',
+       name: 'Partial Results'
+     },
+     {
+       id: 'conn-9',
+       from: 'compute-cluster-3',
+       to: 'result-aggregator',
+       type: 'results',
+       name: 'Partial Results'
+     }
+   ]
+ }
+}
+,
+{
+ id: 'router',
+ title: 'Router',
+ description: 'Priority Rules and LangGraph-style routing: analyzes tasks and routes to optimal agents/architectures based on rules, load, availability, and performance.',
+ longDescription: 'Priority Rules: Pre-established rules or logic are used to settle disagreements. LangGraph: Multi-Agent Workflows and route tasks to appropriate agents. The Router architecture acts as an intelligent traffic director that analyzes incoming tasks and dynamically selects the most suitable architecture pattern or specific agents based on task characteristics, current system load, agent availability, and performance metrics. This pattern enables adaptive system behavior by choosing optimal processing paths.',
+ author: {
+   name: 'Community',
+   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+   github: 'madebyagents-community'
+ },
+ category: ['Routing', 'Orchestration', 'Adaptive'],
+ tags: ['router', 'priority-rules', 'load-balancing', 'dynamic-routing', 'langgraph'],
+ diagram: {
+   image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+   alt: 'Router architecture with Intelligent Router, Analyzer, Load Balancer, Rules Engine, and target clusters'
+ },
+ implementation: {
+   codeExample: `class IntelligentRouter {
+ constructor({ analyzer, balancer, rules, targets }) {
+   this.analyzer = analyzer;    // inspects task to infer domain/intents
+   this.balancer = balancer;    // queries system load/availability
+   this.rules = rules;          // priority rules / policy engine
+   this.targets = targets;      // map clusterName -> { execute(task) }
+ }
+
+ async route(task) {
+   const features = await this.analyzer.inspect(task);
+   const load = await this.balancer.snapshot();
+   const decision = await this.rules.decide({ task, features, load });
+
+   // decision might be { target: 'nlp', reason: 'text:sentiment', priority: 0.9 }
+   const target = this.targets[decision.target];
+   if (!target) throw new Error('No target cluster for ' + decision.target);
+
+   return target.execute(task, { decision, features, load });
+ }
+}`,
+   language: 'javascript'
+ },
+ useCases: [
+   'Front-door routing for multi-capability agent platforms (text vs. vision vs. analytics)',
+   'Policy-based arbitration where priority rules resolve conflicts between candidate handlers',
+   'Load-aware dispatch to balance throughput and latency across agent clusters',
+   'Meta-routing between entire architectures (e.g., send DAG-like tasks to Graph Workflow, content tasks to Pipeline)'
+ ],
+ performance: {
+   scalability: 9,
+   complexity: 6,
+   reliability: 9
+ },
+ createdAt: '2025-08-06',
+ updatedAt: '2025-08-06',
+ githubUrl: null,
+ documentationUrl: 'https://medium.com/@iamanraghuvanshi/agentic-ai-7-multi-agent-architectures-explained-how-ai-agents-collaborate-141c23e9117f',
+ visual: {
+   name: 'Router',
+   type: 'routing',
+   components: [
+     {
+       id: 'intelligent-router',
+       type: 'router',
+       position: { x: 300, y: 100 },
+       label: 'Intelligent Router',
+       color: '#ef4444'
+     },
+     {
+       id: 'task-analyzer',
+       type: 'analyzer',
+       position: { x: 150, y: 200 },
+       label: 'Task Analyzer',
+       color: '#f59e0b'
+     },
+     {
+       id: 'load-balancer',
+       type: 'balancer',
+       position: { x: 450, y: 200 },
+       label: 'Load Balancer',
+       color: '#f59e0b'
+     },
+     {
+       id: 'routing-rules',
+       type: 'rules',
+       position: { x: 300, y: 250 },
+       label: 'Routing Rules Engine',
+       color: '#64748b'
+     },
+     {
+       id: 'nlp-cluster',
+       type: 'cluster',
+       position: { x: 100, y: 400 },
+       label: 'NLP Agent Cluster',
+       color: '#22c55e'
+     },
+     {
+       id: 'vision-cluster',
+       type: 'cluster',
+       position: { x: 250, y: 400 },
+       label: 'Vision Agent Cluster',
+       color: '#3b82f6'
+     },
+     {
+       id: 'analytics-cluster',
+       type: 'cluster',
+       position: { x: 400, y: 400 },
+       label: 'Analytics Cluster',
+       color: '#8b5cf6'
+     },
+     {
+       id: 'workflow-cluster',
+       type: 'cluster',
+       position: { x: 550, y: 400 },
+       label: 'Workflow Cluster',
+       color: '#06b6d4'
+     }
+   ],
+   connections: [
+     {
+       id: 'conn-1',
+       from: 'intelligent-router',
+       to: 'task-analyzer',
+       type: 'analysis',
+       name: 'Task Analysis'
+     },
+     {
+       id: 'conn-2',
+       from: 'intelligent-router',
+       to: 'load-balancer',
+       type: 'load-query',
+       name: 'Load Check'
+     },
+     {
+       id: 'conn-3',
+       from: 'intelligent-router',
+       to: 'routing-rules',
+       type: 'rule-query',
+       name: 'Rule Evaluation'
+     },
+     {
+       id: 'conn-4',
+       from: 'intelligent-router',
+       to: 'nlp-cluster',
+       type: 'conditional',
+       name: 'NLP Tasks'
+     },
+     {
+       id: 'conn-5',
+       from: 'intelligent-router',
+       to: 'vision-cluster',
+       type: 'conditional',
+       name: 'Vision Tasks'
+     },
+     {
+       id: 'conn-6',
+       from: 'intelligent-router',
+       to: 'analytics-cluster',
+       type: 'conditional',
+       name: 'Analytics Tasks'
+     },
+     {
+       id: 'conn-7',
+       from: 'intelligent-router',
+       to: 'workflow-cluster',
+       type: 'conditional',
+       name: 'Complex Workflows'
+     }
+   ]
+ }
+}
 ]
