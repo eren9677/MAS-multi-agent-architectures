@@ -2193,534 +2193,293 @@ class ReportGen { async process(d) { return generateReport(d); } }
 }
 ,
 {
- id: 'interactive-group-chat',
- title: 'Interactive Group Chat',
- description: 'Enhanced group chat with dynamic speaker selection, context-aware agent routing, and adaptive interaction management.',
- longDescription: 'Enhanced version of the group chat pattern with dynamic speaker selection and sophisticated interaction management. This architecture implements advanced conversation flow control, context-aware agent selection, and adaptive interaction patterns that respond to the evolving discussion. The system intelligently determines which agent should contribute next based on the conversation state, expertise requirements, and collaborative dynamics.',
- author: {
-   name: 'Community',
-   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-   github: 'madebyagents-community'
- },
- category: ['Collaborative', 'Adaptive'],
- tags: ['group-chat', 'dynamic-speaker-selection', 'context-aware', 'moderation', 'autogen'],
- diagram: {
-   image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-   alt: 'Interactive Group Chat - Intelligent moderator with context analyzer and dynamic speaker selection'
- },
- implementation: {
-   codeExample: `class InteractiveGroupChat {
- constructor({ moderator, analyzer, selector, participants }) {
-   this.moderator = moderator;      // decides when to analyze/select
-   this.analyzer = analyzer;        // updates conversation state
-   this.selector = selector;        // picks next speaker based on state and expertise
-   this.participants = participants; // id -> agent
-   this.state = { turns: [], context: {} };
- }
- async step(message) {
-   // moderator triggers context analysis
-   const analysis = await this.analyzer.update(this.state, message);
-   Object.assign(this.state.context, analysis?.context ?? {});
-   this.state.turns.push(message);
-
-   // selector chooses best next speaker
-   const nextId = await this.selector.choose(this.state, Object.keys(this.participants));
-   const agent = this.participants[nextId];
-   const reply = await agent.respond(message, this.state);
-   return { speaker: nextId, reply };
- }
+  id: 'interactive-group-chat',
+  title: 'Interactive Group Chat',
+  description: 'An interactive group chat architecture facilitates collaboration among multiple specialized AI agents in a coordinated manner.',
+  longDescription: 'An interactive group chat architecture facilitates collaboration among multiple specialized AI agents in a coordinated manner. This system allows for dynamic speaker selection, mention-based communication where agents can be directed to specific tasks, and the ability for agents to build upon each other\'s responses. It supports both automated and interactive sessions, maintaining conversation history and context for coherent group reasoning.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Collaborative', 'Adaptive'],
+  tags: ['group-chat', 'dynamic-speaker-selection', 'mentions', 'interactive', 'context'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Interactive Group Chat - User ↔ Handler ↔ Coordinator with multiple agents and a conversation log'
+  },
+  implementation: {
+    codeExample: `// Generated json
+{
+  "name": "Interactive Group Chat Architecture",
+  "type": "interactive_group_chat",
+  "components": [
+    { "id": "user-interface", "type": "interface", "position": { "x": 100, "y": 300 }, "label": "User Interface", "color": "#fcd34d" },
+    { "id": "message-handler", "type": "service", "position": { "x": 350, "y": 300 }, "label": "Message Handler", "color": "#86efac" },
+    { "id": "agent-coordinator", "type": "coordinator", "position": { "x": 600, "y": 300 }, "label": "Agent Coordinator", "color": "#93c5fd" },
+    { "id": "agent-1", "type": "agent", "position": { "x": 850, "y": 150 }, "label": "Agent 1", "color": "#fca5a5" },
+    { "id": "agent-2", "type": "agent", "position": { "x": 850, "y": 300 }, "label": "Agent 2", "color": "#fca5a5" },
+    { "id": "agent-3", "type": "agent", "position": { "x": 850, "y": 450 }, "label": "Agent 3", "color": "#fca5a5" },
+    { "id": "conversation-log", "type": "database", "position": { "x": 600, "y": 50 }, "label": "Conversation Log", "color": "#e5e7eb" }
+  ],
+  "connections": [
+    { "id": "igc-conn-1", "from": "user-interface", "to": "message-handler", "type": "websocket", "name": "User Message" },
+    { "id": "igc-conn-2", "from": "message-handler", "to": "agent-coordinator", "type": "rpc", "name": "Process Message" },
+    { "id": "igc-conn-3", "from": "agent-coordinator", "to": "agent-1", "type": "task", "name": "Assign Task" },
+    { "id": "igc-conn-4", "from": "agent-coordinator", "to": "agent-2", "type": "task", "name": "Assign Task" },
+    { "id": "igc-conn-5", "from": "agent-coordinator", "to": "agent-3", "type": "task", "name": "Assign Task" },
+    { "id": "igc-conn-6", "from": "agent-1", "to": "message-handler", "type": "response", "name": "Agent Response" },
+    { "id": "igc-conn-7", "from": "agent-2", "to": "message-handler", "type": "response", "name": "Agent Response" },
+    { "id": "igc-conn-8", "from": "agent-3", "to": "message-handler", "type": "response", "name": "Agent Response" },
+    { "id": "igc-conn-9", "from": "message-handler", "to": "user-interface", "type": "websocket", "name": "Display Message" },
+    { "id": "igc-conn-10", "from": "message-handler", "to": "conversation-log", "type": "log", "name": "Log Message" }
+  ]
 }`,
-   language: 'javascript'
- },
- useCases: [
-   'Technical Discussions: route to Domain Expert, then Critic for review, Synthesizer to summarize',
-   'Product Brainstorms: facilitator guides flow; selector invites most relevant voice per turn',
-   'Customer Support Escalations: analyzer detects intent; selector picks best specialized agent to answer'
- ],
- performance: {
-   scalability: 8,
-   complexity: 6,
-   reliability: 9
- },
- createdAt: '2025-08-06',
- updatedAt: '2025-08-06',
- githubUrl: null,
- documentationUrl: 'https://microsoft.github.io/autogen/0.2/docs/Use-Cases/agent_chat/',
- visual: {
-   name: 'Interactive Group Chat',
-   type: 'adaptive-collaborative',
-   components: [
-     {
-       id: 'intelligent-moderator',
-       type: 'moderator',
-       position: { x: 300, y: 50 },
-       label: 'Intelligent Moderator',
-       color: '#ef4444'
-     },
-     {
-       id: 'context-analyzer',
-       type: 'analyzer',
-       position: { x: 150, y: 150 },
-       label: 'Context Analyzer',
-       color: '#f59e0b'
-     },
-     {
-       id: 'speaker-selector',
-       type: 'selector',
-       position: { x: 450, y: 150 },
-       label: 'Dynamic Speaker Selector',
-       color: '#f59e0b'
-     },
-     {
-       id: 'conversation-state',
-       type: 'state',
-       position: { x: 300, y: 200 },
-       label: 'Conversation State',
-       color: '#64748b'
-     },
-     {
-       id: 'expert-agent',
-       type: 'participant',
-       position: { x: 100, y: 350 },
-       label: 'Domain Expert',
-       color: '#22c55e'
-     },
-     {
-       id: 'critic-agent',
-       type: 'participant',
-       position: { x: 250, y: 350 },
-       label: 'Critical Reviewer',
-       color: '#dc2626'
-     },
-     {
-       id: 'synthesizer-agent',
-       type: 'participant',
-       position: { x: 400, y: 350 },
-       label: 'Synthesizer',
-       color: '#3b82f6'
-     },
-     {
-       id: 'facilitator-agent',
-       type: 'participant',
-       position: { x: 550, y: 350 },
-       label: 'Facilitator',
-       color: '#8b5cf6'
-     }
-   ],
-   connections: [
-     { id: 'conn-1', from: 'intelligent-moderator', to: 'context-analyzer', type: 'analysis-request', name: 'Analyze Context' },
-     { id: 'conn-2', from: 'intelligent-moderator', to: 'speaker-selector', type: 'selection-request', name: 'Select Speaker' },
-     { id: 'conn-3', from: 'context-analyzer', to: 'conversation-state', type: 'update', name: 'Context Update' },
-     { id: 'conn-4', from: 'speaker-selector', to: 'conversation-state', type: 'selection', name: 'Speaker Selection' },
-     { id: 'conn-5', from: 'conversation-state', to: 'expert-agent', type: 'dynamic', name: 'Contextual Interaction' },
-     { id: 'conn-6', from: 'conversation-state', to: 'critic-agent', type: 'dynamic', name: 'Contextual Interaction' },
-     { id: 'conn-7', from: 'conversation-state', to: 'synthesizer-agent', type: 'dynamic', name: 'Contextual Interaction' },
-     { id: 'conn-8', from: 'conversation-state', to: 'facilitator-agent', type: 'dynamic', name: 'Contextual Interaction' }
-   ]
- }
+    language: 'json'
+  },
+  useCases: [
+    'Dynamic group reasoning and collaborative problem solving',
+    'Mention-based routing of questions to specific agents',
+    'Maintaining conversational context across multi-agent sessions'
+  ],
+  performance: { scalability: 8, complexity: 6, reliability: 9 },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: null,
+  documentationUrl: 'https://docs.swarms.world/en/latest/swarms/groupchats/interactive_groupchat/',
+  visual: {
+    name: 'Interactive Group Chat Architecture',
+    type: 'interactive_group_chat',
+    components: [
+      { id: 'user-interface', type: 'interface', position: { x: 100, y: 300 }, label: 'User Interface', color: '#fcd34d' },
+      { id: 'message-handler', type: 'service', position: { x: 350, y: 300 }, label: 'Message Handler', color: '#86efac' },
+      { id: 'agent-coordinator', type: 'coordinator', position: { x: 600, y: 300 }, label: 'Agent Coordinator', color: '#93c5fd' },
+      { id: 'agent-1', type: 'agent', position: { x: 850, y: 150 }, label: 'Agent 1', color: '#fca5a5' },
+      { id: 'agent-2', type: 'agent', position: { x: 850, y: 300 }, label: 'Agent 2', color: '#fca5a5' },
+      { id: 'agent-3', type: 'agent', position: { x: 850, y: 450 }, label: 'Agent 3', color: '#fca5a5' },
+      { id: 'conversation-log', type: 'database', position: { x: 600, y: 50 }, label: 'Conversation Log', color: '#e5e7eb' }
+    ],
+    connections: [
+      { id: 'igc-conn-1', from: 'user-interface', to: 'message-handler', type: 'websocket', name: 'User Message' },
+      { id: 'igc-conn-2', from: 'message-handler', to: 'agent-coordinator', type: 'rpc', name: 'Process Message' },
+      { id: 'igc-conn-3', from: 'agent-coordinator', to: 'agent-1', type: 'task', name: 'Assign Task' },
+      { id: 'igc-conn-4', from: 'agent-coordinator', to: 'agent-2', type: 'task', name: 'Assign Task' },
+      { id: 'igc-conn-5', from: 'agent-coordinator', to: 'agent-3', type: 'task', name: 'Assign Task' },
+      { id: 'igc-conn-6', from: 'agent-1', to: 'message-handler', type: 'response', name: 'Agent Response' },
+      { id: 'igc-conn-7', from: 'agent-2', to: 'message-handler', type: 'response', name: 'Agent Response' },
+      { id: 'igc-conn-8', from: 'agent-3', to: 'message-handler', type: 'response', name: 'Agent Response' },
+      { id: 'igc-conn-9', from: 'message-handler', to: 'user-interface', type: 'websocket', name: 'Display Message' },
+      { id: 'igc-conn-10', from: 'message-handler', to: 'conversation-log', type: 'log', name: 'Log Message' }
+    ]
+  }
 }
 ,
 {
  id: 'agent-registry',
  title: 'Agent Registry',
- description: 'Centralized repository pattern to catalog, manage, and dynamically invoke agents based on system needs.',
- longDescription: 'A centralized repository pattern where agents are cataloged, managed, and dynamically invoked based on current system needs. This architecture provides a service discovery mechanism that maintains metadata about available agents, their capabilities, current status, and performance metrics. The registry enables dynamic agent lifecycle management, allowing systems to discover, instantiate, and coordinate agents on-demand while maintaining scalability and flexibility.',
+ description: 'An agent registry is a centralized architecture for managing a collection of agents. It provides functionalities to add, delete, update, and retrieve agents, ensuring that agent definitions are decoupled from their execution.',
+ longDescription: 'An agent registry is a centralized architecture for managing a collection of agents. It provides functionalities to add, delete, update, and retrieve agents, ensuring that agent definitions are decoupled from their execution. This system is designed for concurrent environments, making it suitable for dynamic and scalable multi-agent systems where agents need to be discovered and invoked at runtime.',
  author: {
    name: 'Community',
    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
    github: 'madebyagents-community'
  },
  category: ['Orchestration', 'Infrastructure'],
- tags: ['registry', 'service-discovery', 'lifecycle', 'capabilities', 'dynamic-invocation'],
+ tags: ['registry', 'service-discovery', 'crud', 'decoupled', 'runtime-invocation'],
  diagram: {
    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-   alt: 'Agent Registry - Central registry core with discovery, lifecycle manager, and registered agents'
+   alt: 'Agent Registry - API Endpoint, Registry Logic, Agent Datastore, External Service'
  },
  implementation: {
-   codeExample: `class AgentRegistry {
- constructor() {
-   this.agents = new Map(); // id -> { capabilities: string[], status, metrics, factory? }
-   this.heartbeats = new Map(); // id -> lastSeen
- }
- register({ id, capabilities = [], metadata = {} }) {
-   this.agents.set(id, { capabilities, status: 'idle', metrics: {}, ...metadata });
-   this.heartbeats.set(id, Date.now());
- }
- heartbeat(id, status) {
-   if (this.agents.has(id)) {
-     this.heartbeats.set(id, Date.now());
-     if (status) this.agents.get(id).status = status;
-   }
- }
- discover({ requires = [] } = {}) {
-   // simple filter by capabilities
-   return [...this.agents.entries()]
-     .filter(([_, a]) => requires.every(r => (a.capabilities || []).includes(r)))
-     .map(([id, a]) => ({ id, ...a }));
- }
- async invoke(id, payload) {
-   const agent = this.agents.get(id);
-   if (!agent?.factory) throw new Error('No factory/handle for agent ' + id);
-   const instance = await agent.factory();
-   return instance.process(payload);
- }
+   codeExample: `// Generated json
+{
+  "name": "Agent Registry Architecture",
+  "type": "agent_registry",
+  "components": [
+    { "id": "api-endpoint", "type": "endpoint", "position": { "x": 100, "y": 250 }, "label": "API Endpoint", "color": "#fecaca" },
+    { "id": "registry-logic", "type": "service", "position": { "x": 350, "y": 250 }, "label": "Registry Logic", "color": "#c7e9b0" },
+    { "id": "agent-datastore", "type": "database", "position": { "x": 600, "y": 250 }, "label": "Agent Datastore", "color": "#a5d8f3" },
+    { "id": "external-service", "type": "service", "position": { "x": 350, "y": 50 }, "label": "External Service", "color": "#fde68a" }
+  ],
+  "connections": [
+    { "id": "ar-conn-1", "from": "api-endpoint", "to": "registry-logic", "type": "http", "name": "Agent Requests" },
+    { "id": "ar-conn-2", "from": "registry-logic", "to": "agent-datastore", "type": "db-query", "name": "CRUD Operations" },
+    { "id": "ar-conn-3", "from": "external-service", "to": "registry-logic", "type": "api-call", "name": "Invoke Agent" }
+  ]
 }`,
-   language: 'javascript'
+   language: 'json'
  },
  useCases: [
-   'Service Discovery: clients query registry to find NLP/Data/Vision agents by capability',
-   'Dynamic Provisioning: lifecycle manager spins agents up/down based on demand',
-   'Observability: track agent health, status, and performance metrics centrally'
+   'Agent CRUD operations via centralized API',
+   'Runtime discovery and invocation of agents',
+   'Decoupling agent definitions from execution backends'
  ],
- performance: {
-   scalability: 9,
-   complexity: 5,
-   reliability: 9
- },
+ performance: { scalability: 9, complexity: 5, reliability: 9 },
  createdAt: '2025-08-06',
  updatedAt: '2025-08-06',
  githubUrl: null,
- documentationUrl: 'https://google.github.io/adk-docs/agents/multi-agents/',
+ documentationUrl: 'https://docs.swarms.world/en/latest/swarms/storage/agent_registry/',
  visual: {
-   name: 'Agent Registry',
-   type: 'registry',
+   name: 'Agent Registry Architecture',
+   type: 'agent_registry',
    components: [
-     {
-       id: 'registry-core',
-       type: 'registry',
-       position: { x: 300, y: 100 },
-       label: 'Agent Registry Core',
-       color: '#ef4444'
-     },
-     {
-       id: 'discovery-service',
-       type: 'discovery',
-       position: { x: 150, y: 200 },
-       label: 'Discovery Service',
-       color: '#f59e0b'
-     },
-     {
-       id: 'lifecycle-manager',
-       type: 'manager',
-       position: { x: 450, y: 200 },
-       label: 'Lifecycle Manager',
-       color: '#f59e0b'
-     },
-     {
-       id: 'metadata-store',
-       type: 'database',
-       position: { x: 300, y: 250 },
-       label: 'Agent Metadata Store',
-       color: '#64748b'
-     },
-     {
-       id: 'registered-agent-1',
-       type: 'registered',
-       position: { x: 100, y: 400 },
-       label: 'NLP Agent',
-       color: '#22c55e'
-     },
-     {
-       id: 'registered-agent-2',
-       type: 'registered',
-       position: { x: 250, y: 400 },
-       label: 'Data Agent',
-       color: '#22c55e'
-     },
-     {
-       id: 'registered-agent-3',
-       type: 'registered',
-       position: { x: 400, y: 400 },
-       label: 'Vision Agent',
-       color: '#22c55e'
-     },
-     {
-       id: 'client-system',
-       type: 'client',
-       position: { x: 550, y: 400 },
-       label: 'Client System',
-       color: '#3b82f6'
-     }
+     { id: 'api-endpoint', type: 'endpoint', position: { x: 100, y: 250 }, label: 'API Endpoint', color: '#fecaca' },
+     { id: 'registry-logic', type: 'service', position: { x: 350, y: 250 }, label: 'Registry Logic', color: '#c7e9b0' },
+     { id: 'agent-datastore', type: 'database', position: { x: 600, y: 250 }, label: 'Agent Datastore', color: '#a5d8f3' },
+     { id: 'external-service', type: 'service', position: { x: 350, y: 50 }, label: 'External Service', color: '#fde68a' }
    ],
- connections: [
-     { id: 'conn-1', from: 'registry-core', to: 'discovery-service', type: 'service', name: 'Discovery Request' },
-     { id: 'conn-2', from: 'registry-core', to: 'lifecycle-manager', type: 'management', name: 'Lifecycle Control' },
-     { id: 'conn-3', from: 'registry-core', to: 'metadata-store', type: 'data', name: 'Metadata Query' },
-     { id: 'conn-4', from: 'registered-agent-1', to: 'registry-core', type: 'registration', name: 'Register/Heartbeat' },
-     { id: 'conn-5', from: 'registered-agent-2', to: 'registry-core', type: 'registration', name: 'Register/Heartbeat' },
-     { id: 'conn-6', from: 'registered-agent-3', to: 'registry-core', type: 'registration', name: 'Register/Heartbeat' },
-     { id: 'conn-7', from: 'client-system', to: 'discovery-service', type: 'query', name: 'Agent Discovery' },
-     { id: 'conn-8', from: 'lifecycle-manager', to: 'registered-agent-1', type: 'invocation', name: 'Dynamic Invocation' }
+   connections: [
+     { id: 'ar-conn-1', from: 'api-endpoint', to: 'registry-logic', type: 'http', name: 'Agent Requests' },
+     { id: 'ar-conn-2', from: 'registry-logic', to: 'agent-datastore', type: 'db-query', name: 'CRUD Operations' },
+     { id: 'ar-conn-3', from: 'external-service', to: 'registry-logic', type: 'api-call', name: 'Invoke Agent' }
    ]
  }
 }
 ,
 {
  id: 'spreadsheet',
- title: 'SpreadSheet',
- description: 'A tabular data management architecture that organizes and tracks agent outputs in structured formats similar to spreadsheet applications.',
- longDescription: 'A tabular data management architecture that organizes and tracks agent outputs in structured formats similar to spreadsheet applications. This pattern is designed for handling large-scale operations where systematic data collection, processing, and analysis are required. Agents contribute data that gets organized into rows and columns, enabling bulk operations, data validation, reporting, and comprehensive tracking of multi-agent system outputs across various dimensions and metrics.',
+ title: 'Spreadsheet Swarm',
+ description: 'Spreadsheet Swarm is a multi-agent architecture designed to manage and orchestrate thousands of agents using a CSV file.',
+ longDescription: 'Spreadsheet Swarm is a multi-agent architecture designed to manage and orchestrate thousands of agents using a CSV file. This system acts as a centralized collector for agent outputs, saving results in a structured tabular format for easy sorting, filtering, and analysis. It supports parallel processing by allowing multiple agents to run concurrently, making it scalable and efficient for large-scale data operations.',
  author: {
    name: 'Community',
    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
    github: 'madebyagents-community'
  },
  category: ['Tabular', 'Data Management'],
- tags: ['spreadsheet', 'tabular', 'data-validation', 'reporting', 'tracking'],
+ tags: ['spreadsheet', 'swarm', 'csv', 'parallel', 'orchestrator'],
  diagram: {
    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-   alt: 'Spreadsheet-like architecture with coordinator, schema, validator, tabular store and agents'
+   alt: 'Spreadsheet Swarm - CSV input, orchestrator, agent pool, aggregator, CSV output'
  },
  implementation: {
-   codeExample: `class TabularCoordinator {
- constructor({ schema, validator, store }) {
-   this.schema = schema;       // defines columns, types, constraints
-   this.validator = validator; // validates rows/bulk updates
-   this.store = store;         // CRUD over rows
- }
-
- async insertRow(row) {
-   const normalized = this.schema.applyDefaults(row);
-   const errors = this.validator.validate(normalized, this.schema.definition);
-   if (errors.length) throw new Error('Validation failed: ' + JSON.stringify(errors));
-   return this.store.insert(normalized);
- }
-
- async bulkUpdate(filter, patch) {
-   // validate patch against schema (partial)
-   const errors = this.validator.validatePatch(patch, this.schema.definition);
-   if (errors.length) throw new Error('Patch invalid: ' + JSON.stringify(errors));
-   return this.store.updateMany(filter, patch);
- }
-
- async query(where, options = {}) {
-   return this.store.query(where, options);
- }
-
- async report(aggregationSpec) {
-   // e.g., groupBy, sum, avg, count on columns
-   return this.store.aggregate(aggregationSpec);
- }
+   codeExample: `// Generated json
+{
+  "name": "Spreadsheet Swarm Architecture",
+  "type": "spreadsheet_swarm",
+  "components": [
+    { "id": "input-csv", "type": "file", "position": { "x": 50, "y": 200 }, "label": "Input CSV", "color": "#bfdbfe" },
+    { "id": "swarm-orchestrator", "type": "orchestrator", "position": { "x": 250, "y": 200 }, "label": "Swarm Orchestrator", "color": "#fde047" },
+    { "id": "agent-pool", "type": "pool", "position": { "x": 500, "y": 200 }, "label": "Agent Pool", "color": "#a7f3d0" },
+    { "id": "worker-agent-1", "type": "agent", "position": { "x": 700, "y": 100 }, "label": "Worker Agent", "color": "#fecaca" },
+    { "id": "worker-agent-2", "type": "agent", "position": { "x": 700, "y": 200 }, "label": "Worker Agent", "color": "#fecaca" },
+    { "id": "worker-agent-n", "type": "agent", "position": { "x": 700, "y": 300 }, "label": "Worker Agent N", "color": "#fecaca" },
+    { "id": "output-aggregator", "type": "aggregator", "position": { "x": 900, "y": 200 }, "label": "Output Aggregator", "color": "#d8b4fe" },
+    { "id": "output-csv", "type": "file", "position": { "x": 1100, "y": 200 }, "label": "Output CSV", "color": "#bfdbfe" }
+  ],
+  "connections": [
+    { "id": "ss-conn-1", "from": "input-csv", "to": "swarm-orchestrator", "type": "read", "name": "Read Tasks" },
+    { "id": "ss-conn-2", "from": "swarm-orchestrator", "to": "agent-pool", "type": "dispatch", "name": "Dispatch Tasks" },
+    { "id": "ss-conn-3", "from": "agent-pool", "to": "worker-agent-1", "type": "assign", "name": "Assign Task" },
+    { "id": "ss-conn-4", "from": "agent-pool", "to": "worker-agent-2", "type": "assign", "name": "Assign Task" },
+    { "id": "ss-conn-5", "from": "agent-pool", "to": "worker-agent-n", "type": "assign", "name": "Assign Task" },
+    { "id": "ss-conn-6", "from": "worker-agent-1", "to": "output-aggregator", "type": "result", "name": "Task Result" },
+    { "id": "ss-conn-7", "from": "worker-agent-2", "to": "output-aggregator", "type": "result", "name": "Task Result" },
+    { "id": "ss-conn-8", "from": "worker-agent-n", "to": "output-aggregator", "type": "result", "name": "Task Result" },
+    { "id": "ss-conn-9", "from": "output-aggregator", "to": "output-csv", "type": "write", "name": "Write Results" }
+  ]
 }`,
-   language: 'javascript'
+   language: 'json'
  },
  useCases: [
-   'Batch result collection and curation for multi-agent runs across prompts, datasets, or tasks',
-   'Operational dashboards: track agent outputs with statuses, owners, timestamps, and metrics',
-   'Quality pipelines: validate and correct data at scale with auditable changes',
-   'Reporting and analytics: aggregations over large tabular agent outputs'
+   'Large-scale CSV-driven task orchestration',
+   'Parallel agent execution with centralized output collection',
+   'Bulk data processing with structured result storage'
  ],
- performance: {
-   scalability: 9,
-   complexity: 5,
-   reliability: 9
- },
+ performance: { scalability: 9, complexity: 5, reliability: 9 },
  createdAt: '2025-08-06',
  updatedAt: '2025-08-06',
  githubUrl: null,
- documentationUrl: 'https://www.aalpha.net/blog/how-to-build-multi-agent-ai-system/',
+ documentationUrl: 'https://docs.swarms.world/en/latest/multi_agent_architectures/documentation/SpreadSheetSwarm/',
  visual: {
-   name: 'SpreadSheet',
-   type: 'tabular',
+   name: 'Spreadsheet Swarm Architecture',
+   type: 'spreadsheet_swarm',
    components: [
-     {
-       id: 'data-coordinator',
-       type: 'coordinator',
-       position: { x: 300, y: 50 },
-       label: 'Data Coordinator',
-       color: '#ef4444'
-     },
-     {
-       id: 'schema-manager',
-       type: 'schema',
-       position: { x: 150, y: 150 },
-       label: 'Schema Manager',
-       color: '#f59e0b'
-     },
-     {
-       id: 'data-validator',
-       type: 'validator',
-       position: { x: 450, y: 150 },
-       label: 'Data Validator',
-       color: '#f59e0b'
-     },
-     {
-       id: 'tabular-store',
-       type: 'database',
-       position: { x: 300, y: 250 },
-       label: 'Tabular Data Store',
-       color: '#64748b'
-     },
-     {
-       id: 'collector-agent-1',
-       type: 'collector',
-       position: { x: 100, y: 400 },
-       label: 'Data Collector 1',
-       color: '#22c55e'
-     },
-     {
-       id: 'collector-agent-2',
-       type: 'collector',
-       position: { x: 200, y: 400 },
-       label: 'Data Collector 2',
-       color: '#22c55e'
-     },
-     {
-       id: 'processor-agent',
-       type: 'processor',
-       position: { x: 300, y: 400 },
-       label: 'Data Processor',
-       color: '#3b82f6'
-     },
-     {
-       id: 'analyzer-agent',
-       type: 'analyzer',
-       position: { x: 400, y: 400 },
-       label: 'Data Analyzer',
-       color: '#8b5cf6'
-     },
-     {
-       id: 'reporter-agent',
-       type: 'reporter',
-       position: { x: 500, y: 400 },
-       label: 'Report Generator',
-       color: '#06b6d4'
-     }
+     { id: 'input-csv', type: 'file', position: { x: 50, y: 200 }, label: 'Input CSV', color: '#bfdbfe' },
+     { id: 'swarm-orchestrator', type: 'orchestrator', position: { x: 250, y: 200 }, label: 'Swarm Orchestrator', color: '#fde047' },
+     { id: 'agent-pool', type: 'pool', position: { x: 500, y: 200 }, label: 'Agent Pool', color: '#a7f3d0' },
+     { id: 'worker-agent-1', type: 'agent', position: { x: 700, y: 100 }, label: 'Worker Agent', color: '#fecaca' },
+     { id: 'worker-agent-2', type: 'agent', position: { x: 700, y: 200 }, label: 'Worker Agent', color: '#fecaca' },
+     { id: 'worker-agent-n', type: 'agent', position: { x: 700, y: 300 }, label: 'Worker Agent N', color: '#fecaca' },
+     { id: 'output-aggregator', type: 'aggregator', position: { x: 900, y: 200 }, label: 'Output Aggregator', color: '#d8b4fe' },
+     { id: 'output-csv', type: 'file', position: { x: 1100, y: 200 }, label: 'Output CSV', color: '#bfdbfe' }
    ],
    connections: [
-     {
-       id: 'conn-1',
-       from: 'data-coordinator',
-       to: 'schema-manager',
-       type: 'schema-request',
-       name: 'Schema Definition'
-     },
-     {
-       id: 'conn-2',
-       from: 'data-coordinator',
-       to: 'data-validator',
-       type: 'validation-request',
-       name: 'Data Validation'
-     },
-     {
-       id: 'conn-3',
-       from: 'data-coordinator',
-       to: 'tabular-store',
-       type: 'data-operation',
-       name: 'CRUD Operations'
-     },
-     {
-       id: 'conn-4',
-       from: 'collector-agent-1',
-       to: 'tabular-store',
-       type: 'row-insert',
-       name: 'Insert Row Data'
-     },
-     {
-       id: 'conn-5',
-       from: 'collector-agent-2',
-       to: 'tabular-store',
-       type: 'row-insert',
-       name: 'Insert Row Data'
-     },
-     {
-       id: 'conn-6',
-       from: 'processor-agent',
-       to: 'tabular-store',
-       type: 'bulk-update',
-       name: 'Bulk Processing'
-     },
-     {
-       id: 'conn-7',
-       from: 'analyzer-agent',
-       to: 'tabular-store',
-       type: 'query',
-       name: 'Data Analysis'
-     },
-     {
-       id: 'conn-8',
-       from: 'reporter-agent',
-       to: 'tabular-store',
-       type: 'aggregation',
-       name: 'Generate Reports'
-     }
+     { id: 'ss-conn-1', from: 'input-csv', to: 'swarm-orchestrator', type: 'read', name: 'Read Tasks' },
+     { id: 'ss-conn-2', from: 'swarm-orchestrator', to: 'agent-pool', type: 'dispatch', name: 'Dispatch Tasks' },
+     { id: 'ss-conn-3', from: 'agent-pool', to: 'worker-agent-1', type: 'assign', name: 'Assign Task' },
+     { id: 'ss-conn-4', from: 'agent-pool', to: 'worker-agent-2', type: 'assign', name: 'Assign Task' },
+     { id: 'ss-conn-5', from: 'agent-pool', to: 'worker-agent-n', type: 'assign', name: 'Assign Task' },
+     { id: 'ss-conn-6', from: 'worker-agent-1', to: 'output-aggregator', type: 'result', name: 'Task Result' },
+     { id: 'ss-conn-7', from: 'worker-agent-2', to: 'output-aggregator', type: 'result', name: 'Task Result' },
+     { id: 'ss-conn-8', from: 'worker-agent-n', to: 'output-aggregator', type: 'result', name: 'Task Result' },
+     { id: 'ss-conn-9', from: 'output-aggregator', to: 'output-csv', type: 'write', name: 'Write Results' }
    ]
  }
 }
 ,
 {
  id: 'heavy',
- title: 'Heavy',
- description: 'A high-performance architecture for computationally intensive, large-scale workloads with coordinated multi-agent execution.',
- longDescription: 'A high-performance architecture designed for computationally intensive tasks that require significant processing power and coordination among multiple agents. This pattern focuses on handling large-scale data processing, complex simulations, and resource-intensive workflows by distributing computational load across multiple specialized agents with robust coordination mechanisms, fault tolerance, and performance optimization strategies.',
+ title: 'Heavy Architecture',
+ description: 'A high-performance architecture designed for handling intensive computational workloads by orchestrating multiple agents working on resource-heavy operations—perfect for large-scale data processing and high-throughput task execution.',
+ longDescription: 'A high-performance architecture designed for handling intensive computational workloads by orchestrating multiple agents working on resource-heavy operations—perfect for large-scale data processing and high-throughput task execution.',
  author: {
    name: 'Community',
    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
    github: 'madebyagents-community'
  },
  category: ['High-Performance', 'Parallel', 'Orchestration'],
- tags: ['high-performance', 'compute', 'partitioning', 'monitoring', 'aggregation', 'fault-tolerance'],
+ tags: ['high-performance', 'compute', 'load-balancing', 'optimization', 'aggregation', 'monitoring'],
  diagram: {
    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-   alt: 'Heavy compute architecture with master controller, resource manager, performance monitor, partitioner, compute clusters, and aggregator'
+   alt: 'Heavy Architecture - Resource manager, load balancer, heavy agent pool, compute agents, monitor, optimizer, aggregator, final output'
  },
  implementation: {
-   codeExample: `class HeavyOrchestrator {
- constructor({ resourceManager, monitor, partitioner, clusters, aggregator, retry = 1 }) {
-   this.resourceManager = resourceManager;
-   this.monitor = monitor;
-   this.partitioner = partitioner;
-   this.clusters = clusters;      // { id: { execute(chunk) } }
-   this.aggregator = aggregator;  // { combine(partials) }
-   this.retry = retry;
- }
+   codeExample: `class HeavyCoordinator {
+constructor({ resourceManager, loadBalancer, agentPool, monitor, optimizer, aggregator }) {
+  this.resourceManager = resourceManager;
+  this.loadBalancer = loadBalancer;
+  this.agentPool = agentPool;      // e.g., getAgents(), acquire(), release()
+  this.monitor = monitor;
+  this.optimizer = optimizer;      // can adjust routing/limits based on feedback
+  this.aggregator = aggregator;
+}
 
- async run(task) {
-   // Allocate resources and partition work
-   await this.resourceManager.allocate(task);
-   const chunks = await this.partitioner.split(task);
+async execute(task) {
+  await this.resourceManager.allocate(task);
+  const agents = await this.agentPool.getAgents();
 
-   // Dispatch chunks in parallel across clusters with basic retry
-   const execOne = async (chunk, attempt = 0) => {
-     const target = this.selectCluster(chunk);
-     const start = Date.now();
-     try {
-       const res = await target.execute(chunk);
-       await this.monitor.report({ cluster: target.id, ok: true, durMs: Date.now() - start });
-       return res;
-     } catch (e) {
-       await this.monitor.report({ cluster: target.id, ok: false, error: String(e), attempt });
-       if (attempt < this.retry) return execOne(chunk, attempt + 1);
-       // fallback: try another cluster once
-       const alt = this.selectAlternate(target.id);
-       if (alt) return alt.execute(chunk);
-       throw e;
-     }
-   };
+  // Route sub-tasks using load balancer
+  const plan = await this.loadBalancer.plan(task, agents);
 
-   const partials = await Promise.all(chunks.map(execOne));
-   const result = await this.aggregator.combine(partials);
-   await this.resourceManager.release(task);
-   return result;
- }
+  const results = await Promise.all(plan.map(async (assignment) => {
+    const { agent, subtask } = assignment;
+    const start = performance.now();
+    try {
+      const out = await agent.compute(subtask);
+      await this.monitor.report({ agent: agent.id, ok: true, durMs: performance.now() - start, usage: await agent.usage?.() });
+      return out;
+    } catch (err) {
+      await this.monitor.report({ agent: agent.id, ok: false, error: String(err) });
+      throw err;
+    }
+  }));
 
- selectCluster(chunk) {
-   // naive: choose least loaded cluster
-   const ranked = Object.values(this.clusters).sort((a, b) => (a.load ?? 0) - (b.load ?? 0));
-   return ranked[0] || Object.values(this.clusters)[0];
- }
+  // Feedback loop to optimizer
+  const tuning = await this.monitor.snapshot?.();
+  if (tuning) await this.optimizer.adjust(tuning);
 
- selectAlternate(excludeId) {
-   return Object.values(this.clusters).find(c => c.id !== excludeId);
- }
+  const final = await this.aggregator.combine(results);
+  await this.resourceManager.release(task);
+  return final;
+}
 }`,
    language: 'javascript'
  },
  useCases: [
-   'Large-scale data processing (ETL, distributed transformations, feature computation)',
-   'Complex simulations and scientific computing with partitioned workloads',
-   'Batch inference over massive datasets using distributed compute clusters',
-   'High-throughput pipelines requiring monitoring, retries, and aggregation'
+   'Large-scale data processing and high-throughput task execution',
+   'Distributed heavy computations with dynamic balancing and optimization',
+   'Batch processing pipelines with monitoring and feedback-driven tuning'
  ],
  performance: {
    scalability: 10,
@@ -2730,132 +2489,31 @@ class ReportGen { async process(d) { return generateReport(d); } }
  createdAt: '2025-08-06',
  updatedAt: '2025-08-06',
  githubUrl: null,
- documentationUrl: 'https://www.aalpha.net/blog/how-to-build-multi-agent-ai-system/',
+ documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
  visual: {
-   name: 'Heavy',
-   type: 'high-performance',
+   name: 'Heavy Architecture',
+   type: 'heavy_computation',
    components: [
-     {
-       id: 'master-controller',
-       type: 'controller',
-       position: { x: 300, y: 50 },
-       label: 'Master Controller',
-       color: '#ef4444'
-     },
-     {
-       id: 'resource-manager',
-       type: 'resource',
-       position: { x: 150, y: 150 },
-       label: 'Resource Manager',
-       color: '#f59e0b'
-     },
-     {
-       id: 'performance-monitor',
-       type: 'monitor',
-       position: { x: 450, y: 150 },
-       label: 'Performance Monitor',
-       color: '#f59e0b'
-     },
-     {
-       id: 'task-partitioner',
-       type: 'partitioner',
-       position: { x: 300, y: 200 },
-       label: 'Task Partitioner',
-       color: '#64748b'
-     },
-     {
-       id: 'compute-cluster-1',
-       type: 'cluster',
-       position: { x: 100, y: 350 },
-       label: 'Compute Cluster 1',
-       color: '#22c55e'
-     },
-     {
-       id: 'compute-cluster-2',
-       type: 'cluster',
-       position: { x: 250, y: 350 },
-       label: 'Compute Cluster 2',
-       color: '#22c55e'
-     },
-     {
-       id: 'compute-cluster-3',
-       type: 'cluster',
-       position: { x: 400, y: 350 },
-       label: 'Compute Cluster 3',
-       color: '#22c55e'
-     },
-     {
-       id: 'result-aggregator',
-       type: 'aggregator',
-       position: { x: 550, y: 350 },
-       label: 'Result Aggregator',
-       color: '#3b82f6'
-     }
+     { id: 'resource-manager', type: 'manager', position: { x: 100, y: 100 }, label: 'Resource Manager', color: '#fde68a' },
+     { id: 'load-balancer', type: 'router', position: { x: 300, y: 100 }, label: 'Load Balancer', color: '#c7d2fe' },
+     { id: 'agent-pool', type: 'pool', position: { x: 500, y: 100 }, label: 'Heavy Agent Pool', color: '#a7f3d0' },
+     { id: 'compute-agent-1', type: 'compute', position: { x: 700, y: 50 }, label: 'Compute Agent 1', color: '#fef9c3' },
+     { id: 'compute-agent-2', type: 'compute', position: { x: 700, y: 150 }, label: 'Compute Agent 2', color: '#fef9c3' },
+     { id: 'resource-monitor', type: 'monitor', position: { x: 900, y: 100 }, label: 'Resource Monitor', color: '#fee2e2' },
+     { id: 'performance-optimizer', type: 'optimizer', position: { x: 1100, y: 100 }, label: 'Performance Optimizer', color: '#dbeafe' },
+     { id: 'result-aggregator', type: 'aggregator', position: { x: 1300, y: 100 }, label: 'Result Aggregator', color: '#ffedd5' },
+     { id: 'final-output', type: 'output', position: { x: 1500, y: 100 }, label: 'Final Output', color: '#ecfccb' }
    ],
    connections: [
-     {
-       id: 'conn-1',
-       from: 'master-controller',
-       to: 'resource-manager',
-       type: 'resource-allocation',
-       name: 'Resource Allocation'
-     },
-     {
-       id: 'conn-2',
-       from: 'master-controller',
-       to: 'performance-monitor',
-       type: 'monitoring',
-       name: 'Performance Tracking'
-     },
-     {
-       id: 'conn-3',
-       from: 'master-controller',
-       to: 'task-partitioner',
-       type: 'task-division',
-       name: 'Task Partitioning'
-     },
-     {
-       id: 'conn-4',
-       from: 'task-partitioner',
-       to: 'compute-cluster-1',
-       type: 'workload',
-       name: 'Heavy Computation'
-     },
-     {
-       id: 'conn-5',
-       from: 'task-partitioner',
-       to: 'compute-cluster-2',
-       type: 'workload',
-       name: 'Heavy Computation'
-     },
-     {
-       id: 'conn-6',
-       from: 'task-partitioner',
-       to: 'compute-cluster-3',
-       type: 'workload',
-       name: 'Heavy Computation'
-     },
-     {
-       id: 'conn-7',
-       from: 'compute-cluster-1',
-       to: 'result-aggregator',
-       type: 'results',
-       name: 'Partial Results'
-     },
-     {
-       id: 'conn-8',
-       from: 'compute-cluster-2',
-       to: 'result-aggregator',
-       type: 'results',
-       name: 'Partial Results'
-     },
-     {
-       id: 'conn-9',
-       from: 'compute-cluster-3',
-       to: 'result-aggregator',
-       type: 'results',
-       name: 'Partial Results'
-     }
+     { id: 'conn-1', from: 'resource-manager', to: 'load-balancer', type: 'control', name: 'Allocate Resources' },
+     { id: 'conn-2', from: 'load-balancer', to: 'agent-pool', type: 'distribute', name: 'Dispatch Agents' },
+     { id: 'conn-3', from: 'agent-pool', to: 'compute-agent-1', type: 'task', name: 'Compute Task' },
+     { id: 'conn-4', from: 'agent-pool', to: 'compute-agent-2', type: 'task', name: 'Compute Task' },
+     { id: 'conn-5', from: 'compute-agent-1', to: 'resource-monitor', type: 'report', name: 'Usage Report' },
+     { id: 'conn-6', from: 'compute-agent-2', to: 'resource-monitor', type: 'report', name: 'Usage Report' },
+     { id: 'conn-7', from: 'resource-monitor', to: 'performance-optimizer', type: 'feedback', name: 'Optimize' },
+     { id: 'conn-8', from: 'performance-optimizer', to: 'result-aggregator', type: 'aggregated', name: 'Aggregate Results' },
+     { id: 'conn-9', from: 'result-aggregator', to: 'final-output', type: 'deliver', name: 'Produce Final Output' }
    ]
  }
 }
@@ -3025,7 +2683,900 @@ class ReportGen { async process(d) { return generateReport(d); } }
        type: 'conditional',
        name: 'Complex Workflows'
      }
-   ]
+    ]
  }
 }
+,
+{
+  id: 'deep-research',
+  title: 'Deep Research',
+  description: 'Specialized architecture for comprehensive, multi-domain research with iterative planning, cross-validation, and synthesis.',
+  longDescription: 'A specialized architecture tailored for conducting comprehensive research across multiple domains. This approach uses iterative workflows where research queries trigger domain-specific agents, whose findings are aggregated, cross-validated, refined, and synthesized into a final report—optimal for academic research, market intelligence, and deep data investigation.',
+  author: {
+    name: 'Community',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    github: 'madebyagents-community'
+  },
+  category: ['Research', 'Iterative', 'Synthesis'],
+  tags: ['research', 'planning', 'validation', 'synthesis', 'multi-domain'],
+  diagram: {
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+    alt: 'Deep Research - Iterative multi-agent research with aggregation, validation, refinement, and synthesis'
+  },
+  implementation: {
+    codeExample: `class DeepResearch {
+  constructor({ planner, domainAnalyzers, agents, validator, refiner, synthesizer, aggregator }) {
+    this.planner = planner;                   // plans research steps/sub-questions
+    this.domainAnalyzers = domainAnalyzers;   // maps domain -> analyzer
+    this.agents = agents;                     // maps domain -> agent array
+    this.validator = validator;               // cross-checks findings
+    this.refiner = refiner;                   // decides what to iterate on
+    this.synthesizer = synthesizer;           // produces final report
+    this.aggregator = aggregator || ((findings) => findings.flat());
+  }
+
+  async run(researchQuery, { maxLoops = 3 } = {}) {
+    // 1) Plan domains/sub-questions
+    const plan = await this.planner.createPlan(researchQuery);
+    // plan: [{ domain: 'finance', question }, { domain: 'academic', question }, ...]
+
+    // 2) Domain analysis: expand tasks per domain
+    const domainTasks = await Promise.all(plan.map(async (p) => {
+      const analyzer = this.domainAnalyzers[p.domain];
+      return analyzer ? await analyzer.expand(p) : [p];
+    }));
+    let tasks = domainTasks.flat();
+
+    // 3) Dispatch to domain-specific agents
+    const initialFindings = await Promise.all(tasks.map(async (t) => {
+      const pool = this.agents[t.domain] || [];
+      const results = await Promise.all(pool.map(a => a.research(t)));
+      return { task: t, results };
+    }));
+
+    // 4) Aggregate
+    let aggregated = this.aggregator(initialFindings);
+
+    // 5) Cross-validate and refinement loop
+    for (let i = 0; i &lt; maxLoops; i++) {
+      const validation = await this.validator.crossCheck(aggregated);
+      const refinePlan = await this.refiner.decide(validation, aggregated);
+      if (!refinePlan || refinePlan.length === 0) break;
+
+      const loopFindings = await Promise.all(refinePlan.map(async (t) => {
+        const pool = this.agents[t.domain] || [];
+        const results = await Promise.all(pool.map(a => a.research(t)));
+        return { task: t, results };
+      }));
+      aggregated = this.aggregator([...aggregated, ...loopFindings]);
+    }
+
+    // 6) Synthesize final report
+    return this.synthesizer.compose(aggregated, researchQuery);
+  }
+}`,
+    language: 'javascript'
+  },
+  useCases: [
+    'Academic literature reviews and meta-analyses',
+    'Market intelligence and competitor analysis',
+    'Policy research and evidence synthesis',
+    'Technical due diligence and feasibility studies'
+  ],
+  performance: {
+    scalability: 8,
+    complexity: 7,
+    reliability: 9
+  },
+  createdAt: '2025-08-06',
+  updatedAt: '2025-08-06',
+  githubUrl: null,
+  documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+  visual: {
+    name: 'Deep Research Architecture',
+    type: 'deep_research',
+    components: [
+      { id: 'research-query', type: 'input', position: { x: 100, y: 100 }, label: 'Research Query', color: '#fde68a' },
+      { id: 'research-planner', type: 'planner', position: { x: 300, y: 100 }, label: 'Research Planner', color: '#c7d2fe' },
+      { id: 'domain-analysis', type: 'analyzer', position: { x: 500, y: 100 }, label: 'Domain Analysis', color: '#a7f3d0' },
+      { id: 'research-agent-1', type: 'agent', position: { x: 700, y: 25 }, label: 'Research Agent 1', color: '#fef9c3' },
+      { id: 'research-agent-2', type: 'agent', position: { x: 700, y: 100 }, label: 'Research Agent 2', color: '#fef9c3' },
+      { id: 'research-agent-n', type: 'agent', position: { x: 700, y: 175 }, label: 'Research Agent N', color: '#fef9c3' },
+      { id: 'initial-findings', type: 'aggregator', position: { x: 900, y: 100 }, label: 'Initial Findings', color: '#fee2e2' },
+      { id: 'cross-validation', type: 'validator', position: { x: 1100, y: 100 }, label: 'Cross-Validation', color: '#dbeafe' },
+      { id: 'refinement-loop', type: 'loop', position: { x: 1300, y: 100 }, label: 'Refinement Loop', color: '#dcfce7' },
+      { id: 'synthesis-agent', type: 'synthesizer', position: { x: 1500, y: 100 }, label: 'Synthesis Agent', color: '#f0f9ff' },
+      { id: 'comprehensive-report', type: 'output', position: { x: 1700, y: 100 }, label: 'Comprehensive Report', color: '#ffedd5' }
+    ],
+    connections: [
+      { id: 'c1', from: 'research-query', to: 'research-planner', type: 'plan', name: 'Plan Research' },
+      { id: 'c2', from: 'research-planner', to: 'domain-analysis', type: 'analyze', name: 'Domain Analysis' },
+      { id: 'c3', from: 'domain-analysis', to: 'research-agent-1', type: 'task', name: 'Task Domain 1' },
+      { id: 'c4', from: 'domain-analysis', to: 'research-agent-2', type: 'task', name: 'Task Domain 2' },
+      { id: 'c5', from: 'domain-analysis', to: 'research-agent-n', type: 'task', name: 'Task Domain N' },
+      { id: 'c6', from: 'research-agent-1', to: 'initial-findings', type: 'report', name: 'Findings' },
+      { id: 'c7', from: 'research-agent-2', to: 'initial-findings', type: 'report', name: 'Findings' },
+      { id: 'c8', from: 'research-agent-n', to: 'initial-findings', type: 'report', name: 'Findings' },
+      { id: 'c9', from: 'initial-findings', to: 'cross-validation', type: 'validate', name: 'Cross-Check' },
+      { id: 'c10', from: 'cross-validation', to: 'refinement-loop', type: 'refine', name: 'Refine' },
+      { id: 'c11', from: 'refinement-loop', to: 'initial-findings', type: 'loop', name: 'Iterate' },
+      { id: 'c12', from: 'refinement-loop', to: 'synthesis-agent', type: 'synthesize', name: 'Synthesize Output' },
+      { id: 'c13', from: 'synthesis-agent', to: 'comprehensive-report', type: 'deliver', name: 'Deliver Report' }
+    ]
+   }
+ },
+ {
+   id: 'de-hallucination',
+   title: 'De-Hallucination Architecture',
+   description: 'Consensus-based validation to minimize hallucinations: primary agent generates, multiple validators fact-check, consensus decides to accept or refine.',
+   longDescription: 'An architecture specifically crafted to minimize and eliminate hallucinations in AI-generated outputs using consensus-based validation. A primary agent produces an initial response, which is then fact-checked by multiple secondary validator agents. A consensus engine evaluates agreement among validations to either finalize the output (if confidence exceeds a threshold) or trigger a targeted refinement loop back to the primary agent.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Safety', 'Validation', 'Consensus'],
+   tags: ['de-hallucination', 'validation', 'consensus', 'confidence-scoring', 'refinement'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'De-Hallucination - Primary output validated by multiple fact-checkers, consensus decides accept/refine'
+   },
+   implementation: {
+     codeExample: `class DeHallucination {
+  constructor({ primary, validators, consensus, threshold = 0.75 }) {
+    this.primary = primary;           // generates initial answer/refinements
+    this.validators = validators;     // [{ id, validate: async (answer)=>{ ok:boolean, evidence?:any, score:number } }]
+    this.consensus = consensus;       // async (verdicts)=>{ confidence:number, decision:'accept'|'refine', details? }
+    this.threshold = threshold;
+  }
+
+  async run(query, maxLoops = 3) {
+    let attempt = await this.primary.respond(query);
+    for (let i = 0; i < maxLoops; i++) {
+      const verdicts = await Promise.all(this.validators.map(v => v.validate(attempt)));
+      const { confidence, decision } = await this.consensus(verdicts);
+      if (confidence >= this.threshold && decision === 'accept') {
+        return { output: attempt, confidence, iterations: i + 1, accepted: true, verdicts };
+      }
+      // refine using validator feedback
+      attempt = await this.primary.refine({ query, attempt, verdicts, confidence });
+    }
+    // final pass
+    const finalVerdicts = await Promise.all(this.validators.map(v => v.validate(attempt)));
+    const { confidence } = await this.consensus(finalVerdicts);
+    return { output: attempt, confidence, iterations: maxLoops, accepted: confidence >= this.threshold, verdicts: finalVerdicts };
+  }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Factual Q&A systems requiring high reliability',
+     'Medical/legal content assistants needing strict fact-checking',
+     'Code assistants validating outputs against tests or static analysis',
+     'Research assistants cross-validating sources before synthesis'
+   ],
+   performance: {
+     scalability: 7,
+     complexity: 6,
+     reliability: 10
+   },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: "De-Hallucination Architecture",
+     type: "de_hallucination",
+     components: [
+       {
+         id: "input-query",
+         type: "input",
+         position: { x: 100, y: 100 },
+         label: "Input Query",
+         color: "#fde68a"
+       },
+       {
+         id: "primary-agent",
+         type: "agent",
+         position: { x: 300, y: 100 },
+         label: "Primary Agent",
+         color: "#c7d2fe"
+       },
+       {
+         id: "initial-response",
+         type: "output",
+         position: { x: 500, y: 100 },
+         label: "Initial Response",
+         color: "#a7f3d0"
+       },
+       {
+         id: "fact-check-agent-1",
+         type: "validator",
+         position: { x: 700, y: 25 },
+         label: "Fact-Check Agent 1",
+         color: "#fef9c3"
+       },
+       {
+         id: "fact-check-agent-2",
+         type: "validator",
+         position: { x: 700, y: 100 },
+         label: "Fact-Check Agent 2",
+         color: "#fef9c3"
+       },
+       {
+         id: "fact-check-agent-3",
+         type: "validator",
+         position: { x: 700, y: 175 },
+         label: "Fact-Check Agent 3",
+         color: "#fef9c3"
+       },
+       {
+         id: "consensus-engine",
+         type: "consensus",
+         position: { x: 918, y: 51 },
+         label: "Consensus Engine",
+         color: "#fee2e2"
+       },
+       {
+         id: "confidence-score",
+         type: "score",
+         position: { x: 941, y: 223 },
+         label: "Confidence Score",
+         color: "#dbeafe"
+       },
+       {
+         id: "validated-output",
+         type: "output",
+         position: { x: 1184, y: 122 },
+         label: "Validated Output",
+         color: "#dcfce7"
+       },
+       {
+         id: "refinement-loop",
+         type: "loop",
+         position: { x: 687, y: 315 },
+         label: "Request Refinement",
+         color: "#f0f9ff"
+       }
+     ],
+     connections: [
+       { id: "d1", from: "input-query", to: "primary-agent", type: "request", name: "Generate Response" },
+       { id: "d2", from: "primary-agent", to: "initial-response", type: "output", name: "Initial Output" },
+       { id: "d3", from: "initial-response", to: "fact-check-agent-1", type: "validate", name: "Validate 1" },
+       { id: "d4", from: "initial-response", to: "fact-check-agent-2", type: "validate", name: "Validate 2" },
+       { id: "d5", from: "initial-response", to: "fact-check-agent-3", type: "validate", name: "Validate 3" },
+       { id: "d6", from: "fact-check-agent-1", to: "consensus-engine", type: "feed", name: "Feedback 1" },
+       { id: "d7", from: "fact-check-agent-2", to: "consensus-engine", type: "feed", name: "Feedback 2" },
+       { id: "d8", from: "fact-check-agent-3", to: "consensus-engine", type: "feed", name: "Feedback 3" },
+       { id: "d9", from: "consensus-engine", to: "confidence-score", type: "evaluate", name: "Evaluate Consensus" },
+       { id: "d10", from: "confidence-score", to: "validated-output", type: "deliver", name: "If Score > Threshold" },
+       { id: "d11", from: "confidence-score", to: "refinement-loop", type: "loop", name: "If Score ≤ Threshold" },
+       { id: "d12", from: "refinement-loop", to: "primary-agent", type: "request", name: "Refine Request" }
+     ]
+   }
+ }
+ ,
+ {
+   id: 'malt-architecture',
+   title: 'MALT (Multi-Agent Learning Task)',
+   description: 'Creator produces an initial solution; Verifiers independently evaluate; Refiners improve based on feedback; iterates to high-quality output.',
+   longDescription: 'Multi-Agent Learning Task (MALT) is a structured multi-agent framework in which a Creator Agent produces an initial solution, Verifier Agents evaluate it independently, and Refiner Agents enhance it based on feedback. This iterative process supports high-quality outputs for complex tasks such as mathematical proofs, translations, or content generation.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Iterative', 'Quality', 'Orchestration'],
+   tags: ['creator', 'verifier', 'refiner', 'feedback', 'iteration', 'malt'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'MALT - Creator → Verifiers → Refiners → Final Output with orchestrator and conversation manager'
+   },
+   implementation: {
+     codeExample: `class MALT {
+ constructor({ creator, verifiers = [], refiners = [], maxLoops = 3, accept = (fb) => fb?.score >= 0.9 }) {
+   this.creator = creator;
+   this.verifiers = verifiers;
+   this.refiners = refiners;
+   this.maxLoops = maxLoops;
+   this.accept = accept;
+   this.history = [];
+ }
+
+ async run(task) {
+   // 1) Creator drafts initial solution
+   let solution = await this.creator.generate(task);
+   this.history.push({ role: 'creator', solution });
+
+   for (let i = 0; i < this.maxLoops; i++) {
+     // 2) Independent verification
+     const feedbacks = await Promise.all(
+       this.verifiers.map(v => v.verify(solution, task).catch(err => ({ ok: false, error: String(err) })))
+     );
+
+     // Aggregate feedback (simple score averaging + comments)
+     const okScores = feedbacks.map(f => Number(f?.score ?? 0)).filter(n => !Number.isNaN(n));
+     const avgScore = okScores.length ? okScores.reduce((a,b) => a + b, 0) / okScores.length : 0;
+     const aggregate = { score: avgScore, details: feedbacks };
+
+     this.history.push({ role: 'verifiers', feedbacks, aggregate });
+
+     // 3) Accept or refine
+     if (this.accept(aggregate)) {
+       return { output: solution, score: aggregate.score, iterations: i + 1, approved: true, trace: this.history };
+     }
+
+     // 4) Refinement by refiner pool (first-come improvement, or choose best)
+     const refinedCandidates = await Promise.all(
+       (this.refiners.length ? this.refiners : [ { refine: async (s) => s } ])
+         .map(r => r.refine(solution, aggregate, task).catch(err => ({ error: String(err) })))
+     );
+
+     // choose best by heuristic: if a candidate provides score hint, else fallback to first valid
+     const pick = refinedCandidates.find(c => typeof c === 'string' || c?.text) ?? refinedCandidates[0];
+     solution = typeof pick === 'string' ? pick : (pick?.text ?? solution);
+     this.history.push({ role: 'refiners', refined: solution });
+   }
+
+   // Final verification exit
+   const finalFeedbacks = await Promise.all(
+     this.verifiers.map(v => v.verify(solution, task).catch(err => ({ ok: false, error: String(err) })))
+   );
+   const scores = finalFeedbacks.map(f => Number(f?.score ?? 0)).filter(n => !Number.isNaN(n));
+   const finalScore = scores.length ? scores.reduce((a,b) => a + b, 0) / scores.length : 0;
+
+   return { output: solution, score: finalScore, iterations: this.maxLoops, approved: this.accept({ score: finalScore }), trace: this.history };
+ }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Mathematical Proofs: creator drafts proof, verifiers check steps, refiners fix gaps.',
+     'High-Quality Translation: creator translates, multiple verifiers check semantics/style, refiners polish.',
+     'Content Generation: creator writes draft, verifiers review for accuracy/tone, refiners enhance quality.'
+   ],
+   performance: {
+     scalability: 8,
+     complexity: 6,
+     reliability: 9
+   },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/structs/malt/',
+   visual: {
+     name: 'MALT Architecture',
+     type: 'malt',
+     components: [
+       {
+         id: 'user-task',
+         type: 'input',
+         position: { x: 100, y: 100 },
+         label: 'User Task',
+         color: '#fde68a'
+       },
+       {
+         id: 'malt-orchestrator',
+         type: 'orchestrator',
+         position: { x: 300, y: 100 },
+         label: 'MALT Orchestrator',
+         color: '#c7d2fe'
+       },
+       {
+         id: 'creator-agent',
+         type: 'agent',
+         position: { x: 500, y: 100 },
+         label: 'Creator Agent',
+         color: '#a7f3d0'
+       },
+       {
+         id: 'conversation-manager',
+         type: 'manager',
+         position: { x: 700, y: 100 },
+         label: 'Conversation Manager',
+         color: '#fee2e2'
+       },
+       {
+         id: 'verifier-agents',
+         type: 'pool',
+         position: { x: 900, y: 50 },
+         label: 'Verifier Agent Pool',
+         color: '#fef9c3'
+       },
+       {
+         id: 'refiner-agents',
+         type: 'pool',
+         position: { x: 895, y: 247 },
+         label: 'Refiner Agent Pool',
+         color: '#fef9c3'
+       },
+       {
+         id: 'final-output',
+         type: 'output',
+         position: { x: 1100, y: 100 },
+         label: 'Final Output',
+         color: '#dcfce7'
+       }
+     ],
+     connections: [
+       { id: 'm1', from: 'user-task', to: 'malt-orchestrator', type: 'start', name: 'Submit Task' },
+       { id: 'm2', from: 'malt-orchestrator', to: 'creator-agent', type: 'request', name: 'Generate Initial Solution' },
+       { id: 'm3', from: 'creator-agent', to: 'conversation-manager', type: 'record', name: 'Log Solution' },
+       { id: 'm4', from: 'conversation-manager', to: 'verifier-agents', type: 'evaluate', name: 'Verify Solution' },
+       { id: 'm5', from: 'verifier-agents', to: 'conversation-manager', type: 'feedback', name: 'Feedback' },
+       { id: 'm6', from: 'conversation-manager', to: 'refiner-agents', type: 'refine', name: 'Refine Solution' },
+       { id: 'm7', from: 'refiner-agents', to: 'final-output', type: 'deliver', name: 'Return Output' }
+     ]
+   }
+ },
+ {
+   id: 'majority-voting',
+   title: 'Majority Voting',
+   description: 'Agents independently vote on proposed decisions; the option with the most votes is selected as final.',
+   longDescription: 'A consensus architecture where each agent casts a vote on proposed decisions or outputs; the option with the most votes is selected as final. This reduces errors and promotes democratic decision-making in contexts like quality control or ensemble predictions.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Consensus', 'Ensemble', 'Validation'],
+   tags: ['majority-vote', 'consensus', 'ensemble', 'aggregation'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Majority Voting - Multiple agents casting votes aggregated into a final decision'
+   },
+   implementation: {
+     codeExample: `class MajorityVoting {
+ constructor(voters, { tieBreaker } = {}) {
+   this.voters = voters; // array of agents with vote(input) -> Promise<string|number|boolean>
+   this.tieBreaker = tieBreaker || ((candidates) => candidates[0]); // pick deterministically if tie
+ }
+
+ async decide(proposal) {
+   const votes = await Promise.all(this.voters.map(v => v.vote(proposal)));
+   const tally = new Map();
+   for (const v of votes) tally.set(v, (tally.get(v) ?? 0) + 1);
+
+   // find max count candidates
+   let max = 0;
+   const counts = [];
+   for (const [opt, c] of tally.entries()) {
+     counts.push({ option: opt, count: c });
+     if (c > max) max = c;
+   }
+   const top = counts.filter(c => c.count === max).map(c => c.option);
+
+   const decision = top.length === 1 ? top[0] : this.tieBreaker(top);
+   return { decision, votes, tally: Object.fromEntries(tally), tie: top.length > 1 };
+ }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Ensemble model predictions: aggregate outputs from multiple specialized models',
+     'Quality control: multiple agents vote to accept/reject generated content',
+     'Decision arbitration: choose safest plan among alternative proposals'
+   ],
+   performance: {
+     scalability: 8,
+     complexity: 3,
+     reliability: 9
+   },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: 'Majority Voting Architecture',
+     type: 'majority_voting',
+     components: [
+       { id: 'proposal', type: 'input', position: { x: 100, y: 100 }, label: 'Proposal', color: '#fde68a' },
+       { id: 'agent-1', type: 'voter', position: { x: 300, y: 50 }, label: 'Agent 1', color: '#c7d2fe' },
+       { id: 'agent-2', type: 'voter', position: { x: 300, y: 100 }, label: 'Agent 2', color: '#c7d2fe' },
+       { id: 'agent-n', type: 'voter', position: { x: 300, y: 150 }, label: 'Agent N', color: '#c7d2fe' },
+       { id: 'vote-aggregator', type: 'aggregator', position: { x: 500, y: 100 }, label: 'Vote Aggregator', color: '#a7f3d0' },
+       { id: 'decision', type: 'output', position: { x: 700, y: 100 }, label: 'Final Decision', color: '#fee2e2' }
+     ],
+     connections: [
+       { id: 'mv1', from: 'proposal', to: 'agent-1', type: 'request', name: 'Request Vote' },
+       { id: 'mv2', from: 'proposal', to: 'agent-2', type: 'request', name: 'Request Vote' },
+       { id: 'mv3', from: 'proposal', to: 'agent-n', type: 'request', name: 'Request Vote' },
+       { id: 'mv4', from: 'agent-1', to: 'vote-aggregator', type: 'vote', name: 'Submit Vote' },
+       { id: 'mv5', from: 'agent-2', to: 'vote-aggregator', type: 'vote', name: 'Submit Vote' },
+       { id: 'mv6', from: 'agent-n', to: 'vote-aggregator', type: 'vote', name: 'Submit Vote' },
+       { id: 'mv7', from: 'vote-aggregator', to: 'decision', type: 'deliver', name: 'Finalize Decision' }
+     ]
+   }
+ },
+ {
+   id: 'round-robin',
+   title: 'Round Robin',
+   description: 'Tasks are distributed cyclically among agents in a fixed sequence for fair load balancing.',
+   longDescription: 'Tasks are distributed cyclically among agents in a fixed sequence, ensuring fair load balancing and preventing any single agent from being overburdened. It’s widely used in scheduling, resource allocation, and parallel workflows.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Scheduling', 'Load Balancing'],
+   tags: ['round-robin', 'scheduler', 'fairness', 'queue'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Round Robin - Scheduler dispatches tasks cyclically across agents'
+   },
+   implementation: {
+     codeExample: `class RoundRobinScheduler {
+ constructor(workers = []) {
+   this.workers = workers;
+   this.index = 0;
+ }
+ nextWorker() {
+   if (this.workers.length === 0) throw new Error('No workers');
+   const w = this.workers[this.index % this.workers.length];
+   this.index = (this.index + 1) % this.workers.length;
+   return w;
+ }
+ async dispatch(task) {
+   const worker = this.nextWorker();
+   return worker.process(task);
+ }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Fair distribution of independent tasks across agents',
+     'Rate-limiting hotspots by rotating handlers',
+     'Balanced background job execution'
+   ],
+   performance: { scalability: 9, complexity: 3, reliability: 8 },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: 'Round Robin Architecture',
+     type: 'round_robin',
+     components: [
+       { id: 'task-queue', type: 'queue', position: { x: 102, y: 81 }, label: 'Task Queue', color: '#fde68a' },
+       { id: 'agent-1', type: 'worker', position: { x: 490, y: 10 }, label: 'Agent 1', color: '#c7d2fe' },
+       { id: 'agent-2', type: 'worker', position: { x: 488, y: 157 }, label: 'Agent 2', color: '#c7d2fe' },
+       { id: 'agent-n', type: 'worker', position: { x: 485, y: 279 }, label: 'Agent N', color: '#c7d2fe' },
+       { id: 'scheduler', type: 'scheduler', position: { x: 103, y: 233 }, label: 'Round Robin Scheduler', color: '#a7f3d0' },
+       { id: 'output', type: 'output', position: { x: 730, y: 100 }, label: 'Processed Tasks', color: '#fee2e2' }
+     ],
+     connections: [
+       { id: 'rr1', from: 'task-queue', to: 'scheduler', type: 'feed', name: 'Feed Tasks' },
+       { id: 'rr2', from: 'scheduler', to: 'agent-1', type: 'dispatch', name: 'Dispatch to Agent 1' },
+       { id: 'rr3', from: 'scheduler', to: 'agent-2', type: 'dispatch', name: 'Dispatch to Agent 2' },
+       { id: 'rr4', from: 'scheduler', to: 'agent-n', type: 'dispatch', name: 'Dispatch to Agent N' },
+       { id: 'rr5', from: 'agent-1', to: 'output', type: 'deliver', name: 'Return Result' },
+       { id: 'rr6', from: 'agent-2', to: 'output', type: 'deliver', name: 'Return Result' },
+       { id: 'rr7', from: 'agent-n', to: 'output', type: 'deliver', name: 'Return Result' }
+     ]
+   }
+ },
+ {
+   id: 'auto-builder',
+   title: 'Auto-Builder',
+   description: 'Inspects task requirements and automatically composes the necessary agents into a working swarm.',
+   longDescription: 'A meta-architecture that inspects task requirements and automatically composes and configures the necessary agents into a working swarm. It streamlines rapid prototyping and adaptive system creation.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Orchestration', 'Automation'],
+   tags: ['auto-builder', 'composition', 'generation', 'factory'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Auto-Builder - Engine analyzes spec, builds agents, stores config, deploys swarm'
+   },
+   implementation: {
+     codeExample: `class AutoBuilder {
+ constructor({ analyzer, factory, configStore, deployer }) {
+   this.analyzer = analyzer;
+   this.factory = factory;
+   this.configStore = configStore;
+   this.deployer = deployer;
+ }
+ async buildAndDeploy(taskSpec) {
+   const plan = await this.analyzer.plan(taskSpec);
+   const agents = await this.factory.create(plan);
+   const configId = await this.configStore.save({ plan, agents });
+   return this.deployer.deploy(configId);
+ }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Rapid prototyping of agent systems from high-level specs',
+     'Auto-scaling agent creation based on task domains',
+     'Reusable configuration blueprints for deployments'
+   ],
+   performance: { scalability: 8, complexity: 5, reliability: 8 },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: 'Auto-Builder Architecture',
+     type: 'auto_builder',
+     components: [
+       { id: 'task-spec', type: 'input', position: { x: 100, y: 100 }, label: 'Task Specification', color: '#fde68a' },
+       { id: 'builder-engine', type: 'engine', position: { x: 300, y: 100 }, label: 'Builder Engine', color: '#c7d2fe' },
+       { id: 'agent-factory', type: 'factory', position: { x: 500, y: 100 }, label: 'Agent Factory', color: '#a7f3d0' },
+       { id: 'configuration-store', type: 'store', position: { x: 700, y: 100 }, label: 'Configuration Store', color: '#fee2e2' },
+       { id: 'deployed-swarm', type: 'swarm', position: { x: 900, y: 100 }, label: 'Deployed Swarm', color: '#dcfce7' }
+     ],
+     connections: [
+       { id: 'ab1', from: 'task-spec', to: 'builder-engine', type: 'analyze', name: 'Analyze Spec' },
+       { id: 'ab2', from: 'builder-engine', to: 'agent-factory', type: 'create', name: 'Create Agents' },
+       { id: 'ab3', from: 'agent-factory', to: 'configuration-store', type: 'store', name: 'Store Config' },
+       { id: 'ab4', from: 'configuration-store', to: 'deployed-swarm', type: 'deploy', name: 'Deploy Swarm' }
+     ]
+   }
+ },
+ {
+   id: 'hybrid-hierarchical-cluster',
+   title: 'Hybrid Hierarchical Cluster',
+   description: 'Top-level coordinator delegates tasks; peer clusters collaborate directly for efficiency.',
+   longDescription: 'Combines a hierarchical control layer with peer-to-peer clustering among lower-level agents. The top-level coordinator delegates broad tasks, while peer clusters collaborate directly for efficiency.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Hybrid', 'Hierarchical', 'P2P'],
+   tags: ['hybrid', 'hierarchy', 'cluster', 'peer-to-peer'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Hybrid hierarchical cluster - Coordinator and peer clusters'
+   },
+   implementation: {
+     codeExample: `class HybridCluster {
+ constructor({ coordinator, clusters }) {
+   this.coordinator = coordinator;
+   this.clusters = clusters; // [{ id, members: Agent[] }]
+ }
+ async execute(task) {
+   const subtasks = await this.coordinator.decompose(task);
+   return Promise.all(this.clusters.map(async (cluster, i) => {
+     const st = subtasks[i % subtasks.length];
+     return cluster.members.map(m => m.collaborate(st));
+   }));
+ }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Large tasks decomposed to teams that collaborate internally',
+     'Federated processing with local coordination',
+     'Mixed central guidance with lateral communication'
+   ],
+   performance: { scalability: 9, complexity: 7, reliability: 8 },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: 'Hybrid Hierarchical Cluster Architecture',
+     type: 'hybrid_hierarchical_cluster',
+     components: [
+       { id: 'root-coordinator', type: 'coordinator', position: { x: 100, y: 100 }, label: 'Root Coordinator', color: '#fde68a' },
+       { id: 'peer-cluster-1', type: 'cluster', position: { x: 300, y: 50 }, label: 'Peer Cluster 1', color: '#c7d2fe' },
+       { id: 'peer-cluster-2', type: 'cluster', position: { x: 300, y: 150 }, label: 'Peer Cluster 2', color: '#c7d2fe' },
+       { id: 'cluster-agent-a', type: 'agent', position: { x: 500, y: 25 }, label: 'Agent A', color: '#a7f3d0' },
+       { id: 'cluster-agent-b', type: 'agent', position: { x: 500, y: 75 }, label: 'Agent B', color: '#a7f3d0' },
+       { id: 'cluster-agent-c', type: 'agent', position: { x: 500, y: 125 }, label: 'Agent C', color: '#a7f3d0' },
+       { id: 'cluster-agent-d', type: 'agent', position: { x: 500, y: 175 }, label: 'Agent D', color: '#a7f3d0' }
+     ],
+     connections: [
+       { id: 'hc1', from: 'root-coordinator', to: 'peer-cluster-1', type: 'delegate', name: 'Delegate Task' },
+       { id: 'hc2', from: 'root-coordinator', to: 'peer-cluster-2', type: 'delegate', name: 'Delegate Task' },
+       { id: 'hc3', from: 'peer-cluster-1', to: 'cluster-agent-a', type: 'collaborate', name: 'Collaborate' },
+       { id: 'hc4', from: 'peer-cluster-1', to: 'cluster-agent-b', type: 'collaborate', name: 'Collaborate' },
+       { id: 'hc5', from: 'peer-cluster-2', to: 'cluster-agent-c', type: 'collaborate', name: 'Collaborate' },
+       { id: 'hc6', from: 'peer-cluster-2', to: 'cluster-agent-d', type: 'collaborate', name: 'Collaborate' }
+     ]
+   }
+ },
+ {
+   id: 'election',
+   title: 'Election',
+   description: 'Agents run a ballot to elect a leader or make collective choices with fault-tolerant coordination.',
+   longDescription: 'Agents run a ballot among themselves to elect a leader or make collective choices. This democratic approach supports robust governance in distributed systems and fault-tolerant coordination.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Consensus', 'Governance'],
+   tags: ['election', 'leader-election', 'ballot', 'consensus'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Election - Agents vote, tally aggregates, leader announced'
+   },
+   implementation: {
+     codeExample: `class LeaderElection {
+ constructor(voters) {
+   this.voters = voters;
+ }
+ async elect(candidates) {
+   const votes = await Promise.all(this.voters.map(v => v.vote(candidates)));
+   const tally = new Map();
+   for (const choice of votes) tally.set(choice, (tally.get(choice) ?? 0) + 1);
+   return [...tally.entries()].sort((a,b) => b[1]-a[1])[0][0];
+ }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Distributed leader election for coordination',
+     'Democratic parameter or plan selection',
+     'Robust fallback selection in fault-tolerant systems'
+   ],
+   performance: { scalability: 7, complexity: 4, reliability: 9 },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: 'Election Architecture',
+     type: 'election',
+     components: [
+       { id: 'candidates', type: 'input', position: { x: 100, y: 100 }, label: 'Candidates', color: '#fde68a' },
+       { id: 'agent-voter-1', type: 'voter', position: { x: 300, y: 50 }, label: 'Agent Voter 1', color: '#c7d2fe' },
+       { id: 'agent-voter-n', type: 'voter', position: { x: 300, y: 150 }, label: 'Agent Voter N', color: '#c7d2fe' },
+       { id: 'vote-tally', type: 'aggregator', position: { x: 500, y: 100 }, label: 'Vote Tally', color: '#a7f3d0' },
+       { id: 'elected-leader', type: 'output', position: { x: 700, y: 100 }, label: 'Elected Leader', color: '#fee2e2' }
+     ],
+     connections: [
+       { id: 'el1', from: 'candidates', to: 'agent-voter-1', type: 'present', name: 'Present Candidates' },
+       { id: 'el2', from: 'candidates', to: 'agent-voter-n', type: 'present', name: 'Present Candidates' },
+       { id: 'el3', from: 'agent-voter-1', to: 'vote-tally', type: 'vote', name: 'Submit Vote' },
+       { id: 'el4', from: 'agent-voter-n', to: 'vote-tally', type: 'vote', name: 'Submit Vote' },
+       { id: 'el5', from: 'vote-tally', to: 'elected-leader', type: 'deliver', name: 'Announce Leader' }
+     ]
+   }
+ }
+ ,
+ {
+   id: 'dynamic-conversational',
+   title: 'Dynamic Conversational',
+   description: 'An adaptive chat architecture that selects which agents join and how messages are routed based on context, user goals, and prior dialogue—ideal for advanced customer support and context-aware chatbots.',
+   longDescription: 'An adaptive conversational architecture where a context analyzer inspects dialogue state and user intent, a selector chooses the most relevant chat agents to engage, and a message router orchestrates turn-taking and delivery. This enables targeted, context-aware responses while minimizing noise from unrelated participants.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Conversational', 'Adaptive', 'Routing'],
+   tags: ['dynamic', 'chat', 'routing', 'selector', 'context-aware'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Dynamic Conversational - context analyzer, agent selector, message router with final response'
+   },
+   implementation: {
+     codeExample: `class DynamicConversational {
+ constructor({ analyzer, selector, router, participants }) {
+   this.analyzer = analyzer;    // analyze(message, history) => { intents, entities, context }
+   this.selector = selector;    // select(context, participants) => string[] (agent ids)
+   this.router = router;        // route(messages) => final response
+   this.participants = participants; // id -> { respond(message, context) }
+   this.history = [];
+ }
+
+ async handle(userMessage) {
+   const analysis = await this.analyzer.analyze(userMessage, this.history);
+   const chosen = await this.selector.select(analysis, Object.keys(this.participants));
+   const replies = await Promise.all(
+     chosen.map(id => this.participants[id].respond(userMessage, analysis).then(r => ({ id, r })))
+   );
+   const final = await this.router.route(replies, analysis);
+   this.history.push({ role: 'user', content: userMessage, analysis });
+   this.history.push({ role: 'system', content: final });
+   return final;
+ }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Advanced customer support with intent-based agent handoff',
+     'Context-aware chatbots that selectively involve specialists',
+     'Enterprise assistants routing to policy, billing, or technical agents dynamically'
+   ],
+   performance: { scalability: 8, complexity: 6, reliability: 9 },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: 'Dynamic Conversational Architecture',
+     type: 'dynamic_conversational',
+     components: [
+       { "id": "user-input", "type": "input", "position": { "x": 100, "y": 100 }, "label": "User Input", "color": "#fde68a" },
+       { "id": "context-analyzer", "type": "analyzer", "position": { "x": 300, "y": 100 }, "label": "Context Analyzer", "color": "#c7d2fe" },
+       { "id": "agent-selector", "type": "selector", "position": { "x": 500, "y": 100 }, "label": "Agent Selector", "color": "#a7f3d0" },
+       { "id": "chat-agent-1", "type": "agent", "position": { "x": 700, "y": 50 }, "label": "Chat Agent 1", "color": "#fee2e2" },
+       { "id": "chat-agent-2", "type": "agent", "position": { "x": 700, "y": 150 }, "label": "Chat Agent 2", "color": "#fee2e2" },
+       { "id": "message-router", "type": "router", "position": { "x": 900, "y": 100 }, "label": "Message Router", "color": "#dcfce7" },
+       { "id": "final-response", "type": "output", "position": { "x": 1100, "y": 100 }, "label": "Final Response", "color": "#f0f9ff" }
+     ],
+     connections: [
+       { "id": "dc1", "from": "user-input", "to": "context-analyzer", "type": "analyze", "name": "Analyze Context" },
+       { "id": "dc2", "from": "context-analyzer", "to": "agent-selector", "type": "select", "name": "Select Agents" },
+       { "id": "dc3", "from": "agent-selector", "to": "chat-agent-1", "type": "engage", "name": "Engage Agent 1" },
+       { "id": "dc4", "from": "agent-selector", "to": "chat-agent-2", "type": "engage", "name": "Engage Agent 2" },
+       { "id": "dc5", "from": "chat-agent-1", "to": "message-router", "type": "message", "name": "Message" },
+       { "id": "dc6", "from": "chat-agent-2", "to": "message-router", "type": "message", "name": "Message" },
+       { "id": "dc7", "from": "message-router", "to": "final-response", "type": "deliver", "name": "Deliver Response" }
+     ]
+   }
+ },
+ {
+   id: 'tree-architecture',
+   title: 'Tree',
+   description: 'A strict parent-child hierarchy where each agent has exactly one parent (except the root) and may have multiple children. This structure simplifies delegation, logging, and failure isolation.',
+   longDescription: 'A classic tree structure with a single root agent, internal nodes as managers, and leaves as executors. Each node has exactly one parent, enabling clear delegation paths, easy logging/traceability, and isolated failure handling. Common in organizational charts, decision trees, and taxonomy engines.',
+   author: {
+     name: 'Community',
+     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+     github: 'madebyagents-community'
+   },
+   category: ['Hierarchical', 'Structured'],
+   tags: ['tree', 'hierarchy', 'delegation', 'supervision'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Tree - Root with children and leaves in a strict hierarchy'
+   },
+   implementation: {
+     codeExample: `class TreeNode {
+ constructor({ id, children = [], process }) {
+   this.id = id;
+   this.children = children; // TreeNode[]
+   this.process = process || (async (task) => task);
+ }
+ async execute(task) {
+   const own = await this.process(task);
+   const results = [];
+   for (const child of this.children) {
+     results.push(await child.execute(own));
+   }
+   return { node: this.id, own, children: results };
+ }
+}
+class TreeArchitecture {
+ constructor(root) { this.root = root; }
+ async run(task) { return this.root.execute(task); }
+}`,
+     language: 'javascript'
+   },
+   useCases: [
+     'Organizational workflows with clear reporting lines',
+     'Decision trees with deterministic branching',
+     'Taxonomy processing and rule hierarchies'
+   ],
+   performance: { scalability: 8, complexity: 4, reliability: 9 },
+   createdAt: '2025-08-06',
+   updatedAt: '2025-08-06',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/',
+   visual: {
+     name: 'Tree Architecture',
+     type: 'tree',
+     components: [
+       { "id": "root", "type": "root", "position": { "x": 100, "y": 100 }, "label": "Root Agent", "color": "#fde68a" },
+       { "id": "child-1", "type": "child", "position": { "x": 300, "y": 50 }, "label": "Child 1", "color": "#c7d2fe" },
+       { "id": "child-2", "type": "child", "position": { "x": 300, "y": 150 }, "label": "Child 2", "color": "#c7d2fe" },
+       { "id": "leaf-1", "type": "leaf", "position": { "x": 500, "y": 25 }, "label": "Leaf 1", "color": "#a7f3d0" },
+       { "id": "leaf-2", "type": "leaf", "position": { "x": 500, "y": 75 }, "label": "Leaf 2", "color": "#a7f3d0" }
+     ],
+     connections: [
+       { "id": "t1", "from": "root", "to": "child-1", "type": "delegate", "name": "Delegate Task" },
+       { "id": "t2", "from": "root", "to": "child-2", "type": "delegate", "name": "Delegate Task" },
+       { "id": "t3", "from": "child-1", "to": "leaf-1", "type": "delegate", "name": "Delegate Subtask" },
+       { "id": "t4", "from": "child-2", "to": "leaf-2", "type": "delegate", "name": "Delegate Subtask" }
+     ]
+   }
+ }
 ]
