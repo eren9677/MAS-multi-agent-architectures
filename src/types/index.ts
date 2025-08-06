@@ -28,8 +28,8 @@ export interface Architecture {
   }
   createdAt: string
   updatedAt: string
-  githubUrl?: string
-  documentationUrl?: string
+  githubUrl?: string | null
+  documentationUrl?: string | null
   visual?: VisualArchitecture
 }
 
@@ -42,4 +42,4 @@ export interface FilterOptions {
 export interface ModalState {
   isOpen: boolean
   architecture: Architecture | null
-} 
+}
