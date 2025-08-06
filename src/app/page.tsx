@@ -8,7 +8,6 @@ import { ArchitectureCard, AddArchitectureCard } from '@/components/Architecture
 import { ArchitectureModal } from '@/components/ArchitectureModal'
 import { SearchBar } from '@/components/SearchBar'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { ArchitectureCodePreview } from '@/components/ArchitecturePreview'
 
 export default function Home() {
   const [filters, setFilters] = useState<FilterOptions>({
@@ -152,17 +151,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Architecture Code Preview Demo */}
-            <div>
-              <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">Try Architecture Preview</h4>
-              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed mb-3">
-                Paste architecture JSON code below to see it rendered as a visual diagram.
-              </p>
-              <ArchitectureCodePreview
-                placeholder="Paste architecture JSON here..."
-                className="text-xs"
-              />
-            </div>
           </div>
         </aside>
 
@@ -204,27 +192,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Footer Links */}
-          <div className="mt-16 pt-8 border-t border-light-border dark:border-dark-border">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">Links</h4>
-                <ul className="space-y-1 text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                  <li>• GitHub Repository</li>
-                  <li>• Documentation</li>
-                  <li>• Community</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-3">Resources</h4>
-                <ul className="space-y-1 text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                  <li>• Multi-Agent Systems Guide</li>
-                  <li>• Best Practices</li>
-                  <li>• Research Papers</li>
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>

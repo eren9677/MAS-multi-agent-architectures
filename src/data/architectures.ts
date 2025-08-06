@@ -747,5 +747,366 @@ class Tier {
         }
       ]
     }
+  },
+  {
+    id: 'basic-sequential',
+    title: 'Basic Sequential',
+    description: 'Agents operate in a linear pipeline; each agent’s output is the next agent’s input.',
+    longDescription: 'In a sequential architecture, agents work in a pipeline where the output of one agent becomes the input for the next in the sequence. This creates a linear workflow, with each agent performing a specific transformation on the data it receives. This architecture is ideal for processes with clearly defined, ordered stages.',
+    author: {
+      name: 'Community',
+      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&h=150&fit=crop&crop=face',
+      github: 'madebyagents-community'
+    },
+    category: ['Sequential', 'Pipeline'],
+    tags: ['sequential', 'pipeline', 'linear', 'staged-processing'],
+    diagram: {
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      alt: 'Basic Sequential - Linear pipeline A → B → C'
+    },
+    implementation: {
+      codeExample: `class BasicSequential {
+  constructor(stages) {
+    this.stages = stages;
+  }
+
+  async run(input) {
+    let data = input;
+    for (const stage of this.stages) {
+      data = await stage.process(data);
+    }
+    return data;
+  }
+}
+
+/* Example stages
+class FetchData { async process(_) { return await fetchData(); } }
+class CleanData { async process(d) { return clean(d); } }
+class EnrichData { async process(d) { return enrich(d); } }
+class ReportGen { async process(d) { return generateReport(d); } }
+*/`,
+      language: 'javascript'
+    },
+    useCases: [
+      'Data Processing Pipeline: retrieve raw data → clean/format → enrich → generate report',
+      'Email Campaign: draft → personalize → schedule and send',
+      'Document Translation and Summarization: translate → summarize'
+    ],
+    performance: {
+      scalability: 7,
+      complexity: 3,
+      reliability: 9
+    },
+    createdAt: '2025-08-06',
+    updatedAt: '2025-08-06',
+    githubUrl: 'https://github.com/example/basic-sequential',
+    documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
+    visual: {
+      name: "My Architecture",
+      type: "microservices",
+      components: [
+        {
+          id: "api-gateway",
+          type: "input",
+          position: {
+            x: 132.33333333333334,
+            y: 206
+          },
+          label: "User Input",
+          color: "#53d5fd"
+        },
+        {
+          id: "user-service",
+          type: "agent",
+          position: {
+            x: 412.66666666666663,
+            y: 208
+          },
+          label: "Agent 1",
+          color: "#fffbb9"
+        },
+        {
+          id: "database",
+          type: "agent",
+          position: {
+            x: 663.3333333333333,
+            y: 208
+          },
+          label: "Agent 2",
+          color: "#fffbb9"
+        }
+      ],
+      connections: [
+        {
+          id: "conn-1",
+          from: "api-gateway",
+          to: "user-service",
+          type: "http",
+          name: "Request"
+        },
+        {
+          id: "conn-2",
+          from: "user-service",
+          to: "database",
+          type: "query",
+          name: "files"
+        }
+      ]
+    }
+  },
+  {
+    id: 'network-decentralized',
+    title: 'Network (Decentralized) Architecture',
+    description: 'Agents communicate directly without a central coordinator for flexible, dynamic collaboration.',
+    longDescription: 'In a network or decentralized architecture, agents communicate directly with each other without a central coordinator. This enables flexible and dynamic collaboration, as any agent can interact with any other agent in the network. It is well-suited for complex problems where workflows are not predictable and require dynamic information sharing.',
+    author: {
+      name: 'Community',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'madebyagents-community'
+    },
+    category: ['Distributed', 'Decentralized'],
+    tags: ['p2p', 'decentralized', 'network', 'collaboration'],
+    diagram: {
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      alt: 'Network/Decentralized - Mesh-like peer-to-peer agent connections'
+    },
+    implementation: {
+      codeExample: `class P2PNetwork {
+  constructor(agents) {
+    this.agents = agents;
+  }
+
+  async broadcast(senderId, message) {
+    const others = this.agents.filter(a => a.id !== senderId);
+    await Promise.all(others.map(a => a.receive(message)));
+  }
+
+  async send(fromId, toId, message) {
+    const target = this.agents.find(a => a.id === toId);
+    if (target) await target.receive({ from: fromId, ...message });
+  }
+}`,
+      language: 'javascript'
+    },
+    useCases: [
+      'Supply Chain Management: suppliers ↔ manufacturers ↔ distributors ↔ retailers coordinate directly',
+      'Smart Home Systems: thermostats ↔ lights ↔ cameras interact for automation',
+      'Collaborative Design: UI, backend, and database agents share updates directly'
+    ],
+    performance: {
+      scalability: 9,
+      complexity: 7,
+      reliability: 7
+    },
+    createdAt: '2025-08-06',
+    updatedAt: '2025-08-06',
+    githubUrl: 'https://github.com/example/network-decentralized',
+    documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
+    visual: {
+      name: "My Architecture",
+      type: "microservices",
+      components: [
+        {
+          id: "api-gateway",
+          type: "agent",
+          position: { x: 573.9999999999999, y: 101.16666666666669 },
+          label: "Agent 1",
+          color: "#ffe4a8"
+        },
+        {
+          id: "user-service",
+          type: "agent",
+          position: { x: 567.9999999999999, y: 385.3333333333333 },
+          label: "Agent 3",
+          color: "#ffe4a8"
+        },
+        {
+          id: "component-1754477351230-pojquwej0",
+          type: "agent",
+          position: { x: 242.99999999999994, y: 383.16666666666663 },
+          label: "Agent 4",
+          color: "#ffe4a8"
+        },
+        {
+          id: "component-1754477352919-cbv8kme0s",
+          type: "agent",
+          position: { x: 231.25, y: 100.58333333333334 },
+          label: "Agent 2",
+          color: "#ffe4a8"
+        }
+      ],
+      connections: [
+        { id: "conn-1", from: "api-gateway", to: "user-service", type: "http", name: "" },
+        { id: "conn-1754477435796-8f55bmvzx", name: "", from: "api-gateway", to: "component-1754477352919-cbv8kme0s", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477441239-lpobqfg2q", name: "", from: "api-gateway", to: "component-1754477351230-pojquwej0", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477471096-32o5nyg1g", name: "", from: "component-1754477352919-cbv8kme0s", to: "component-1754477351230-pojquwej0", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477473708-o96ajmat6", name: "", from: "component-1754477352919-cbv8kme0s", to: "api-gateway", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477481023-3hxz8hgb7", name: "", from: "component-1754477352919-cbv8kme0s", to: "user-service", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477492126-fd48xisih", name: "", from: "component-1754477351230-pojquwej0", to: "component-1754477352919-cbv8kme0s", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477496023-t53i61gx2", name: "", from: "component-1754477351230-pojquwej0", to: "api-gateway", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477498767-r7v7wz3mi", name: "", from: "component-1754477351230-pojquwej0", to: "user-service", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477504656-slq8mofc2", name: "", from: "user-service", to: "api-gateway", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477508893-3dqwky3wq", name: "", from: "user-service", to: "component-1754477352919-cbv8kme0s", type: "custom", fromCorner: "auto", toCorner: "auto" },
+        { id: "conn-1754477514817-d9pxutvhw", name: "", from: "user-service", to: "component-1754477351230-pojquwej0", type: "custom", fromCorner: "auto", toCorner: "auto" }
+      ]
+    }
+  },
+  {
+    id: 'hierarchical-architecture',
+    title: 'Hierarchical Architecture',
+    description: 'Multi-level supervision where top-level supervisors manage lower-level supervisors who manage worker agents.',
+    longDescription: 'A hierarchical architecture is an extension of the supervisor model, featuring multiple levels of supervision. A top-level supervisor oversees lower-level supervisors, each managing their own team of worker agents. This structure enables handling complex tasks by decomposing them into smaller, manageable sub-problems that specialized teams can address.',
+    author: {
+      name: 'Community',
+      avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face',
+      github: 'madebyagents-community'
+    },
+    category: ['Hierarchical', 'Orchestration'],
+    tags: ['hierarchical', 'supervisor', 'multi-level', 'orchestration'],
+    diagram: {
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      alt: 'Hierarchical Architecture - Top supervisor overseeing sub-supervisors, each with worker agents'
+    },
+    implementation: {
+      codeExample: `class HierarchySupervisor {
+  constructor(children) {
+    this.children = children; // can be supervisors or workers
+  }
+  async process(task) {
+    const subtasks = this.decompose(task);
+    const results = [];
+    for (let i = 0; i < this.children.length; i++) {
+      results.push(await this.children[i].process(subtasks[i]));
+    }
+    return this.aggregate(results);
+  }
+}`,
+      language: 'javascript'
+    },
+    useCases: [
+      'Large-Scale Project Management: top manager → department leads → team agents',
+      'Complex Research Tasks: primary research → sub-topic supervisors → specialized teams',
+      'Running a Virtual Company: CEO → executives (CTO/CPO/...) → department teams'
+    ],
+    performance: {
+      scalability: 8,
+      complexity: 8,
+      reliability: 9
+    },
+    createdAt: '2025-08-06',
+    updatedAt: '2025-08-06',
+    githubUrl: 'https://github.com/example/hierarchical-architecture',
+    documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
+    visual: {
+      name: "My Architecture",
+      type: "microservices",
+      components: [
+        {
+          id: "component-1754478515905-x7kmhpjrr",
+          type: "supervisor",
+          position: { x: 473, y: 163 },
+          label: "Agent Supervisor",
+          color: "#e392fe"
+        },
+        {
+          id: "component-1754478568308-mpewau0fu",
+          type: "supervisor",
+          position: { x: 606, y: 311 },
+          label: "Sub-Supervisor 2",
+          color: "#a8c6fe"
+        },
+        {
+          id: "component-1754478569850-9bca171r7",
+          type: "supervisor",
+          position: { x: 348, y: 305 },
+          label: "Sub-Supervisor 1",
+          color: "#a8c6fe"
+        },
+        {
+          id: "component-1754478632540-26d27ye8m",
+          type: "agent",
+          position: { x: 179, y: 485 },
+          label: "Agent 1a",
+          color: "#fffbb9"
+        },
+        {
+          id: "component-1754478637259-uxvouazwt",
+          type: "agent",
+          position: { x: 784, y: 493 },
+          label: "Agent 2b",
+          color: "#fffbb9"
+        },
+        {
+          id: "component-1754478639394-xiyyfzbuq",
+          type: "agent",
+          position: { x: 600, y: 490 },
+          label: "Agent 2a",
+          color: "#fffbb9"
+        },
+        {
+          id: "component-1754478640661-cjcbkddb9",
+          type: "agent",
+          position: { x: 372, y: 488 },
+          label: "Agent 1b",
+          color: "#fffbb9"
+        }
+      ],
+      connections: [
+        {
+          id: "conn-1754478587717-sknyz25m9",
+          name: "Supervises",
+          from: "component-1754478515905-x7kmhpjrr",
+          to: "component-1754478569850-9bca171r7",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754478601462-bxianbwjj",
+          name: "Supervises",
+          from: "component-1754478515905-x7kmhpjrr",
+          to: "component-1754478568308-mpewau0fu",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754478688837-wqqo3mwgx",
+          name: "Delegates",
+          from: "component-1754478569850-9bca171r7",
+          to: "component-1754478640661-cjcbkddb9",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754478727436-4h8i8ji4v",
+          name: "Delegates",
+          from: "component-1754478569850-9bca171r7",
+          to: "component-1754478632540-26d27ye8m",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754478737288-b3n25r73o",
+          name: "Delegates",
+          from: "component-1754478568308-mpewau0fu",
+          to: "component-1754478639394-xiyyfzbuq",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        },
+        {
+          id: "conn-1754478756704-mcdtbdj6o",
+          name: "Delegates",
+          from: "component-1754478568308-mpewau0fu",
+          to: "component-1754478637259-uxvouazwt",
+          type: "custom",
+          fromCorner: "auto",
+          toCorner: "auto"
+        }
+      ]
+    }
   }
 ]

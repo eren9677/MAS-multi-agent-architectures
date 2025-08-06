@@ -633,19 +633,39 @@ Add any additional notes or considerations for this architecture.`)
                 placeholder="Enter a descriptive name for this connection"
               />
             </div>
-            <div className="flex justify-end gap-2 pt-4">
-              <Button
-                variant="secondary"
-                onClick={() => setEditConnectionModalOpen(false)}
+            <div className="flex justify-between items-center gap-2 pt-4">
+              <button
+                className="text-red-600 hover:text-red-700 text-sm font-medium"
+                onClick={() => {
+                  if (!editingConnection) return
+                  // Optional confirm; keep simple inline to avoid extra modal
+                  const ok = confirm('Delete this connection? This action cannot be undone.')
+                  if (!ok) return
+                  setArchitecture(prev => ({
+                    ...prev,
+                    connections: prev.connections.filter(conn => conn.id !== editingConnection.id)
+                  }))
+                  setEditConnectionModalOpen(false)
+                  setEditingConnection(null)
+                }}
+                title="Delete this connection"
               >
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                onClick={handleSaveEditConnection}
-              >
-                Save
-              </Button>
+                Delete
+              </button>
+              <div className="flex gap-2">
+                <Button
+                  variant="secondary"
+                  onClick={() => setEditConnectionModalOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={handleSaveEditConnection}
+                >
+                  Save
+                </Button>
+              </div>
             </div>
           </div>
         )}
