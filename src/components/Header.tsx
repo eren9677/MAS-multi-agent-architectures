@@ -24,6 +24,24 @@ export const Header: React.FC = () => {
     }, 1000)
   }
 
+  // Get the correct URL based on environment
+  const getArchitectureBuilderUrl = () => {
+    if (typeof window !== 'undefined') {
+      // Client-side: use current origin and add the path
+      const origin = window.location.origin
+      const pathname = window.location.pathname
+      
+      // If we're on GitHub Pages, construct the proper URL
+      if (origin.includes('github.io')) {
+        return `${origin}/MAS-multi-agent-architectures/architecture-builder/`
+      }
+      // For local development
+      return `${origin}/architecture-builder`
+    }
+    // Server-side fallback
+    return '/architecture-builder'
+  }
+
   return (
     <header
       ref={headerRef}
@@ -70,7 +88,7 @@ export const Header: React.FC = () => {
           {/* CTA Button */}
           <div className="flex items-center">
             <a
-              href="https://eren9677.github.io/MAS-multi-agent-architectures/architecture-builder/"
+              href="./architecture-builder/"
               className="hidden sm:inline-flex relative z-10 items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-light-bg dark:focus:ring-offset-dark-bg bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 shadow-soft hover:shadow-soft-hover transform hover:scale-105 px-4 py-2 text-sm"
             >
               Add Architecture
