@@ -16,7 +16,7 @@ export interface Architecture {
     image: string
     alt: string
   }
-  implementation: {
+  implementation?: {
     codeExample: string
     language: string
   }

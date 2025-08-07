@@ -93,20 +93,15 @@ export const ArchitectureModal: React.FC<ArchitectureModalProps> = ({
           </div>
         </div>
 
-        {/* Implementation */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">Implementation</h3>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">
-                {architecture.implementation.language}
-              </span>
+        {/* Detailed Example */}
+        {architecture.implementation && (
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Detailed Example</h3>
+            <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+              {architecture.implementation.codeExample}
             </div>
-            <pre className="text-sm text-gray-800 overflow-x-auto">
-              <code>{architecture.implementation.codeExample}</code>
-            </pre>
           </div>
-        </div>
+        )}
 
         {/* Performance Metrics */}
         {architecture.performance && (

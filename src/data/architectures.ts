@@ -17,33 +17,10 @@ export const architectures: Architecture[] = [
       alt: 'Supervisor-Agent Architecture - Central supervisor with connections to specialized worker agents'
     },
     implementation: {
-      codeExample: `class SupervisorAgent {
-  constructor(workers) {
-    this.workers = workers;
-    this.taskQueue = [];
-  }
-  
-  async processTask(task) {
-    // Decompose task into subtasks
-    const subtasks = this.decomposeTask(task);
-    
-    // Delegate subtasks to appropriate workers
-    const promises = subtasks.map(subtask => {
-      const worker = this.selectWorker(subtask.type);
-      return worker.process(subtask);
-    });
-    
-    // Collect and synthesize results
-    const results = await Promise.all(promises);
-    return this.synthesizeResults(results);
-  }
-  
-  selectWorker(taskType) {
-    // Logic to select appropriate worker based on task type
-    return this.workers.find(worker => worker.specialties.includes(taskType));
-  }
-}`,
-      language: 'javascript'
+      codeExample: `In a practical content creation scenario, imagine a marketing team needs to produce a comprehensive report about renewable energy trends. The supervisor receives this high-level task and immediately breaks it down into specialized subtasks: a researcher agent gathers the latest data and market analysis, a writer agent drafts the main content based on the research findings, and an editor agent refines the draft for clarity and impact. Each agent operates independently but under the supervisor's coordination, with the researcher completing their work in 2 hours, the writer taking 3 hours to create the initial draft, and the editor spending 1 hour polishing the final output. The supervisor monitors progress, ensures quality standards are met, and seamlessly integrates the results into a cohesive final report that would have taken a single person 8-10 hours to complete with the same level of expertise and detail.
+
+This architecture excels in complex customer support environments where different types of inquiries require specialized knowledge. For instance, when a customer contacts a tech company with a billing issue that also involves technical troubleshooting, the supervisor can simultaneously dispatch a billing specialist to investigate the charge discrepancy while a technical support agent diagnoses the system problem. The billing agent might discover an erroneous subscription charge and process a refund, while the technical agent identifies a software patch that needs deployment. The supervisor then synthesizes both solutions into a comprehensive response that addresses both the financial and technical aspects of the customer's issue, providing a faster and more effective resolution than if a single agent had to handle both domains sequentially.`,
+      language: 'text'
     },
     useCases: [
       'Content Creation: A supervisor agent can manage a team of agents including a "researcher" to gather information, a "writer" to draft the content, and an "editor" to proofread and format it.',
@@ -208,29 +185,6 @@ export const architectures: Architecture[] = [
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Basic Sequential - Linear pipeline A → B → C'
     },
-    implementation: {
-      codeExample: `class BasicSequential {
-  constructor(stages) {
-    this.stages = stages;
-  }
-
-  async run(input) {
-    let data = input;
-    for (const stage of this.stages) {
-      data = await stage.process(data);
-    }
-    return data;
-  }
-}
-
-/* Example stages
-class FetchData { async process(_) { return await fetchData(); } }
-class CleanData { async process(d) { return clean(d); } }
-class EnrichData { async process(d) { return enrich(d); } }
-class ReportGen { async process(d) { return generateReport(d); } }
-*/`,
-      language: 'javascript'
-    },
     useCases: [
       'Data Processing Pipeline: retrieve raw data → clean/format → enrich → generate report',
       'Email Campaign: draft → personalize → schedule and send',
@@ -313,24 +267,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Network/Decentralized - Mesh-like peer-to-peer agent connections'
     },
-    implementation: {
-      codeExample: `class P2PNetwork {
-  constructor(agents) {
-    this.agents = agents;
-  }
-
-  async broadcast(senderId, message) {
-    const others = this.agents.filter(a => a.id !== senderId);
-    await Promise.all(others.map(a => a.receive(message)));
-  }
-
-  async send(fromId, toId, message) {
-    const target = this.agents.find(a => a.id === toId);
-    if (target) await target.receive({ from: fromId, ...message });
-  }
-}`,
-      language: 'javascript'
-    },
     useCases: [
       'Supply Chain Management: suppliers ↔ manufacturers ↔ distributors ↔ retailers coordinate directly',
       'Smart Home Systems: thermostats ↔ lights ↔ cameras interact for automation',
@@ -408,21 +344,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     diagram: {
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Market-Based Bidding - Auctioneer broadcasting, contractors bidding, winner awarded'
-    },
-    implementation: {
-      codeExample: `class Auctioneer {
-  constructor(contractors, chooser = (bids) => bids.sort((a,b) => a.cost - b.cost)[0]) {
-    this.contractors = contractors;
-    this.chooseWinner = chooser;
-  }
-  async run(task) {
-    await Promise.all(this.contractors.map(c => c.notifyTask(task)));
-    const bids = (await Promise.all(this.contractors.map(c => c.submitBid(task)))).filter(Boolean);
-    const winner = this.chooseWinner(bids);
-    return await winner.agent.execute(task);
-  }
-}`,
-      language: 'javascript'
     },
     useCases: [
       'Dynamic Resource Allocation: VMs bid to run a task based on current load/capabilities',
@@ -505,22 +426,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     diagram: {
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Hierarchical Architecture - Top supervisor overseeing sub-supervisors, each with worker agents'
-    },
-    implementation: {
-      codeExample: `class HierarchySupervisor {
-  constructor(children) {
-    this.children = children; // can be supervisors or workers
-  }
-  async process(task) {
-    const subtasks = this.decompose(task);
-    const results = [];
-    for (let i = 0; i < this.children.length; i++) {
-      results.push(await this.children[i].process(subtasks[i]));
-    }
-    return this.aggregate(results);
-  }
-}`,
-      language: 'javascript'
     },
     useCases: [
       'Large-Scale Project Management: top manager → department leads → team agents',
@@ -664,26 +569,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Tool-Augmented Agent Network - Orchestrator agent invoking external tools and producing final result'
     },
-    implementation: {
-      codeExample: `class ToolAugmentedAgent {
-  constructor(tools) {
-    this.tools = tools; // e.g., { webSearch, codeInterpreter, database }
-  }
-  async decideAndAct(task) {
-    // Simple ReAct-style loop (pseudo)
-    const plan = await this.reason(task);
-    for (const step of plan) {
-      if (step.tool && this.tools[step.tool]) {
-        step.result = await this.tools[step.tool].execute(step.input);
-      } else {
-        step.result = await this.internalReason(step.input);
-      }
-    }
-    return this.summarize(plan);
-  }
-}`,
-      language: 'javascript'
-    },
     useCases: [
       'Advanced Research and Analysis: Use Web Search to find sources, Web Scraper to extract data, and Code Interpreter with pandas to analyze.',
       'Automated Software Development: Use File System to write code, Terminal to run tests, and Git to commit changes.',
@@ -769,30 +654,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
       alt: 'Critic & Refinement Loop - Creator and Critic in a feedback loop until approval'
     },
-    implementation: {
-      codeExample: `class CriticRefinementLoop {
-  constructor(creator, critic, maxIters = 3, accept = (r) => r?.approved === true) {
-    this.creator = creator;
-    this.critic = critic;
-    this.maxIters = maxIters;
-    this.accept = accept;
-  }
-
-  async run(task) {
-    let draft = await this.creator.generate(task);
-    for (let i = 0; i < this.maxIters; i++) {
-      const review = await this.critic.review(draft, task);
-      if (this.accept(review)) {
-        return { output: draft, review, iterations: i + 1, approved: true };
-      }
-      draft = await this.creator.refine(draft, review, task);
-    }
-    const finalReview = await this.critic.review(draft, task);
-    return { output: draft, review: finalReview, iterations: this.maxIters, approved: this.accept(finalReview) };
-  }
-}`,
-      language: 'javascript'
-    },
     useCases: [
       'Code Generation: A "Developer" agent writes code, and a "Code Reviewer" agent checks for bugs, style violations, and inefficiencies. The Developer agent then refixes the code based on the feedback.',
       'High-Quality Content Creation: A "Writer" agent drafts an article, and an "Editor" agent checks for factual accuracy, tone, and grammatical errors. The writer then revises the draft.',
@@ -864,34 +725,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'HITL - Autonomous agent requests human approval before final action'
    },
-   implementation: {
-     codeExample: `class HITLPipeline {
-  constructor(agent, { approve, onReview, confidenceThreshold = 0.7 }) {
-    this.agent = agent;
-    this.approve = approve;         // async (context) => boolean
-    this.onReview = onReview;       // async (draft, context) => { approved: boolean, notes?: string, edits?: any }
-    this.confidenceThreshold = confidenceThreshold;
-  }
-  async run(task) {
-    const draft = await this.agent.process(task);
-    const needsReview = (draft.confidence ?? 0) < this.confidenceThreshold || draft.requiresApproval === true;
-    if (!needsReview) {
-      return { output: draft, approved: true, via: 'auto' };
-    }
-    const review = await this.onReview?.(draft, task) ?? { approved: false };
-    if (!review.approved) {
-      // allow human to request changes and agent to refine
-      const refined = await this.agent.refine?.(draft, review, task) ?? draft;
-      const finalApproval = await this.approve({ draft: refined, task, review });
-      if (!finalApproval) return { output: refined, approved: false, via: 'rejected' };
-      return { output: refined, approved: true, via: 'manual-approve' };
-    }
-    const finalApproval = await this.approve({ draft, task, review });
-    return { output: draft, approved: !!finalApproval, via: 'manual-approve' };
-  }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Medical Diagnosis: AI suggests diagnosis; clinician reviews and confirms before treatment.',
      'High-Stakes Financial Transactions: System proposes significant trade; human analyst must approve to execute.',
@@ -962,49 +795,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   diagram: {
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
     alt: 'Foraging Architecture - Multiple forager agents exploring and converging on a rich resource'
-  },
-  implementation: {
-    codeExample: `class ForagingSwarm {
- constructor(agents, pheromones = new Map(), evaporation = 0.05) {
-   this.agents = agents;            // array of forager agents
-   this.pheromones = pheromones;    // key: location/resourceId, value: intensity
-   this.evaporation = evaporation;  // pheromone evaporation rate
- }
-
- stepEvaporation() {
-   for (const [k, v] of this.pheromones.entries()) {
-     const nv = v * (1 - this.evaporation);
-     if (nv < 0.001) this.pheromones.delete(k);
-     else this.pheromones.set(k, nv);
-   }
- }
-
- pheromoneWeightedChoice(options) {
-   // options: [{ id, scoreHint }]
-   const weights = options.map(o => (this.pheromones.get(o.id) ?? 0.01) + (o.scoreHint ?? 0));
-   const total = weights.reduce((a, b) => a + b, 0);
-   const r = Math.random() * total;
-   let acc = 0;
-   for (let i = 0; i < options.length; i++) {
-     acc += weights[i];
-     if (r <= acc) return options[i];
-   }
-   return options[options.length - 1];
- }
-
- async runStep(searchSpace) {
-   // Each agent explores; upon discovery, deposit pheromone to attract others
-   const discoveries = await Promise.all(this.agents.map(a => a.explore(searchSpace)));
-   for (const d of discoveries.filter(Boolean)) {
-     const key = d.location ?? d.id ?? JSON.stringify(d);
-     const boost = d.value ?? 1;
-     this.pheromones.set(key, (this.pheromones.get(key) ?? 0) + boost);
-   }
-   this.stepEvaporation();
-   return discoveries.filter(Boolean);
- }
-}`,
-    language: 'javascript'
   },
   useCases: [
     'Distributed Web Scraping: Many agents crawl; rich sources attract more crawlers.',
@@ -1094,27 +884,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   diagram: {
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
     alt: 'Group Architecture - Teams with internal dense communication and inter-team liaison links'
-  },
-  implementation: {
-    codeExample: `class GroupCoordinator {
-  constructor(groups) {
-    // groups: { name, lead, members: Agent[] }
-    this.groups = groups;
-  }
-  async disseminate(task) {
-    // Send task to each group's lead; leads coordinate internally
-    return Promise.all(this.groups.map(async (g) => {
-      const plan = await g.lead.plan(task, g.members);
-      const results = await Promise.all(g.members.map(m => m.execute(plan[m.id] ?? task)));
-      return { group: g.name, results };
-    }));
-  }
-  async synchronize(leadsMessage) {
-    // Structured inter-group sync via leads only
-    await Promise.all(this.groups.map(g => g.lead.sync(leadsMessage)));
-  }
-}`,
-    language: 'javascript'
   },
   useCases: [
     'Software Engineering (Virtual Company): Frontend, Backend, and QA teams collaborate internally; team leads integrate across teams.',
@@ -1212,52 +981,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
     alt: 'Mixture of Agents - Orchestrator coordinating heterogeneous specialist agents'
   },
-  implementation: {
-    codeExample: `class OrchestratedMixture {
-  constructor(agents, router = (task, agents) => agents) {
-    // agents: { id, name, specialties: string[], process: (task, ctx) => Promise<any> }[]
-    this.agents = agents;
-    this.router = router; // decides which subset of agents to consult per subtask
-  }
-
-  async solve(problem) {
-    const context = { traces: [] };
-    // Decompose problem into modality-specific subtasks (simplified)
-    const subtasks = this.decompose(problem);
-
-    const results = await Promise.all(subtasks.map(async (st) => {
-      const chosen = await this.router(st, this.agents);
-      const partials = await Promise.all(
-        chosen.map(a => a.process(st, context).then(out => ({ agent: a.name, out })))
-      );
-      context.traces.push({ subtask: st, partials });
-      return { subtask: st, partials };
-    }));
-
-    return this.synthesize(results, context);
-  }
-
-  decompose(problem) {
-    // Example: break into text/image/data analysis based on fields present
-    const tasks = [];
-    if (problem.text) tasks.push({ type: 'nlp', input: problem.text });
-    if (problem.image) tasks.push({ type: 'vision', input: problem.image });
-    if (problem.data) tasks.push({ type: 'data', input: problem.data });
-    if (tasks.length === 0) tasks.push({ type: 'generic', input: problem });
-    return tasks;
-  }
-
-  synthesize(results, context) {
-    // Simple synthesis: merge insights
-    const insights = {};
-    for (const r of results) {
-      insights[r.subtask.type] = r.partials.map(p => ({ agent: p.agent, insight: p.out }));
-    }
-    return { insights, traces: context.traces };
-  }
-}`,
-    language: 'javascript'
-  },
   useCases: [
     'Financial Forecasting: Quantitative Analyst + News Analyst (NLP) + Risk Assessment combine signals.',
     'Complex Problem-Solving: Creative Brainstormer + Logical Validator + Planner iterate to a plan.',
@@ -1346,22 +1069,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   diagram: {
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
     alt: 'Concurrent Workflows - Coordinator dispatches to parallel agents, aggregator collects results'
-  },
-  implementation: {
-    codeExample: `class ConcurrentWorkflow {
-  constructor(agents, { aggregator } = {}) {
-    this.agents = agents; // array of worker agents
-    this.aggregator = aggregator || ((results) => results);
-  }
-
-  async run(task) {
-    // Dispatch the same task to all agents concurrently
-    const promises = this.agents.map(agent => agent.process(task));
-    const results = await Promise.all(promises);
-    return this.aggregator(results);
-  }
-}`,
-    language: 'javascript'
   },
   useCases: [
     'Parallel Content Generation: multiple writers produce sections simultaneously and merge results',
@@ -1452,49 +1159,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
     alt: 'Agent Rearrange - Orchestrator dynamically provisions agents from a pool based on monitoring feedback'
   },
-  implementation: {
-    codeExample: `class DynamicOrchestrator {
-  constructor({ pool, monitor, policy }) {
-    this.pool = pool;       // provides acquire/release of agents
-    this.monitor = monitor; // reports metrics and status
-    this.policy = policy;   // decides reconfiguration actions
-    this.active = new Set(); // active agents
-  }
-
-  async assign(task) {
-    // Decide reconfiguration based on current metrics
-    const snapshot = await this.monitor.snapshot();
-    const action = await this.policy.decide({ task, active: [...this.active], metrics: snapshot });
-
-    if (action?.type === 'scaleUp') {
-      const agent = await this.pool.acquire(action.capability);
-      if (agent) this.active.add(agent);
-    } else if (action?.type === 'scaleDown') {
-      const victim = [...this.active].find(a => a.id === action.agentId);
-      if (victim) { this.active.delete(victim); await this.pool.release(victim); }
-    } else if (action?.type === 'replace') {
-      const victim = [...this.active].find(a => a.id === action.agentId);
-      if (victim) { this.active.delete(victim); await this.pool.release(victim); }
-      const agent = await this.pool.acquire(action.capability);
-      if (agent) this.active.add(agent);
-    }
-
-    // Dispatch task to active agents concurrently
-    const results = await Promise.all(
-      [...this.active].map(a => a.process(task).catch(err => ({ agent: a.id, error: String(err?.message || err) })))
-    );
-
-    await this.monitor.report({ task, results, active: [...this.active].map(a => a.id) });
-    return this.aggregate(results);
-  }
-
-  aggregate(results) {
-    // Example aggregation (can be majority vote, weighted merge, etc.)
-    return { results, meta: { activeCount: [...this.active].length } };
-  }
-}`,
-    language: 'javascript'
-  },
   useCases: [
     'Variable Load Production: scale agents up/down from a pool based on throughput/latency targets',
     'Self-Healing Pipelines: replace underperforming or failing agents on the fly',
@@ -1544,46 +1208,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   diagram: {
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
     alt: 'Graph Workflow - DAG of agents with converging and parallel paths'
-  },
-  implementation: {
-    codeExample: `class GraphWorkflowEngine {
-  constructor(nodes, edges) {
-    // nodes: { id, process: (state) => Promise<void> }[]
-    // edges: { from, to }[] forming a DAG
-    this.nodes = new Map(nodes.map(n => [n.id, n]));
-    this.edges = edges;
-    this.inDegree = new Map();
-    for (const n of nodes) this.inDegree.set(n.id, 0);
-    for (const e of edges) this.inDegree.set(e.to, (this.inDegree.get(e.to) ?? 0) + 1);
-  }
-
-  async run(initialState = {}) {
-    const state = { ...initialState, graph: { log: [] } };
-    const ready = [];
-    for (const [id, deg] of this.inDegree.entries()) if (deg === 0) ready.push(id);
-
-    // Kahn-style topological traversal with parallel execution of ready nodes
-    const visited = new Set();
-    while (ready.length) {
-      const batch = [...ready];
-      ready.length = 0;
-
-      await Promise.all(batch.map(async id => {
-        if (visited.has(id)) return;
-        const node = this.nodes.get(id);
-        await node.process(state); // nodes can append to state.graph.log etc.
-        visited.add(id);
-        for (const e of this.edges.filter(x => x.from === id)) {
-          const deg = this.inDegree.get(e.to) - 1;
-          this.inDegree.set(e.to, deg);
-          if (deg === 0) ready.push(e.to);
-        }
-      }));
-    }
-    return state;
-  }
-}`,
-    language: 'javascript'
   },
   useCases: [
     'Complex CI/CD Pipelines: validation and security checks gate business logic; branches join later nodes',
@@ -1639,35 +1263,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
     alt: 'Interactive Group Chat - User ↔ Handler ↔ Coordinator with multiple agents and a conversation log'
   },
-  implementation: {
-    codeExample: `// Generated json
-{
-  "name": "Interactive Group Chat Architecture",
-  "type": "interactive_group_chat",
-  "components": [
-    { "id": "user-interface", "type": "interface", "position": { "x": 100, "y": 300 }, "label": "User Interface", "color": "#fcd34d" },
-    { "id": "message-handler", "type": "service", "position": { "x": 350, "y": 300 }, "label": "Message Handler", "color": "#86efac" },
-    { "id": "agent-coordinator", "type": "coordinator", "position": { "x": 600, "y": 300 }, "label": "Agent Coordinator", "color": "#93c5fd" },
-    { "id": "agent-1", "type": "agent", "position": { "x": 850, "y": 150 }, "label": "Agent 1", "color": "#fca5a5" },
-    { "id": "agent-2", "type": "agent", "position": { "x": 850, "y": 300 }, "label": "Agent 2", "color": "#fca5a5" },
-    { "id": "agent-3", "type": "agent", "position": { "x": 850, "y": 450 }, "label": "Agent 3", "color": "#fca5a5" },
-    { "id": "conversation-log", "type": "database", "position": { "x": 600, "y": 50 }, "label": "Conversation Log", "color": "#e5e7eb" }
-  ],
-  "connections": [
-    { "id": "igc-conn-1", "from": "user-interface", "to": "message-handler", "type": "websocket", "name": "User Message" },
-    { "id": "igc-conn-2", "from": "message-handler", "to": "agent-coordinator", "type": "rpc", "name": "Process Message" },
-    { "id": "igc-conn-3", "from": "agent-coordinator", "to": "agent-1", "type": "task", "name": "Assign Task" },
-    { "id": "igc-conn-4", "from": "agent-coordinator", "to": "agent-2", "type": "task", "name": "Assign Task" },
-    { "id": "igc-conn-5", "from": "agent-coordinator", "to": "agent-3", "type": "task", "name": "Assign Task" },
-    { "id": "igc-conn-6", "from": "agent-1", "to": "message-handler", "type": "response", "name": "Agent Response" },
-    { "id": "igc-conn-7", "from": "agent-2", "to": "message-handler", "type": "response", "name": "Agent Response" },
-    { "id": "igc-conn-8", "from": "agent-3", "to": "message-handler", "type": "response", "name": "Agent Response" },
-    { "id": "igc-conn-9", "from": "message-handler", "to": "user-interface", "type": "websocket", "name": "Display Message" },
-    { "id": "igc-conn-10", "from": "message-handler", "to": "conversation-log", "type": "log", "name": "Log Message" }
-  ]
-}`,
-    language: 'json'
-  },
   useCases: [
     'Dynamic group reasoning and collaborative problem solving',
     'Mention-based routing of questions to specific agents',
@@ -1720,25 +1315,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
    alt: 'Agent Registry - API Endpoint, Registry Logic, Agent Datastore, External Service'
  },
- implementation: {
-   codeExample: `// Generated json
-{
-  "name": "Agent Registry Architecture",
-  "type": "agent_registry",
-  "components": [
-    { "id": "api-endpoint", "type": "endpoint", "position": { "x": 100, "y": 250 }, "label": "API Endpoint", "color": "#fecaca" },
-    { "id": "registry-logic", "type": "service", "position": { "x": 350, "y": 250 }, "label": "Registry Logic", "color": "#c7e9b0" },
-    { "id": "agent-datastore", "type": "database", "position": { "x": 600, "y": 250 }, "label": "Agent Datastore", "color": "#a5d8f3" },
-    { "id": "external-service", "type": "service", "position": { "x": 350, "y": 50 }, "label": "External Service", "color": "#fde68a" }
-  ],
-  "connections": [
-    { "id": "ar-conn-1", "from": "api-endpoint", "to": "registry-logic", "type": "http", "name": "Agent Requests" },
-    { "id": "ar-conn-2", "from": "registry-logic", "to": "agent-datastore", "type": "db-query", "name": "CRUD Operations" },
-    { "id": "ar-conn-3", "from": "external-service", "to": "registry-logic", "type": "api-call", "name": "Invoke Agent" }
-  ]
-}`,
-   language: 'json'
- },
  useCases: [
    'Agent CRUD operations via centralized API',
    'Runtime discovery and invocation of agents',
@@ -1780,35 +1356,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
  diagram: {
    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
    alt: 'Spreadsheet Swarm - CSV input, orchestrator, agent pool, aggregator, CSV output'
- },
- implementation: {
-   codeExample: `// Generated json
-{
-  "name": "Spreadsheet Swarm Architecture",
-  "type": "spreadsheet_swarm",
-  "components": [
-    { "id": "input-csv", "type": "file", "position": { "x": 50, "y": 200 }, "label": "Input CSV", "color": "#bfdbfe" },
-    { "id": "swarm-orchestrator", "type": "orchestrator", "position": { "x": 250, "y": 200 }, "label": "Swarm Orchestrator", "color": "#fde047" },
-    { "id": "agent-pool", "type": "pool", "position": { "x": 500, "y": 200 }, "label": "Agent Pool", "color": "#a7f3d0" },
-    { "id": "worker-agent-1", "type": "agent", "position": { "x": 700, "y": 100 }, "label": "Worker Agent", "color": "#fecaca" },
-    { "id": "worker-agent-2", "type": "agent", "position": { "x": 700, "y": 200 }, "label": "Worker Agent", "color": "#fecaca" },
-    { "id": "worker-agent-n", "type": "agent", "position": { "x": 700, "y": 300 }, "label": "Worker Agent N", "color": "#fecaca" },
-    { "id": "output-aggregator", "type": "aggregator", "position": { "x": 900, "y": 200 }, "label": "Output Aggregator", "color": "#d8b4fe" },
-    { "id": "output-csv", "type": "file", "position": { "x": 1100, "y": 200 }, "label": "Output CSV", "color": "#bfdbfe" }
-  ],
-  "connections": [
-    { "id": "ss-conn-1", "from": "input-csv", "to": "swarm-orchestrator", "type": "read", "name": "Read Tasks" },
-    { "id": "ss-conn-2", "from": "swarm-orchestrator", "to": "agent-pool", "type": "dispatch", "name": "Dispatch Tasks" },
-    { "id": "ss-conn-3", "from": "agent-pool", "to": "worker-agent-1", "type": "assign", "name": "Assign Task" },
-    { "id": "ss-conn-4", "from": "agent-pool", "to": "worker-agent-2", "type": "assign", "name": "Assign Task" },
-    { "id": "ss-conn-5", "from": "agent-pool", "to": "worker-agent-n", "type": "assign", "name": "Assign Task" },
-    { "id": "ss-conn-6", "from": "worker-agent-1", "to": "output-aggregator", "type": "result", "name": "Task Result" },
-    { "id": "ss-conn-7", "from": "worker-agent-2", "to": "output-aggregator", "type": "result", "name": "Task Result" },
-    { "id": "ss-conn-8", "from": "worker-agent-n", "to": "output-aggregator", "type": "result", "name": "Task Result" },
-    { "id": "ss-conn-9", "from": "output-aggregator", "to": "output-csv", "type": "write", "name": "Write Results" }
-  ]
-}`,
-   language: 'json'
  },
  useCases: [
    'Large-scale CSV-driven task orchestration',
@@ -1861,48 +1408,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
  diagram: {
    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
    alt: 'Heavy Architecture - Resource manager, load balancer, heavy agent pool, compute agents, monitor, optimizer, aggregator, final output'
- },
- implementation: {
-   codeExample: `class HeavyCoordinator {
-constructor({ resourceManager, loadBalancer, agentPool, monitor, optimizer, aggregator }) {
-  this.resourceManager = resourceManager;
-  this.loadBalancer = loadBalancer;
-  this.agentPool = agentPool;      // e.g., getAgents(), acquire(), release()
-  this.monitor = monitor;
-  this.optimizer = optimizer;      // can adjust routing/limits based on feedback
-  this.aggregator = aggregator;
-}
-
-async execute(task) {
-  await this.resourceManager.allocate(task);
-  const agents = await this.agentPool.getAgents();
-
-  // Route sub-tasks using load balancer
-  const plan = await this.loadBalancer.plan(task, agents);
-
-  const results = await Promise.all(plan.map(async (assignment) => {
-    const { agent, subtask } = assignment;
-    const start = performance.now();
-    try {
-      const out = await agent.compute(subtask);
-      await this.monitor.report({ agent: agent.id, ok: true, durMs: performance.now() - start, usage: await agent.usage?.() });
-      return out;
-    } catch (err) {
-      await this.monitor.report({ agent: agent.id, ok: false, error: String(err) });
-      throw err;
-    }
-  }));
-
-  // Feedback loop to optimizer
-  const tuning = await this.monitor.snapshot?.();
-  if (tuning) await this.optimizer.adjust(tuning);
-
-  const final = await this.aggregator.combine(results);
-  await this.resourceManager.release(task);
-  return final;
-}
-}`,
-   language: 'javascript'
  },
  useCases: [
    'Large-scale data processing and high-throughput task execution',
@@ -1960,29 +1465,6 @@ async execute(task) {
  diagram: {
    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
    alt: 'Router architecture with Intelligent Router, Analyzer, Load Balancer, Rules Engine, and target clusters'
- },
- implementation: {
-   codeExample: `class IntelligentRouter {
- constructor({ analyzer, balancer, rules, targets }) {
-   this.analyzer = analyzer;    // inspects task to infer domain/intents
-   this.balancer = balancer;    // queries system load/availability
-   this.rules = rules;          // priority rules / policy engine
-   this.targets = targets;      // map clusterName -> { execute(task) }
- }
-
- async route(task) {
-   const features = await this.analyzer.inspect(task);
-   const load = await this.balancer.snapshot();
-   const decision = await this.rules.decide({ task, features, load });
-
-   // decision might be { target: 'nlp', reason: 'text:sentiment', priority: 0.9 }
-   const target = this.targets[decision.target];
-   if (!target) throw new Error('No target cluster for ' + decision.target);
-
-   return target.execute(task, { decision, features, load });
- }
-}`,
-   language: 'javascript'
  },
  useCases: [
    'Front-door routing for multi-capability agent platforms (text vs. vision vs. analytics)',
@@ -2246,34 +1728,6 @@ async execute(task) {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'De-Hallucination - Primary output validated by multiple fact-checkers, consensus decides accept/refine'
    },
-   implementation: {
-     codeExample: `class DeHallucination {
-  constructor({ primary, validators, consensus, threshold = 0.75 }) {
-    this.primary = primary;           // generates initial answer/refinements
-    this.validators = validators;     // [{ id, validate: async (answer)=>{ ok:boolean, evidence?:any, score:number } }]
-    this.consensus = consensus;       // async (verdicts)=>{ confidence:number, decision:'accept'|'refine', details? }
-    this.threshold = threshold;
-  }
-
-  async run(query, maxLoops = 3) {
-    let attempt = await this.primary.respond(query);
-    for (let i = 0; i < maxLoops; i++) {
-      const verdicts = await Promise.all(this.validators.map(v => v.validate(attempt)));
-      const { confidence, decision } = await this.consensus(verdicts);
-      if (confidence >= this.threshold && decision === 'accept') {
-        return { output: attempt, confidence, iterations: i + 1, accepted: true, verdicts };
-      }
-      // refine using validator feedback
-      attempt = await this.primary.refine({ query, attempt, verdicts, confidence });
-    }
-    // final pass
-    const finalVerdicts = await Promise.all(this.validators.map(v => v.validate(attempt)));
-    const { confidence } = await this.consensus(finalVerdicts);
-    return { output: attempt, confidence, iterations: maxLoops, accepted: confidence >= this.threshold, verdicts: finalVerdicts };
-  }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Factual Q&A systems requiring high reliability',
      'Medical/legal content assistants needing strict fact-checking',
@@ -2396,64 +1850,6 @@ async execute(task) {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'MALT - Creator → Verifiers → Refiners → Final Output with orchestrator and conversation manager'
    },
-   implementation: {
-     codeExample: `class MALT {
- constructor({ creator, verifiers = [], refiners = [], maxLoops = 3, accept = (fb) => fb?.score >= 0.9 }) {
-   this.creator = creator;
-   this.verifiers = verifiers;
-   this.refiners = refiners;
-   this.maxLoops = maxLoops;
-   this.accept = accept;
-   this.history = [];
- }
-
- async run(task) {
-   // 1) Creator drafts initial solution
-   let solution = await this.creator.generate(task);
-   this.history.push({ role: 'creator', solution });
-
-   for (let i = 0; i < this.maxLoops; i++) {
-     // 2) Independent verification
-     const feedbacks = await Promise.all(
-       this.verifiers.map(v => v.verify(solution, task).catch(err => ({ ok: false, error: String(err) })))
-     );
-
-     // Aggregate feedback (simple score averaging + comments)
-     const okScores = feedbacks.map(f => Number(f?.score ?? 0)).filter(n => !Number.isNaN(n));
-     const avgScore = okScores.length ? okScores.reduce((a,b) => a + b, 0) / okScores.length : 0;
-     const aggregate = { score: avgScore, details: feedbacks };
-
-     this.history.push({ role: 'verifiers', feedbacks, aggregate });
-
-     // 3) Accept or refine
-     if (this.accept(aggregate)) {
-       return { output: solution, score: aggregate.score, iterations: i + 1, approved: true, trace: this.history };
-     }
-
-     // 4) Refinement by refiner pool (first-come improvement, or choose best)
-     const refinedCandidates = await Promise.all(
-       (this.refiners.length ? this.refiners : [ { refine: async (s) => s } ])
-         .map(r => r.refine(solution, aggregate, task).catch(err => ({ error: String(err) })))
-     );
-
-     // choose best by heuristic: if a candidate provides score hint, else fallback to first valid
-     const pick = refinedCandidates.find(c => typeof c === 'string' || c?.text) ?? refinedCandidates[0];
-     solution = typeof pick === 'string' ? pick : (pick?.text ?? solution);
-     this.history.push({ role: 'refiners', refined: solution });
-   }
-
-   // Final verification exit
-   const finalFeedbacks = await Promise.all(
-     this.verifiers.map(v => v.verify(solution, task).catch(err => ({ ok: false, error: String(err) })))
-   );
-   const scores = finalFeedbacks.map(f => Number(f?.score ?? 0)).filter(n => !Number.isNaN(n));
-   const finalScore = scores.length ? scores.reduce((a,b) => a + b, 0) / scores.length : 0;
-
-   return { output: solution, score: finalScore, iterations: this.maxLoops, approved: this.accept({ score: finalScore }), trace: this.history };
- }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Mathematical Proofs: creator drafts proof, verifiers check steps, refiners fix gaps.',
      'High-Quality Translation: creator translates, multiple verifiers check semantics/style, refiners polish.',
@@ -2548,33 +1944,6 @@ async execute(task) {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Majority Voting - Multiple agents casting votes aggregated into a final decision'
    },
-   implementation: {
-     codeExample: `class MajorityVoting {
- constructor(voters, { tieBreaker } = {}) {
-   this.voters = voters; // array of agents with vote(input) -> Promise<string|number|boolean>
-   this.tieBreaker = tieBreaker || ((candidates) => candidates[0]); // pick deterministically if tie
- }
-
- async decide(proposal) {
-   const votes = await Promise.all(this.voters.map(v => v.vote(proposal)));
-   const tally = new Map();
-   for (const v of votes) tally.set(v, (tally.get(v) ?? 0) + 1);
-
-   // find max count candidates
-   let max = 0;
-   const counts = [];
-   for (const [opt, c] of tally.entries()) {
-     counts.push({ option: opt, count: c });
-     if (c > max) max = c;
-   }
-   const top = counts.filter(c => c.count === max).map(c => c.option);
-
-   const decision = top.length === 1 ? top[0] : this.tieBreaker(top);
-   return { decision, votes, tally: Object.fromEntries(tally), tie: top.length > 1 };
- }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Ensemble model predictions: aggregate outputs from multiple specialized models',
      'Quality control: multiple agents vote to accept/reject generated content',
@@ -2626,25 +1995,6 @@ async execute(task) {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Round Robin - Scheduler dispatches tasks cyclically across agents'
    },
-   implementation: {
-     codeExample: `class RoundRobinScheduler {
- constructor(workers = []) {
-   this.workers = workers;
-   this.index = 0;
- }
- nextWorker() {
-   if (this.workers.length === 0) throw new Error('No workers');
-   const w = this.workers[this.index % this.workers.length];
-   this.index = (this.index + 1) % this.workers.length;
-   return w;
- }
- async dispatch(task) {
-   const worker = this.nextWorker();
-   return worker.process(task);
- }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Fair distribution of independent tasks across agents',
      'Rate-limiting hotspots by rotating handlers',
@@ -2692,23 +2042,6 @@ async execute(task) {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Auto-Builder - Engine analyzes spec, builds agents, stores config, deploys swarm'
    },
-   implementation: {
-     codeExample: `class AutoBuilder {
- constructor({ analyzer, factory, configStore, deployer }) {
-   this.analyzer = analyzer;
-   this.factory = factory;
-   this.configStore = configStore;
-   this.deployer = deployer;
- }
- async buildAndDeploy(taskSpec) {
-   const plan = await this.analyzer.plan(taskSpec);
-   const agents = await this.factory.create(plan);
-   const configId = await this.configStore.save({ plan, agents });
-   return this.deployer.deploy(configId);
- }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Rapid prototyping of agent systems from high-level specs',
      'Auto-scaling agent creation based on task domains',
@@ -2751,22 +2084,6 @@ async execute(task) {
    diagram: {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Hybrid hierarchical cluster - Coordinator and peer clusters'
-   },
-   implementation: {
-     codeExample: `class HybridCluster {
- constructor({ coordinator, clusters }) {
-   this.coordinator = coordinator;
-   this.clusters = clusters; // [{ id, members: Agent[] }]
- }
- async execute(task) {
-   const subtasks = await this.coordinator.decompose(task);
-   return Promise.all(this.clusters.map(async (cluster, i) => {
-     const st = subtasks[i % subtasks.length];
-     return cluster.members.map(m => m.collaborate(st));
-   }));
- }
-}`,
-     language: 'javascript'
    },
    useCases: [
      'Large tasks decomposed to teams that collaborate internally',
@@ -2815,20 +2132,6 @@ async execute(task) {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Election - Agents vote, tally aggregates, leader announced'
    },
-   implementation: {
-     codeExample: `class LeaderElection {
- constructor(voters) {
-   this.voters = voters;
- }
- async elect(candidates) {
-   const votes = await Promise.all(this.voters.map(v => v.vote(candidates)));
-   const tally = new Map();
-   for (const choice of votes) tally.set(choice, (tally.get(choice) ?? 0) + 1);
-   return [...tally.entries()].sort((a,b) => b[1]-a[1])[0][0];
- }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Distributed leader election for coordination',
      'Democratic parameter or plan selection',
@@ -2874,30 +2177,6 @@ async execute(task) {
    diagram: {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Dynamic Conversational - context analyzer, agent selector, message router with final response'
-   },
-   implementation: {
-     codeExample: `class DynamicConversational {
- constructor({ analyzer, selector, router, participants }) {
-   this.analyzer = analyzer;    // analyze(message, history) => { intents, entities, context }
-   this.selector = selector;    // select(context, participants) => string[] (agent ids)
-   this.router = router;        // route(messages) => final response
-   this.participants = participants; // id -> { respond(message, context) }
-   this.history = [];
- }
-
- async handle(userMessage) {
-   const analysis = await this.analyzer.analyze(userMessage, this.history);
-   const chosen = await this.selector.select(analysis, Object.keys(this.participants));
-   const replies = await Promise.all(
-     chosen.map(id => this.participants[id].respond(userMessage, analysis).then(r => ({ id, r })))
-   );
-   const final = await this.router.route(replies, analysis);
-   this.history.push({ role: 'user', content: userMessage, analysis });
-   this.history.push({ role: 'system', content: final });
-   return final;
- }
-}`,
-     language: 'javascript'
    },
    useCases: [
      'Advanced customer support with intent-based agent handoff',
@@ -2947,28 +2226,6 @@ async execute(task) {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Tree - Root with children and leaves in a strict hierarchy'
    },
-   implementation: {
-     codeExample: `class TreeNode {
- constructor({ id, children = [], process }) {
-   this.id = id;
-   this.children = children; // TreeNode[]
-   this.process = process || (async (task) => task);
- }
- async execute(task) {
-   const own = await this.process(task);
-   const results = [];
-   for (const child of this.children) {
-     results.push(await child.execute(own));
-   }
-   return { node: this.id, own, children: results };
- }
-}
-class TreeArchitecture {
- constructor(root) { this.root = root; }
- async run(task) { return this.root.execute(task); }
-}`,
-     language: 'javascript'
-   },
    useCases: [
      'Organizational workflows with clear reporting lines',
      'Decision trees with deterministic branching',
@@ -3011,60 +2268,6 @@ class TreeArchitecture {
    diagram: {
      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
      alt: 'Collaborative Circle - Agents contribute to and read from shared memory in a cyclic manner'
-   },
-   implementation: {
-     codeExample: `{
- "name": "Collaborative Circle Architecture",
- "type": "collaborative_circle",
- "components": [
-   {
-     "id": "shared-memory",
-     "type": "memory",
-     "position": { "x": 400, "y": 250 },
-     "label": "Shared Memory",
-     "color": "#f3e8ff"
-   },
-   {
-     "id": "agent-1",
-     "type": "agent",
-     "position": { "x": 400, "y": 50 },
-     "label": "Agent 1",
-     "color": "#dbeafe"
-   },
-   {
-     "id": "agent-2",
-     "type": "agent",
-     "position": { "x": 650, "y": 250 },
-     "label": "Agent 2",
-     "color": "#dcfce7"
-   },
-   {
-     "id": "agent-3",
-     "type": "agent",
-     "position": { "x": 400, "y": 450 },
-     "label": "Agent 3",
-     "color": "#fee2e2"
-   },
-   {
-     "id": "agent-4",
-     "type": "agent",
-     "position": { "x": 150, "y": 250 },
-     "label": "Agent 4",
-     "color": "#fef9c3"
-   }
- ],
- "connections": [
-   { "id": "conn-1", "from": "agent-1", "to": "shared-memory", "type": "write", "name": "Contribute" },
-   { "id": "conn-2", "from": "agent-2", "to": "shared-memory", "type": "write", "name": "Contribute" },
-   { "id": "conn-3", "from": "agent-3", "to": "shared-memory", "type": "write", "name": "Contribute" },
-   { "id": "conn-4", "from": "agent-4", "to": "shared-memory", "type": "write", "name": "Contribute" },
-   { "id": "conn-5", "from": "shared-memory", "to": "agent-1", "type": "read", "name": "Read Update" },
-   { "id": "conn-6", "from": "shared-memory", "to": "agent-2", "type": "read", "name": "Read Update" },
-   { "id": "conn-7", "from": "shared-memory", "to": "agent-3", "type": "read", "name": "Read Update" },
-   { "id": "conn-8", "from": "shared-memory", "to": "agent-4", "type": "read", "name": "Read Update" }
- ]
-}`,
-     language: 'json'
    },
    useCases: [
      'Collaborative content creation with iterative peer refinement',
