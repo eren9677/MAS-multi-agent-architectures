@@ -32,7 +32,7 @@ We hope you find these architectures useful and have fun exploring the  world of
 1. Clone the repository:
 ```bash
 git clone https://github.com/eren9677/MAS-multi-agent-architectures.git
-cd awesome-multi-agent-architectures
+cd MAS-multi-agent-architectures
 ```
 
 2. Install dependencies:
