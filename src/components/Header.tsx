@@ -71,7 +71,7 @@ export const Header: React.FC = () => {
 
           {/* CTA Button */}
           <div className="flex items-center">
-            <Link href="https://eren9677.github.io/MAS-multi-agent-architectures/architecture-builder" passHref>
+            <Link href="/MAS-multi-agent-architectures/architecture-builder" passHref>
               <Button
                 variant="primary"
                 size="md"
