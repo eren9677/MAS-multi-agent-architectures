@@ -10,9 +10,13 @@ Multi-agent architectures represent a sophisticated approach to AI system design
 
 In this repository, you will find a variety of multi-agent architecture patterns that can be used with different AI frameworks and development approaches. We encourage you to add your own architectures to the list, and to use AI to help generate new patterns as well.
 
-To get started, simply clone this repository and explore the architectures in the architectures.md file. You can also use these patterns as inspiration for creating your own multi-agent systems.
+To get started, visit site or simply clone this repository and explore the architectures. You can also use these patterns as inspiration for creating your own multi-agent systems.
 
-We hope you find these architectures useful and have fun exploring the fascinating world of multi-agent AI systems!
+We hope you find these architectures useful and have fun exploring the  world of multi-agent AI systems!
+
+<div align="center">
+  <img src="mainpage.png" alt="Mainpage Screenshot" width="800">
+</div>
 
 ## 🚀 Features
 
@@ -22,15 +26,6 @@ We hope you find these architectures useful and have fun exploring the fascinati
 - **Performance Metrics**: Visual performance indicators for scalability, complexity, and reliability
 - **Responsive Design**: Mobile-first design that works across all devices
 - **Modern UI**: Clean, modern interface with indigo blue color scheme and smooth animations
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Images**: Next.js Image Optimization
-- **Icons**: Heroicons (SVG)
-- **Deployment**: Static Site Generation (SSG)
 
 ## 📦 Installation
 
