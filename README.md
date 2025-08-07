@@ -31,7 +31,7 @@ We hope you find these architectures useful and have fun exploring the  world of
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/MAS-multi-agent-architectures.git
+git clone https://github.com/eren9677/MAS-multi-agent-architectures.git
 cd awesome-multi-agent-architectures
 ```
 
