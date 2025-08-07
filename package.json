@@ -2,11 +2,13 @@
   "name": "awesome-multi-agent-architectures",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://eren9677.github.io/MAS-multi-agent-architectures",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "next": "14.0.4",
@@ -20,8 +22,9 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
+    "gh-pages": "^6.1.1",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
-} 
+}
