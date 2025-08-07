@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useRef } from 'react'
-import Link from 'next/link'
 import { Button } from './ui/Button'
 
 export const Header: React.FC = () => {
@@ -70,12 +69,12 @@ export const Header: React.FC = () => {
           </nav>
           {/* CTA Button */}
           <div className="flex items-center">
-            <Link
-              href="architecture-builder"
+            <a
+              href="https://eren9677.github.io/MAS-multi-agent-architectures/architecture-builder/"
               className="hidden sm:inline-flex relative z-10 items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-light-bg dark:focus:ring-offset-dark-bg bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 shadow-soft hover:shadow-soft-hover transform hover:scale-105 px-4 py-2 text-sm"
             >
               Add Architecture
-            </Link>
+            </a>
           </div>
         </div>
       </div>
