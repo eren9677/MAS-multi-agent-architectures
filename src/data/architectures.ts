@@ -29,7 +29,6 @@ This architecture excels in complex customer support environments where differen
     ],
     createdAt: '2024-02-01',
     updatedAt: '2024-02-01',
-    githubUrl: 'https://github.com/example/supervisor-agent',
     documentationUrl: 'https://langchain-ai.github.io/langgraph/tutorials/multi_agent/agent_supervisor/',
     visual: {
       name: "Supervisor-Agent Architecture",
@@ -197,7 +196,6 @@ This architecture excels in complex customer support environments where differen
     },
     createdAt: '2025-08-06',
     updatedAt: '2025-08-06',
-    githubUrl: 'https://github.com/example/basic-sequential',
     documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
     visual: {
       name: "My Architecture",
@@ -279,7 +277,6 @@ This architecture excels in complex customer support environments where differen
     },
     createdAt: '2025-08-06',
     updatedAt: '2025-08-06',
-    githubUrl: 'https://github.com/example/network-decentralized',
     documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
     visual: {
       name: "My Architecture",
@@ -357,7 +354,6 @@ This architecture excels in complex customer support environments where differen
     },
     createdAt: '2025-08-06',
     updatedAt: '2025-08-06',
-    githubUrl: 'https://github.com/example/market-based-bidding',
     documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
     visual: {
       name: "Market-Based (Bidding) Architecture",
@@ -439,7 +435,6 @@ This architecture excels in complex customer support environments where differen
     },
     createdAt: '2025-08-06',
     updatedAt: '2025-08-06',
-    githubUrl: 'https://github.com/example/hierarchical-architecture',
     documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
     visual: {
       name: "My Architecture",
@@ -581,7 +576,6 @@ This architecture excels in complex customer support environments where differen
     },
     createdAt: '2025-08-06',
     updatedAt: '2025-08-06',
-    githubUrl: 'https://github.com/example/tool-augmented-agent-network',
     documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
     visual: {
       name: "Tool-Augmented Agent Network",
@@ -666,7 +660,6 @@ This architecture excels in complex customer support environments where differen
     },
     createdAt: '2025-08-06',
     updatedAt: '2025-08-06',
-    githubUrl: 'https://github.com/example/critic-refinement-loop',
     documentationUrl: 'https://www.madebyagents.com/blog/multi-agent-architectures',
     visual: {
       name: "Critic & Refinement Loop Architecture",
@@ -737,7 +730,6 @@ This architecture excels in complex customer support environments where differen
    },
    createdAt: '2025-08-06',
    updatedAt: '2025-08-06',
-   githubUrl: 'https://github.com/example/hitl-architecture',
    documentationUrl: 'https://www.ibm.com/think/topics/human-in-the-loop',
    visual: {
      name: "Human-in-the-Loop Architecture",
@@ -808,7 +800,6 @@ This architecture excels in complex customer support environments where differen
   },
   createdAt: '2025-08-06',
   updatedAt: '2025-08-06',
-  githubUrl: 'https://github.com/example/foraging-architecture',
   documentationUrl: 'https://www.sciencedirect.com/book/9781558605954/swarm-intelligence',
   visual: {
     name: "Foraging Architecture",
@@ -897,7 +888,6 @@ This architecture excels in complex customer support environments where differen
   },
   createdAt: '2025-08-06',
   updatedAt: '2025-08-06',
-  githubUrl: 'https://github.com/example/group-architecture',
   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/concept/swarm_architectures/#group-chat',
   visual: {
     name: "Group Architecture",
@@ -993,7 +983,6 @@ This architecture excels in complex customer support environments where differen
   },
   createdAt: '2025-08-06',
   updatedAt: '2025-08-06',
-  githubUrl: 'https://github.com/example/mixture-of-agents',
   documentationUrl: 'https://huggingface.co/blog/moe',
   visual: {
     name: 'Mixture of Agents',
@@ -1082,7 +1071,6 @@ This architecture excels in complex customer support environments where differen
   },
   createdAt: '2025-08-06',
   updatedAt: '2025-08-06',
-  githubUrl: 'https://github.com/example/concurrent-workflows',
   documentationUrl: 'https://devblogs.microsoft.com/semantic-kernel/semantic-kernel-multi-agent-orchestration/',
   visual: {
     name: 'Concurrent Workflows',
@@ -1171,7 +1159,6 @@ This architecture excels in complex customer support environments where differen
   },
   createdAt: '2025-08-06',
   updatedAt: '2025-08-06',
-  githubUrl: 'https://github.com/example/agent-rearrange',
   documentationUrl: 'https://galileo.ai/blog/stability-strategies-dynamic-multi-agents',
   visual: {
     name: 'Agent Rearrange',
@@ -1221,7 +1208,6 @@ This architecture excels in complex customer support environments where differen
   },
   createdAt: '2025-08-06',
   updatedAt: '2025-08-06',
-  githubUrl: 'https://github.com/example/graph-workflow',
   documentationUrl: 'https://blog.langchain.com/langgraph-multi-agent-workflows/',
   visual: {
     name: 'Graph Workflow',
