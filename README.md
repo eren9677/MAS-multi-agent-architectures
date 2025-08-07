@@ -4,7 +4,7 @@
 
 # Multi-Agent Architectures - Open Source Collaboration Platform
 
-Welcome to the "Awesome Multi-Agent Architectures" repository! This collection was created to showcase and share innovative multi agent AI architectures, but these patterns work great with various AI frameworks and development approaches.
+Welcome to the "MAS-multi-agent-architectures" repository! This collection was created to showcase and share innovative multi agent AI architectures, but these patterns work great with various AI frameworks and development approaches.
 
 Multi-agent architectures represent a sophisticated approach to AI system design, where multiple specialized AI agents collaborate to solve complex problems. These systems can range from simple sequential workflows to complex distributed networks, each with unique strengths and applications.
 
@@ -31,7 +31,7 @@ We hope you find these architectures useful and have fun exploring the  world of
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/awesome-multi-agent-architectures.git
+git clone https://github.com/your-username/MAS-multi-agent-architectures.git
 cd awesome-multi-agent-architectures
 ```
 
