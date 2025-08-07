@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="navbar-screenshot.png" alt="Navbar Screenshot" width="800">
+</div>
+
 # Multi-Agent Architectures - Open Source Collaboration Platform
 
 Welcome to the "Awesome Multi-Agent Architectures" repository! This collection was created to showcase and share innovative multi agent AI architectures, but these patterns work great with various AI frameworks and development approaches.
@@ -9,10 +13,6 @@ In this repository, you will find a variety of multi-agent architecture patterns
 To get started, simply clone this repository and explore the architectures in the architectures.md file. You can also use these patterns as inspiration for creating your own multi-agent systems.
 
 We hope you find these architectures useful and have fun exploring the fascinating world of multi-agent AI systems!
-
-
-Screenshot 2025-01-05 at 22 17 19
-
 
 ## 🚀 Features
 
@@ -51,7 +51,6 @@ npm run dev
 ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
 
 The application includes 30 sample multi-agent architectures:
 
