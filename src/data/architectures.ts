@@ -8,7 +8,6 @@ export const architectures: Architecture[] = [
     longDescription: 'The Supervisor-Agent architecture features a central supervisor agent that orchestrates specialized worker agents. The supervisor receives tasks, decomposes them into manageable sub-tasks, and delegates them to appropriate worker agents based on their specializations. As worker agents complete their assignments, the supervisor monitors progress and collects results, ultimately synthesizing outputs to generate the final solution. This architecture is particularly effective for complex workflows that can be clearly partitioned into distinct, specialized steps, making it an excellent starting point for multi-agent systems.',
     author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
     category: ['Hierarchical', 'Orchestration'],
@@ -201,7 +200,6 @@ export const architectures: Architecture[] = [
     longDescription: 'In a sequential architecture, agents work in a pipeline where the output of one agent becomes the input for the next in the sequence. This creates a linear workflow, with each agent performing a specific transformation on the data it receives. This architecture is ideal for processes with clearly defined, ordered stages.',
     author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
     category: ['Sequential', 'Pipeline'],
@@ -307,7 +305,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     longDescription: 'In a network or decentralized architecture, agents communicate directly with each other without a central coordinator. This enables flexible and dynamic collaboration, as any agent can interact with any other agent in the network. It is well-suited for complex problems where workflows are not predictable and require dynamic information sharing.',
     author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
     category: ['Distributed', 'Decentralized'],
@@ -404,7 +401,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     longDescription: 'In a market-based architecture, tasks are not assigned directly. A Client or Auctioneer agent broadcasts a task to a network of Contractor agents, which then bid on the task with capability, confidence, or cost. The Auctioneer selects the best bid based on criteria such as lowest cost, highest confidence, or fastest completion time, and awards the task to the winning agent.',
     author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
     category: ['Competitive', 'Market'],
@@ -502,7 +498,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     longDescription: 'A hierarchical architecture is an extension of the supervisor model, featuring multiple levels of supervision. A top-level supervisor oversees lower-level supervisors, each managing their own team of worker agents. This structure enables handling complex tasks by decomposing them into smaller, manageable sub-problems that specialized teams can address.',
     author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
     category: ['Hierarchical', 'Orchestration'],
@@ -661,7 +656,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     longDescription: 'In a Tool-Augmented architecture, agents are not limited to communicating with each other; they are explicitly designed to interact with a set of external, non-agentive "tools." These tools can be anything from code interpreters and calculators to databases and third-party APIs (e.g., Google Search, weather services). An orchestrating agent, or the agents themselves, can reason about which tool is required to accomplish a specific sub-task. This dramatically extends the agent system\'s capabilities beyond its inherent knowledge, allowing it to ground its reasoning in real-world data and perform complex actions. This is a foundational architecture for most modern, practical AI agent systems.',
     author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
     category: ['Tool-Augmented', 'Orchestration'],
@@ -767,7 +761,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
     longDescription: 'This architecture introduces a "Critic" agent whose sole purpose is to review the output of a "Creator" agent and provide constructive feedback. The Creator agent then takes this feedback and refines its work in a loop until the output meets a certain quality standard, is approved by the Critic, or a maximum number of iterations is reached. This pattern is fundamental for improving the quality and accuracy of generated content or plans.',
     author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
     category: ['Iterative', 'Quality'],
@@ -863,7 +856,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
    longDescription: 'Human-in-the-Loop (HITL) is a design pattern that strategically combines human intelligence with AI automation. The multi-agent system operates autonomously but pauses and consults a human at critical junctures. Triggers for intervention include low confidence, subjective judgment, sensitive data handling, or final approval for irreversible actions. HITL leverages human common sense, ethics, and creativity together with machine speed and data processing to produce robust, safe, and trustworthy outcomes.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Safety', 'Governance', 'Workflow'],
@@ -962,10 +954,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'Decentralized swarm of forager agents explore broadly; discoveries attract others to exploit rich areas.',
   longDescription: 'The Foraging Architecture is a decentralized pattern inspired by the natural behavior of social insects like ants or bees. Multiple independent agents ("foragers") explore a large search space (e.g., the internet, a database, a file system) in parallel to find specific information or resources. When a forager agent finds a valuable resource, it communicates this discovery back to the swarm—often including the "scent" or location—attracting other agents to exploit it more thoroughly. This creates an efficient, self-organizing search-and-exploitation mechanism that excels at finding needles in a haystack.',
   author: {
-      name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'eren9677'
-    },
+     name: 'Eren Kızılırmak',
+     github: 'eren9677'
+   },
   category: ['Distributed', 'Swarm'],
   tags: ['foraging', 'swarm-intelligence', 'ant-colony', 'explore-exploit', 'decentralized'],
   diagram: {
@@ -1096,7 +1087,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   longDescription: 'A Group Architecture (also called Team-based or Coalition) organizes agents into subgroups. Within a group, communication is fluid and context-rich (all-to-all or local broadcast). Between groups, communication is structured and less frequent, typically handled by designated liaison/leader agents. This enables specialization per group while reducing system-wide communication overhead and information overload.',
   author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
   category: ['Collaborative', 'Structured'],
@@ -1214,7 +1204,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   longDescription: 'A Mixture of Agents architecture is fundamentally about heterogeneity. It involves creating a system where agents with different specializations, capabilities, underlying models, or even programming languages are combined to solve a complex problem. Instead of relying on a team of identical agents, this model leverages the idea that diverse expertise leads to a more robust and powerful solution. The core challenge lies in creating a communication and coordination protocol that allows these disparate agents to work together effectively.',
   author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
   category: ['Heterogeneous', 'Orchestration', 'Ensemble'],
@@ -1350,7 +1339,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   longDescription: 'The concurrent pattern enables multiple agents to work on the same task in parallel. Each agent processes the input independently, allowing for simultaneous execution of different aspects of a complex task. This architecture maximizes efficiency by leveraging parallelism, where agents coordinate their efforts while working concurrently to achieve a common goal, significantly reducing overall processing time.',
   author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
   category: ['Concurrent', 'Parallel'],
@@ -1456,7 +1444,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   longDescription: 'Multi-agent systems can adjust to varying environments by adding, removing or adapting agents in dynamic configurations. In this architecture, agents continuously rearrange themselves based on changing task requirements, environmental conditions, and system performance metrics. Prioritize modular components that can be reconfigured independently without compromising system integrity. This approach enables individual agents to evolve while preserving collective functionality.',
   author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
   category: ['Dynamic', 'Adaptive'],
@@ -1550,7 +1537,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   longDescription: 'In this approach, each agent is a node in the graph, and their connections are represented as an edge. The control flow is managed by edges, and they communicate by adding to the graph\'s state. This architecture represents complex workflows as directed acyclic graphs (DAG) where agents can have multiple dependencies and parallel execution paths, enabling sophisticated coordination patterns that go beyond simple sequential or hierarchical structures.',
   author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
   category: ['Graph', 'Workflow', 'DAG'],
@@ -1645,7 +1631,6 @@ class ReportGen { async process(d) { return generateReport(d); } }
   longDescription: 'An interactive group chat architecture facilitates collaboration among multiple specialized AI agents in a coordinated manner. This system allows for dynamic speaker selection, mention-based communication where agents can be directed to specific tasks, and the ability for agents to build upon each other\'s responses. It supports both automated and interactive sessions, maintaining conversation history and context for coherent group reasoning.',
   author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
   category: ['Collaborative', 'Adaptive'],
@@ -1726,10 +1711,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
  description: 'An agent registry is a centralized architecture for managing a collection of agents. It provides functionalities to add, delete, update, and retrieve agents, ensuring that agent definitions are decoupled from their execution.',
  longDescription: 'An agent registry is a centralized architecture for managing a collection of agents. It provides functionalities to add, delete, update, and retrieve agents, ensuring that agent definitions are decoupled from their execution. This system is designed for concurrent environments, making it suitable for dynamic and scalable multi-agent systems where agents need to be discovered and invoked at runtime.',
  author: {
-      name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'eren9677'
-    },
+     name: 'Eren Kızılırmak',
+     github: 'eren9677'
+   },
  category: ['Orchestration', 'Infrastructure'],
  tags: ['registry', 'service-discovery', 'crud', 'decoupled', 'runtime-invocation'],
  diagram: {
@@ -1788,10 +1772,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
  description: 'Spreadsheet Swarm is a multi-agent architecture designed to manage and orchestrate thousands of agents using a CSV file.',
  longDescription: 'Spreadsheet Swarm is a multi-agent architecture designed to manage and orchestrate thousands of agents using a CSV file. This system acts as a centralized collector for agent outputs, saving results in a structured tabular format for easy sorting, filtering, and analysis. It supports parallel processing by allowing multiple agents to run concurrently, making it scalable and efficient for large-scale data operations.',
  author: {
-      name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'eren9677'
-    },
+     name: 'Eren Kızılırmak',
+     github: 'eren9677'
+   },
  category: ['Tabular', 'Data Management'],
  tags: ['spreadsheet', 'swarm', 'csv', 'parallel', 'orchestrator'],
  diagram: {
@@ -1870,10 +1853,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
  description: 'A high-performance architecture designed for handling intensive computational workloads by orchestrating multiple agents working on resource-heavy operations—perfect for large-scale data processing and high-throughput task execution.',
  longDescription: 'A high-performance architecture designed for handling intensive computational workloads by orchestrating multiple agents working on resource-heavy operations—perfect for large-scale data processing and high-throughput task execution.',
  author: {
-      name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'eren9677'
-    },
+     name: 'Eren Kızılırmak',
+     github: 'eren9677'
+   },
  category: ['High-Performance', 'Parallel', 'Orchestration'],
  tags: ['high-performance', 'compute', 'load-balancing', 'optimization', 'aggregation', 'monitoring'],
  diagram: {
@@ -1970,10 +1952,9 @@ async execute(task) {
  description: 'Priority Rules and LangGraph-style routing: analyzes tasks and routes to optimal agents/architectures based on rules, load, availability, and performance.',
  longDescription: 'Priority Rules: Pre-established rules or logic are used to settle disagreements. LangGraph: Multi-Agent Workflows and route tasks to appropriate agents. The Router architecture acts as an intelligent traffic director that analyzes incoming tasks and dynamically selects the most suitable architecture pattern or specific agents based on task characteristics, current system load, agent availability, and performance metrics. This pattern enables adaptive system behavior by choosing optimal processing paths.',
  author: {
-      name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'eren9677'
-    },
+     name: 'Eren Kızılırmak',
+     github: 'eren9677'
+   },
  category: ['Routing', 'Orchestration', 'Adaptive'],
  tags: ['router', 'priority-rules', 'load-balancing', 'dynamic-routing', 'langgraph'],
  diagram: {
@@ -2140,7 +2121,6 @@ async execute(task) {
   longDescription: 'A specialized architecture tailored for conducting comprehensive research across multiple domains. This approach uses iterative workflows where research queries trigger domain-specific agents, whose findings are aggregated, cross-validated, refined, and synthesized into a final report—optimal for academic research, market intelligence, and deep data investigation.',
   author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
   category: ['Research', 'Iterative', 'Synthesis'],
@@ -2258,7 +2238,6 @@ async execute(task) {
    longDescription: 'An architecture specifically crafted to minimize and eliminate hallucinations in AI-generated outputs using consensus-based validation. A primary agent produces an initial response, which is then fact-checked by multiple secondary validator agents. A consensus engine evaluates agreement among validations to either finalize the output (if confidence exceeds a threshold) or trigger a targeted refinement loop back to the primary agent.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Safety', 'Validation', 'Consensus'],
@@ -2409,7 +2388,6 @@ async execute(task) {
    longDescription: 'Multi-Agent Learning Task (MALT) is a structured multi-agent framework in which a Creator Agent produces an initial solution, Verifier Agents evaluate it independently, and Refiner Agents enhance it based on feedback. This iterative process supports high-quality outputs for complex tasks such as mathematical proofs, translations, or content generation.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Iterative', 'Quality', 'Orchestration'],
@@ -2562,7 +2540,6 @@ async execute(task) {
    longDescription: 'A consensus architecture where each agent casts a vote on proposed decisions or outputs; the option with the most votes is selected as final. This reduces errors and promotes democratic decision-making in contexts like quality control or ensemble predictions.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Consensus', 'Ensemble', 'Validation'],
@@ -2641,7 +2618,6 @@ async execute(task) {
    longDescription: 'Tasks are distributed cyclically among agents in a fixed sequence, ensuring fair load balancing and preventing any single agent from being overburdened. It’s widely used in scheduling, resource allocation, and parallel workflows.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Scheduling', 'Load Balancing'],
@@ -2708,7 +2684,6 @@ async execute(task) {
    longDescription: 'A meta-architecture that inspects task requirements and automatically composes and configures the necessary agents into a working swarm. It streamlines rapid prototyping and adaptive system creation.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Orchestration', 'Automation'],
@@ -2769,7 +2744,6 @@ async execute(task) {
    longDescription: 'Combines a hierarchical control layer with peer-to-peer clustering among lower-level agents. The top-level coordinator delegates broad tasks, while peer clusters collaborate directly for efficiency.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Hybrid', 'Hierarchical', 'P2P'],
@@ -2833,7 +2807,6 @@ async execute(task) {
    longDescription: 'Agents run a ballot among themselves to elect a leader or make collective choices. This democratic approach supports robust governance in distributed systems and fault-tolerant coordination.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Consensus', 'Governance'],
@@ -2966,7 +2939,6 @@ async execute(task) {
    longDescription: 'A classic tree structure with a single root agent, internal nodes as managers, and leaves as executors. Each node has exactly one parent, enabling clear delegation paths, easy logging/traceability, and isolated failure handling. Common in organizational charts, decision trees, and taxonomy engines.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Hierarchical', 'Structured'],
@@ -3032,7 +3004,6 @@ class TreeArchitecture {
    longDescription: 'The Collaborative Circle architecture is a multi-agent system designed for cooperative problem-solving. In this structure, a group of agents works together on a shared task, contributing their individual capabilities. Information is shared openly among the agents in a cyclical or all-to-all manner, allowing for iterative refinement and collective decision-making. This architecture is well-suited for tasks that benefit from diverse perspectives and collaborative iteration to achieve a robust final output.',
    author: {
       name: 'Eren Kızılırmak',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
       github: 'eren9677'
     },
    category: ['Collaborative', 'Swarm'],

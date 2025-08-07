@@ -96,47 +96,9 @@ const ArchitectureBuilder: React.FC = () => {
   }, [architecture])
 
   const handleExport = useCallback(() => {
-    if (!validateArchitectureForm()) {
-      return
-    }
-    
-    // Convert architecture to YAML format
-    const yamlContent = `name: "${architecture.name}"
-type: "${architecture.type}"
-components:
-${architecture.components.map(c => `  - id: "${c.id}"
-    type: "${c.type}"
-    position: {x: ${c.position.x}, y: ${c.position.y}}
-    label: "${c.label}"`).join('\n')}
-connections:
-${architecture.connections.map(conn => `  - id: "${conn.id}"
-    from: "${conn.from}"
-    to: "${conn.to}"
-    type: "${conn.type}"
-    name: "${conn.name}"`).join('\n')}`
-
-    // Generate GitHub issue URL with pre-filled template
-    // In a real application, these would be configurable
-    const githubUsername = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'username'
-    const githubRepo = process.env.NEXT_PUBLIC_GITHUB_REPO || 'repo'
-    
-    const title = encodeURIComponent(`[Architecture] ${architecture.name}`)
-    const body = encodeURIComponent(`## Architecture Submission
-
-### Description
-Please describe your architecture pattern and its use cases.
-
-### Architecture Code
-\`\`\`yaml
-${yamlContent}
-\`\`\`
-
-### Additional Notes
-Add any additional notes or considerations for this architecture.`)
-    
-    const url = `https://github.com/${githubUsername}/${githubRepo}/issues/new?template=architecture-submission.md&title=${title}&body=${body}`
-    window.open(url, '_blank')
-  }, [architecture, validateArchitecture])
+    // Directly open the repository Pull Requests page in a new tab
+    window.open('https://github.com/eren9677/awesome-multi-agent-architectures/pulls', '_blank', 'noopener,noreferrer')
+  }, [])
 
   const togglePreviewMode = useCallback(() => {
     setPreviewMode(prev => !prev)

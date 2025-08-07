@@ -53,10 +53,10 @@ export default function Home() {
             {/* Left: Logo */}
             <div>
               <h1 className="text-2xl font-bold bg-gradient-blueish bg-clip-text text-transparent bg-size-200 animate-gradient-shift hover:bg-gradient-blueish-hover hover:animate-gradient-hover transition-all duration-500 ease-in-out cursor-pointer">
-                Multi-Agent Architectures
+                MAS Design
               </h1>
               <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">
-                World&apos;s First Multi-Agent Architecture Directory
+                Collaborative Multi-Agent Architecture Directory
               </p>
             </div>
 
