@@ -51,38 +51,6 @@ export const Header: React.FC = () => {
               Open-source collaboration platform
             </p>
           </div>
-
-          {/* Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            <a
-              href="#architectures"
-              className="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200 relative z-10"
-            >
-              Architectures
-            </a>
-            <a
-              href="#about"
-              className="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200 relative z-10"
-            >
-              About
-            </a>
-            <a
-              href="#contribute"
-              className="text-gray-700 hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors duration-200 relative z-10"
-            >
-              Contribute
-            </a>
-          </nav>
-          {/* CTA Button */}
-          <div className="flex items-center">
-            <a
-              href="/MAS-multi-agent-architectures/architecture-builder/"
-              onClick={handleAddArchitectureClick}
-              className="hidden sm:inline-flex relative z-10 items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-light-bg dark:focus:ring-offset-dark-bg bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 shadow-soft hover:shadow-soft-hover transform hover:scale-105 px-4 py-2 text-sm"
-            >
-              Add Architecture
-            </a>
-          </div>
         </div>
       </div>
     </header>

@@ -83,12 +83,8 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
   )
 }
 
-// Make sure Link is imported at the top of your file
+
 import Link from 'next/link'
-
-// ... (keep the rest of your imports and the ArchitectureCard component as they are)
-
-// PASTE THIS NEW VERSION of AddArchitectureCard
 export const AddArchitectureCard: React.FC = () => {
   return (
     <Link
