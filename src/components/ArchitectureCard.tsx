@@ -83,31 +83,31 @@ export const ArchitectureCard: React.FC<ArchitectureCardProps> = ({ architecture
   )
 }
 
-export const AddArchitectureCard: React.FC = () => {
-  const handleRedirect = () => {
-    window.location.href = '/architecture-builder';
-  };
+// Make sure Link is imported at the top of your file
+import Link from 'next/link'
 
+// ... (keep the rest of your imports and the ArchitectureCard component as they are)
+
+// PASTE THIS NEW VERSION of AddArchitectureCard
+export const AddArchitectureCard: React.FC = () => {
   return (
-    <Card
-      onClick={handleRedirect}
-      className="w-full h-80 border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500 bg-white dark:bg-dark-card rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group"
+    <Link
+      href="/architecture-builder"
+      className="w-full h-80 border-2 border-dashed border-primary-300 dark:border-primary-600 hover:border-primary-400 dark:hover:border-primary-500 bg-white dark:bg-dark-card rounded-lg cursor-pointer transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg dark:hover:shadow-dark-hover group p-4 flex flex-col items-center justify-center text-center"
     >
-      <div className="p-4 h-full flex flex-col items-center justify-center text-center">
-        {/* Plus Icon */}
-        <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-3 group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors duration-200">
-          <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-        </div>
-        
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-dark-text mb-1">
-          Add New Architecture
-        </h3>
-        <p className="text-xs text-gray-600 dark:text-dark-text-secondary line-clamp-2">
-          Create and visualize your multi-agent architecture with our builder.
-        </p>
+      {/* Plus Icon */}
+      <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-3 group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors duration-200">
+        <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
       </div>
-    </Card>
+      
+      <h3 className="text-sm font-semibold text-gray-900 dark:text-dark-text mb-1">
+        Add New Architecture
+      </h3>
+      <p className="text-xs text-gray-600 dark:text-dark-text-secondary line-clamp-2">
+        Create and visualize your multi-agent architecture with our builder.
+      </p>
+    </Link>
   )
 }
