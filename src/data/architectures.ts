@@ -2,568 +2,14 @@ import { Architecture } from '@/types'
 
 export const architectures: Architecture[] = [
   {
-    id: 'sequential-reasoning-chain',
-    title: 'Sequential Reasoning Chain',
-    description: 'Agents process information sequentially, each building on previous results',
-    longDescription: 'A sophisticated multi-agent system where agents work in a sequential chain, each building upon the reasoning and outputs of previous agents. This architecture is particularly effective for complex problems that require multiple stages of analysis, reasoning, and decision-making.',
-    author: {
-      name: 'Dr. Sarah Chen',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'sarahchen-ai'
-    },
-    category: ['Sequential', 'Reasoning'],
-    tags: ['chain-of-thought', 'reasoning', 'sequential', 'analysis'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Sequential Reasoning Chain - Connected nodes A→B→C→D in horizontal line'
-    },
-    implementation: {
-      codeExample: `class SequentialChain {
-  constructor(agents) {
-    this.agents = agents;
-    this.context = {};
-  }
-  
-  async process(input) {
-    let result = input;
-    for (const agent of this.agents) {
-      result = await agent.reason(result, this.context);
-      this.context[agent.name] = result;
-    }
-    return result;
-  }
-}`,
-      language: 'javascript'
-    },
-    useCases: [
-      'Complex problem decomposition',
-      'Step-by-step analysis',
-      'Scientific research workflows',
-      'Financial analysis pipelines'
-    ],
-    performance: {
-      scalability: 8,
-      complexity: 6,
-      reliability: 9
-    },
-    createdAt: '2024-01-15',
-    updatedAt: '2024-01-20',
-    githubUrl: 'https://github.com/example/sequential-chain',
-    documentationUrl: 'https://docs.example.com/sequential-chain'
-  },
-  {
-    id: 'hierarchical-command-structure',
-    title: 'Hierarchical Command Structure',
-    description: 'Central manager delegates tasks to specialized worker agents',
-    longDescription: 'A hierarchical architecture where a manager agent coordinates multiple worker agents, each specializing in specific tasks. The manager agent handles task distribution, result aggregation, and overall workflow coordination while worker agents focus on their specialized domains.',
-    author: {
-      name: 'Alex Rodriguez',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-      github: 'alex-rodriguez-ai'
-    },
-    category: ['Hierarchical', 'Management'],
-    tags: ['hierarchy', 'management', 'delegation', 'coordination'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Hierarchical Command Structure - Tree diagram with manager at top, workers below'
-    },
-    implementation: {
-      codeExample: `class ManagerAgent {
-  constructor(workers) {
-    this.workers = workers;
-    this.taskQueue = [];
-  }
-  
-  async coordinate(task) {
-    const subtasks = this.decomposeTask(task);
-    const promises = subtasks.map(subtask => 
-      this.assignToWorker(subtask)
-    );
-    const results = await Promise.all(promises);
-    return this.aggregateResults(results);
-  }
-}`,
-      language: 'python'
-    },
-    useCases: [
-      'Task delegation',
-      'Resource allocation',
-      'Command & control systems',
-      'Project coordination'
-    ],
-    performance: {
-      scalability: 9,
-      complexity: 7,
-      reliability: 8
-    },
-    createdAt: '2024-01-10',
-    updatedAt: '2024-01-18',
-    githubUrl: 'https://github.com/example/hierarchical-structure',
-    documentationUrl: 'https://docs.example.com/hierarchical-structure'
-  },
-  {
-    id: 'peer-to-peer-swarm-network',
-    title: 'Peer-to-Peer Swarm Network',
-    description: 'Agents communicate directly with each other, no central authority',
-    longDescription: 'A decentralized swarm architecture where agents communicate directly with each other in a peer-to-peer network. Each agent operates independently while sharing information and coordinating through direct communication channels, enabling robust and scalable distributed processing.',
-    author: {
-      name: 'Maya Patel',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-      github: 'maya-patel-ai'
-    },
-    category: ['Distributed', 'Swarm'],
-    tags: ['p2p', 'decentralized', 'swarm', 'consensus'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Peer-to-Peer Swarm Network - Mesh network with interconnected circular nodes'
-    },
-    implementation: {
-      codeExample: `class SwarmAgent {
-  constructor(peers) {
-    this.peers = peers;
-    this.knowledge = new Map();
-  }
-  
-  async broadcast(message) {
-    const promises = this.peers.map(peer =>
-      peer.receiveMessage(message)
-    );
-    await Promise.all(promises);
-  }
-  
-  async processLocally(data) {
-    const result = await this.compute(data);
-    await this.broadcast({ type: 'result', data: result });
-    return result;
-  }
-}`,
-      language: 'typescript'
-    },
-    useCases: [
-      'Distributed consensus',
-      'Swarm intelligence',
-      'Collective decision-making',
-      'Blockchain networks'
-    ],
-    performance: {
-      scalability: 10,
-      complexity: 8,
-      reliability: 7
-    },
-    createdAt: '2024-01-05',
-    updatedAt: '2024-01-15',
-    githubUrl: 'https://github.com/example/swarm-network',
-    documentationUrl: 'https://docs.example.com/swarm-network'
-  },
-  {
-    id: 'pipeline-assembly-line',
-    title: 'Pipeline Assembly Line',
-    description: 'Agents perform specialized tasks in sequence like assembly line',
-    longDescription: 'A pipeline architecture where specialized agents are designed for specific domains or tasks. Each agent in the pipeline handles a particular aspect of the overall process, allowing for highly optimized and domain-specific processing workflows.',
-    author: {
-      name: 'David Kim',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-      github: 'david-kim-ai'
-    },
-    category: ['Pipeline', 'Specialized'],
-    tags: ['pipeline', 'assembly-line', 'specialized', 'workflow'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Pipeline Assembly Line - Horizontal conveyor belt with specialized stations'
-    },
-    implementation: {
-      codeExample: `class Pipeline {
-  constructor(stages) {
-    this.stages = stages;
-  }
-  
-  async process(input) {
-    let data = input;
-    for (const stage of this.stages) {
-      data = await stage.process(data);
-    }
-    return data;
-  }
-}
-
-class AssemblyStage {
-  async process(data) {
-    return await this.specializedTask(data);
-  }
-}`,
-      language: 'python'
-    },
-    useCases: [
-      'Data processing workflows',
-      'Content creation pipelines',
-      'Quality assurance processes',
-      'Manufacturing automation'
-    ],
-    performance: {
-      scalability: 7,
-      complexity: 5,
-      reliability: 9
-    },
-    createdAt: '2024-01-12',
-    updatedAt: '2024-01-22',
-    githubUrl: 'https://github.com/example/pipeline-assembly',
-    documentationUrl: 'https://docs.example.com/pipeline-assembly'
-  },
-  {
-    id: 'hub-and-spoke-coordinator',
-    title: 'Hub-and-Spoke Coordinator',
-    description: 'Central coordinator manages multiple specialized peripheral agents',
-    longDescription: 'A hub-and-spoke architecture where a central coordinator manages multiple specialized peripheral agents. The hub acts as the central point of control and coordination, while the spokes represent specialized agents that handle specific tasks or domains.',
-    author: {
-      name: 'Emma Wilson',
-      avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
-      github: 'emma-wilson-ai'
-    },
-    category: ['Centralized', 'Coordination'],
-    tags: ['hub-spoke', 'centralized', 'coordination', 'management'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Hub-and-Spoke Coordinator - Central hub with spokes radiating to peripheral agents'
-    },
-    implementation: {
-      codeExample: `class HubCoordinator {
-  constructor(spokes) {
-    this.spokes = spokes;
-    this.taskQueue = [];
-  }
-  
-  async coordinate(task) {
-    const subtasks = this.decomposeTask(task);
-    const results = {};
-    
-    for (const [spokeId, subtask] of subtasks) {
-      results[spokeId] = await this.spokes[spokeId].process(subtask);
-    }
-    
-    return this.aggregateResults(results);
-  }
-}`,
-      language: 'javascript'
-    },
-    useCases: [
-      'Centralized coordination',
-      'Distributed execution',
-      'Resource management',
-      'Service orchestration'
-    ],
-    performance: {
-      scalability: 8,
-      complexity: 6,
-      reliability: 8
-    },
-    createdAt: '2024-01-08',
-    updatedAt: '2024-01-25',
-    githubUrl: 'https://github.com/example/hub-spoke',
-    documentationUrl: 'https://docs.example.com/hub-spoke'
-  },
-  {
-    id: 'adaptive-dynamic-ensemble',
-    title: 'Adaptive Dynamic Ensemble',
-    description: 'Agent selection changes based on task requirements and context',
-    longDescription: 'An adaptive ensemble architecture that dynamically selects and combines agents based on the specific requirements of each task. The system learns from performance metrics and adapts its agent selection strategy to optimize for different types of problems and performance criteria.',
-    author: {
-      name: 'James Lee',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
-      github: 'james-lee-ai'
-    },
-    category: ['Adaptive', 'Ensemble'],
-    tags: ['adaptive', 'ensemble', 'dynamic', 'context-aware'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Adaptive Dynamic Ensemble - Flexible circle with agents that can connect/disconnect'
-    },
-    implementation: {
-      codeExample: `class AdaptiveEnsemble {
-  constructor(agents) {
-    this.agents = agents;
-    this.performanceHistory = new Map();
-  }
-  
-  async selectAgents(task) {
-    const scores = await Promise.all(
-      this.agents.map(agent => this.evaluateAgent(agent, task))
-    );
-    return this.agents.filter((_, i) => scores[i] > threshold);
-  }
-  
-  async process(task) {
-    const selectedAgents = await this.selectAgents(task);
-    const results = await Promise.all(
-      selectedAgents.map(agent => agent.process(task))
-    );
-    return this.combineResults(results);
-  }
-}`,
-      language: 'javascript'
-    },
-    useCases: [
-      'Context-aware systems',
-      'Flexible problem solving',
-      'Adaptive workflows',
-      'Dynamic load balancing'
-    ],
-    performance: {
-      scalability: 8,
-      complexity: 9,
-      reliability: 8
-    },
-    createdAt: '2024-01-03',
-    updatedAt: '2024-01-28',
-    githubUrl: 'https://github.com/example/adaptive-ensemble',
-    documentationUrl: 'https://docs.example.com/adaptive-ensemble'
-  },
-  {
-    id: 'layered-multi-tier-architecture',
-    title: 'Layered Multi-Tier Architecture',
-    description: 'Multiple tiers of agents handling different abstraction levels',
-    longDescription: 'A layered architecture with multiple tiers of agents, each handling different abstraction levels. Lower tiers handle detailed, specific tasks while higher tiers manage abstract, strategic decisions. This creates a hierarchical system of increasing abstraction.',
-    author: {
-      name: 'Lisa Zhang',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
-      github: 'lisa-zhang-ai'
-    },
-    category: ['Layered', 'Multi-Tier'],
-    tags: ['layered', 'multi-tier', 'abstraction', 'hierarchical'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Layered Multi-Tier Architecture - Stacked horizontal layers with agents at different levels'
-    },
-    implementation: {
-      codeExample: `class MultiTierArchitecture {
-  constructor(tiers) {
-    this.tiers = tiers;
-  }
-  
-  async process(input) {
-    let data = input;
-    
-    // Process through each tier from bottom to top
-    for (let i = 0; i < this.tiers.length; i++) {
-      data = await this.tiers[i].process(data);
-    }
-    
-    return data;
-  }
-}
-
-class Tier {
-  constructor(agents) {
-    this.agents = agents;
-  }
-  
-  async process(data) {
-    const results = await Promise.all(
-      this.agents.map(agent => agent.process(data))
-    );
-    return this.aggregate(results);
-  }
-}`,
-      language: 'python'
-    },
-    useCases: [
-      'Complex system architecture',
-      'Hierarchical data processing',
-      'Multi-level decision making',
-      'Enterprise systems'
-    ],
-    performance: {
-      scalability: 7,
-      complexity: 8,
-      reliability: 9
-    },
-    createdAt: '2024-01-20',
-    updatedAt: '2024-01-30',
-    githubUrl: 'https://github.com/example/multi-tier',
-    documentationUrl: 'https://docs.example.com/multi-tier'
-  },
-  {
-    id: 'competitive-market-model',
-    title: 'Competitive Market Model',
-    description: 'Agents compete for tasks based on capability and availability',
-    longDescription: 'A competitive market architecture where agents compete for tasks based on their capabilities, availability, and performance history. This creates a dynamic marketplace where the most suitable agents are selected for each task through competitive bidding or selection processes.',
-    author: {
-      name: 'Michael Brown',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-      github: 'michael-brown-ai'
-    },
-    category: ['Competitive', 'Market'],
-    tags: ['competitive', 'market', 'bidding', 'optimization'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Competitive Market Model - Agents in marketplace with bidding/competition indicators'
-    },
-    implementation: {
-      codeExample: `class MarketModel {
-  constructor(agents) {
-    this.agents = agents;
-    this.taskQueue = [];
-  }
-  
-  async bidForTask(task) {
-    const bids = await Promise.all(
-      this.agents.map(agent => agent.submitBid(task))
-    );
-    
-    const winner = this.selectWinner(bids);
-    return await winner.executeTask(task);
-  }
-  
-  selectWinner(bids) {
-    return bids.reduce((best, current) => 
-      current.score > best.score ? current : best
-    ).agent;
-  }
-}`,
-      language: 'typescript'
-    },
-    useCases: [
-      'Resource optimization',
-      'Competitive task allocation',
-      'Market dynamics simulation',
-      'Load balancing'
-    ],
-    performance: {
-      scalability: 9,
-      complexity: 7,
-      reliability: 8
-    },
-    createdAt: '2024-01-18',
-    updatedAt: '2024-01-25',
-    githubUrl: 'https://github.com/example/market-model',
-    documentationUrl: 'https://docs.example.com/market-model'
-  },
-  {
-    id: 'collaborative-circle',
-    title: 'Collaborative Circle',
-    description: 'All agents contribute equally to collaborative decision-making',
-    longDescription: 'A collaborative circle architecture where all agents contribute equally to decision-making processes. This creates a democratic system where each agent has an equal voice and the final decision is reached through consensus or voting mechanisms.',
-    author: {
-      name: 'Sophie Martin',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'sophie-martin-ai'
-    },
-    category: ['Collaborative', 'Democratic'],
-    tags: ['collaborative', 'democratic', 'consensus', 'equal-participation'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Collaborative Circle - Agents arranged in circle with bidirectional connections'
-    },
-    implementation: {
-      codeExample: `class CollaborativeCircle {
-  constructor(agents) {
-    this.agents = agents;
-  }
-  
-  async makeDecision(input) {
-    const opinions = await Promise.all(
-      this.agents.map(agent => agent.expressOpinion(input))
-    );
-    
-    return this.reachConsensus(opinions);
-  }
-  
-  reachConsensus(opinions) {
-    // Implement consensus mechanism (voting, averaging, etc.)
-    const votes = opinions.map(op => op.vote);
-    return this.countVotes(votes);
-  }
-}`,
-      language: 'python'
-    },
-    useCases: [
-      'Democratic consensus',
-      'Collaborative creation',
-      'Equal participation systems',
-      'Group decision making'
-    ],
-    performance: {
-      scalability: 6,
-      complexity: 5,
-      reliability: 9
-    },
-    createdAt: '2024-01-22',
-    updatedAt: '2024-01-28',
-    githubUrl: 'https://github.com/example/collaborative-circle',
-    documentationUrl: 'https://docs.example.com/collaborative-circle'
-  },
-  {
-    id: 'feedback-loop-network',
-    title: 'Feedback Loop Network',
-    description: 'Agents continuously learn and adapt based on feedback from others',
-    longDescription: 'A feedback loop network where agents continuously learn and adapt based on feedback from other agents in the system. This creates a dynamic learning environment where agents improve their performance through continuous interaction and feedback mechanisms.',
-    author: {
-      name: 'Robert Taylor',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-      github: 'robert-taylor-ai'
-    },
-    category: ['Learning', 'Adaptive'],
-    tags: ['feedback-loop', 'learning', 'adaptive', 'continuous-improvement'],
-    diagram: {
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      alt: 'Feedback Loop Network - Circular flow with feedback arrows between connected agents'
-    },
-    implementation: {
-      codeExample: `class FeedbackLoopNetwork {
-  constructor(agents) {
-    this.agents = agents;
-    this.feedbackHistory = new Map();
-  }
-  
-  async processWithFeedback(input) {
-    const results = await Promise.all(
-      this.agents.map(agent => agent.process(input))
-    );
-    
-    // Generate feedback for each agent
-    const feedback = await this.generateFeedback(results);
-    
-    // Apply feedback to improve agents
-    await Promise.all(
-      this.agents.map((agent, i) => agent.learn(feedback[i]))
-    );
-    
-    return this.aggregateResults(results);
-  }
-  
-  async generateFeedback(results) {
-    return results.map(result => ({
-      performance: this.evaluatePerformance(result),
-      suggestions: this.generateSuggestions(result)
-    }));
-  }
-}`,
-      language: 'javascript'
-    },
-    useCases: [
-      'Continuous improvement',
-      'Adaptive learning systems',
-      'Iterative refinement',
-      'Performance optimization'
-    ],
-    performance: {
-      scalability: 7,
-      complexity: 8,
-      reliability: 8
-    },
-    createdAt: '2024-01-25',
-    updatedAt: '2024-01-30',
-    githubUrl: 'https://github.com/example/feedback-loop',
-    documentationUrl: 'https://docs.example.com/feedback-loop'
-  },
-  {
     id: 'supervisor-agent-architecture',
     title: 'Supervisor-Agent Architecture',
     description: 'In a Supervisor-Agent architecture, one agent acts as the central "supervisor" or "orchestrator." This supervisor agent is responsible for receiving a task, breaking it down into smaller sub-tasks, and delegating those sub-tasks to specialized "worker" agents. The supervisor then monitors the progress of the worker agents and synthesizes their outputs to produce the final result. This architecture is easy to start with and is effective for workflows that can be clearly broken down into distinct steps.',
     longDescription: 'The Supervisor-Agent architecture features a central supervisor agent that orchestrates specialized worker agents. The supervisor receives tasks, decomposes them into manageable sub-tasks, and delegates them to appropriate worker agents based on their specializations. As worker agents complete their assignments, the supervisor monitors progress and collects results, ultimately synthesizing outputs to generate the final solution. This architecture is particularly effective for complex workflows that can be clearly partitioned into distinct, specialized steps, making it an excellent starting point for multi-agent systems.',
     author: {
-      name: 'Dr. Michael Roberts',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-      github: 'michael-roberts-ai'
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
     },
     category: ['Hierarchical', 'Orchestration'],
     tags: ['supervisor', 'orchestrator', 'delegation', 'task-management', 'workflow'],
@@ -754,9 +200,9 @@ class Tier {
     description: 'Agents operate in a linear pipeline; each agent’s output is the next agent’s input.',
     longDescription: 'In a sequential architecture, agents work in a pipeline where the output of one agent becomes the input for the next in the sequence. This creates a linear workflow, with each agent performing a specific transformation on the data it receives. This architecture is ideal for processes with clearly defined, ordered stages.',
     author: {
-      name: 'Community',
-      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&h=150&fit=crop&crop=face',
-      github: 'madebyagents-community'
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
     },
     category: ['Sequential', 'Pipeline'],
     tags: ['sequential', 'pipeline', 'linear', 'staged-processing'],
@@ -860,9 +306,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
     description: 'Agents communicate directly without a central coordinator for flexible, dynamic collaboration.',
     longDescription: 'In a network or decentralized architecture, agents communicate directly with each other without a central coordinator. This enables flexible and dynamic collaboration, as any agent can interact with any other agent in the network. It is well-suited for complex problems where workflows are not predictable and require dynamic information sharing.',
     author: {
-      name: 'Community',
+      name: 'Eren Kızılırmak',
       avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'madebyagents-community'
+      github: 'eren9677'
     },
     category: ['Distributed', 'Decentralized'],
     tags: ['p2p', 'decentralized', 'network', 'collaboration'],
@@ -957,9 +403,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
     description: 'Auctioneer broadcasts tasks; contractor agents bid; best bid wins based on predefined criteria.',
     longDescription: 'In a market-based architecture, tasks are not assigned directly. A Client or Auctioneer agent broadcasts a task to a network of Contractor agents, which then bid on the task with capability, confidence, or cost. The Auctioneer selects the best bid based on criteria such as lowest cost, highest confidence, or fastest completion time, and awards the task to the winning agent.',
     author: {
-      name: 'Community',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-      github: 'madebyagents-community'
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
     },
     category: ['Competitive', 'Market'],
     tags: ['bidding', 'auction', 'market-based', 'allocation', 'contract-net'],
@@ -1055,9 +501,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
     description: 'Multi-level supervision where top-level supervisors manage lower-level supervisors who manage worker agents.',
     longDescription: 'A hierarchical architecture is an extension of the supervisor model, featuring multiple levels of supervision. A top-level supervisor oversees lower-level supervisors, each managing their own team of worker agents. This structure enables handling complex tasks by decomposing them into smaller, manageable sub-problems that specialized teams can address.',
     author: {
-      name: 'Community',
-      avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face',
-      github: 'madebyagents-community'
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
     },
     category: ['Hierarchical', 'Orchestration'],
     tags: ['hierarchical', 'supervisor', 'multi-level', 'orchestration'],
@@ -1214,9 +660,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
     description: 'Agents are designed to interact with external tools (APIs, databases, code interpreters) to ground reasoning and perform real-world actions.',
     longDescription: 'In a Tool-Augmented architecture, agents are not limited to communicating with each other; they are explicitly designed to interact with a set of external, non-agentive "tools." These tools can be anything from code interpreters and calculators to databases and third-party APIs (e.g., Google Search, weather services). An orchestrating agent, or the agents themselves, can reason about which tool is required to accomplish a specific sub-task. This dramatically extends the agent system\'s capabilities beyond its inherent knowledge, allowing it to ground its reasoning in real-world data and perform complex actions. This is a foundational architecture for most modern, practical AI agent systems.',
     author: {
-      name: 'Community',
+      name: 'Eren Kızılırmak',
       avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'madebyagents-community'
+      github: 'eren9677'
     },
     category: ['Tool-Augmented', 'Orchestration'],
     tags: ['tools', 'apis', 'databases', 'react', 'toolformer', 'grounding'],
@@ -1320,9 +766,9 @@ class ReportGen { async process(d) { return generateReport(d); } }
     description: 'Creator agent produces output; Critic reviews and provides feedback; loop continues until approval or iteration limit.',
     longDescription: 'This architecture introduces a "Critic" agent whose sole purpose is to review the output of a "Creator" agent and provide constructive feedback. The Creator agent then takes this feedback and refines its work in a loop until the output meets a certain quality standard, is approved by the Critic, or a maximum number of iterations is reached. This pattern is fundamental for improving the quality and accuracy of generated content or plans.',
     author: {
-      name: 'Community',
+      name: 'Eren Kızılırmak',
       avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      github: 'madebyagents-community'
+      github: 'eren9677'
     },
     category: ['Iterative', 'Quality'],
     tags: ['critic', 'refinement', 'feedback-loop', 'review'],
@@ -1416,10 +862,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
    description: 'Autonomous agents collaborate with humans at critical checkpoints for approval, judgment, or handling sensitive actions.',
    longDescription: 'Human-in-the-Loop (HITL) is a design pattern that strategically combines human intelligence with AI automation. The multi-agent system operates autonomously but pauses and consults a human at critical junctures. Triggers for intervention include low confidence, subjective judgment, sensitive data handling, or final approval for irreversible actions. HITL leverages human common sense, ethics, and creativity together with machine speed and data processing to produce robust, safe, and trustworthy outcomes.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Safety', 'Governance', 'Workflow'],
    tags: ['human-in-the-loop', 'approval', 'review', 'oversight', 'safety'],
    diagram: {
@@ -1516,10 +962,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'Decentralized swarm of forager agents explore broadly; discoveries attract others to exploit rich areas.',
   longDescription: 'The Foraging Architecture is a decentralized pattern inspired by the natural behavior of social insects like ants or bees. Multiple independent agents ("foragers") explore a large search space (e.g., the internet, a database, a file system) in parallel to find specific information or resources. When a forager agent finds a valuable resource, it communicates this discovery back to the swarm—often including the "scent" or location—attracting other agents to exploit it more thoroughly. This creates an efficient, self-organizing search-and-exploitation mechanism that excels at finding needles in a haystack.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Distributed', 'Swarm'],
   tags: ['foraging', 'swarm-intelligence', 'ant-colony', 'explore-exploit', 'decentralized'],
   diagram: {
@@ -1649,10 +1095,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'Agents organized into teams with rich intra-group communication and structured inter-group coordination via liaisons.',
   longDescription: 'A Group Architecture (also called Team-based or Coalition) organizes agents into subgroups. Within a group, communication is fluid and context-rich (all-to-all or local broadcast). Between groups, communication is structured and less frequent, typically handled by designated liaison/leader agents. This enables specialization per group while reducing system-wide communication overhead and information overload.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Collaborative', 'Structured'],
   tags: ['group', 'team', 'coalition', 'liaison', 'coordination'],
   diagram: {
@@ -1767,10 +1213,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'Heterogeneous agents with different specializations collaborate via an orchestrator to solve complex problems.',
   longDescription: 'A Mixture of Agents architecture is fundamentally about heterogeneity. It involves creating a system where agents with different specializations, capabilities, underlying models, or even programming languages are combined to solve a complex problem. Instead of relying on a team of identical agents, this model leverages the idea that diverse expertise leads to a more robust and powerful solution. The core challenge lies in creating a communication and coordination protocol that allows these disparate agents to work together effectively.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Heterogeneous', 'Orchestration', 'Ensemble'],
   tags: ['mixture-of-agents', 'heterogeneous', 'specialization', 'coordination', 'orchestrator'],
   diagram: {
@@ -1903,10 +1349,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'Multiple agents work on the same task in parallel, coordinating while processing independently to reduce total time.',
   longDescription: 'The concurrent pattern enables multiple agents to work on the same task in parallel. Each agent processes the input independently, allowing for simultaneous execution of different aspects of a complex task. This architecture maximizes efficiency by leveraging parallelism, where agents coordinate their efforts while working concurrently to achieve a common goal, significantly reducing overall processing time.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Concurrent', 'Parallel'],
   tags: ['parallelism', 'concurrency', 'coordinator', 'aggregation'],
   diagram: {
@@ -2009,10 +1455,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'Agents dynamically add, remove, or adapt based on changing tasks and performance signals while preserving overall system integrity.',
   longDescription: 'Multi-agent systems can adjust to varying environments by adding, removing or adapting agents in dynamic configurations. In this architecture, agents continuously rearrange themselves based on changing task requirements, environmental conditions, and system performance metrics. Prioritize modular components that can be reconfigured independently without compromising system integrity. This approach enables individual agents to evolve while preserving collective functionality.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Dynamic', 'Adaptive'],
   tags: ['dynamic', 'rearrange', 'orchestrator', 'monitoring', 'agent-pool'],
   diagram: {
@@ -2103,10 +1549,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'Agents are nodes and connections are edges; control flow is managed by edges and agents communicate by updating shared graph state.',
   longDescription: 'In this approach, each agent is a node in the graph, and their connections are represented as an edge. The control flow is managed by edges, and they communicate by adding to the graph\'s state. This architecture represents complex workflows as directed acyclic graphs (DAG) where agents can have multiple dependencies and parallel execution paths, enabling sophisticated coordination patterns that go beyond simple sequential or hierarchical structures.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Graph', 'Workflow', 'DAG'],
   tags: ['graph', 'dag', 'control-flow', 'dependencies', 'parallel'],
   diagram: {
@@ -2198,10 +1644,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
   description: 'An interactive group chat architecture facilitates collaboration among multiple specialized AI agents in a coordinated manner.',
   longDescription: 'An interactive group chat architecture facilitates collaboration among multiple specialized AI agents in a coordinated manner. This system allows for dynamic speaker selection, mention-based communication where agents can be directed to specific tasks, and the ability for agents to build upon each other\'s responses. It supports both automated and interactive sessions, maintaining conversation history and context for coherent group reasoning.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Collaborative', 'Adaptive'],
   tags: ['group-chat', 'dynamic-speaker-selection', 'mentions', 'interactive', 'context'],
   diagram: {
@@ -2280,10 +1726,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
  description: 'An agent registry is a centralized architecture for managing a collection of agents. It provides functionalities to add, delete, update, and retrieve agents, ensuring that agent definitions are decoupled from their execution.',
  longDescription: 'An agent registry is a centralized architecture for managing a collection of agents. It provides functionalities to add, delete, update, and retrieve agents, ensuring that agent definitions are decoupled from their execution. This system is designed for concurrent environments, making it suitable for dynamic and scalable multi-agent systems where agents need to be discovered and invoked at runtime.',
  author: {
-   name: 'Community',
-   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-   github: 'madebyagents-community'
- },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
  category: ['Orchestration', 'Infrastructure'],
  tags: ['registry', 'service-discovery', 'crud', 'decoupled', 'runtime-invocation'],
  diagram: {
@@ -2342,10 +1788,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
  description: 'Spreadsheet Swarm is a multi-agent architecture designed to manage and orchestrate thousands of agents using a CSV file.',
  longDescription: 'Spreadsheet Swarm is a multi-agent architecture designed to manage and orchestrate thousands of agents using a CSV file. This system acts as a centralized collector for agent outputs, saving results in a structured tabular format for easy sorting, filtering, and analysis. It supports parallel processing by allowing multiple agents to run concurrently, making it scalable and efficient for large-scale data operations.',
  author: {
-   name: 'Community',
-   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-   github: 'madebyagents-community'
- },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
  category: ['Tabular', 'Data Management'],
  tags: ['spreadsheet', 'swarm', 'csv', 'parallel', 'orchestrator'],
  diagram: {
@@ -2424,10 +1870,10 @@ class ReportGen { async process(d) { return generateReport(d); } }
  description: 'A high-performance architecture designed for handling intensive computational workloads by orchestrating multiple agents working on resource-heavy operations—perfect for large-scale data processing and high-throughput task execution.',
  longDescription: 'A high-performance architecture designed for handling intensive computational workloads by orchestrating multiple agents working on resource-heavy operations—perfect for large-scale data processing and high-throughput task execution.',
  author: {
-   name: 'Community',
-   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-   github: 'madebyagents-community'
- },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
  category: ['High-Performance', 'Parallel', 'Orchestration'],
  tags: ['high-performance', 'compute', 'load-balancing', 'optimization', 'aggregation', 'monitoring'],
  diagram: {
@@ -2524,10 +1970,10 @@ async execute(task) {
  description: 'Priority Rules and LangGraph-style routing: analyzes tasks and routes to optimal agents/architectures based on rules, load, availability, and performance.',
  longDescription: 'Priority Rules: Pre-established rules or logic are used to settle disagreements. LangGraph: Multi-Agent Workflows and route tasks to appropriate agents. The Router architecture acts as an intelligent traffic director that analyzes incoming tasks and dynamically selects the most suitable architecture pattern or specific agents based on task characteristics, current system load, agent availability, and performance metrics. This pattern enables adaptive system behavior by choosing optimal processing paths.',
  author: {
-   name: 'Community',
-   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-   github: 'madebyagents-community'
- },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
  category: ['Routing', 'Orchestration', 'Adaptive'],
  tags: ['router', 'priority-rules', 'load-balancing', 'dynamic-routing', 'langgraph'],
  diagram: {
@@ -2693,10 +2139,10 @@ async execute(task) {
   description: 'Specialized architecture for comprehensive, multi-domain research with iterative planning, cross-validation, and synthesis.',
   longDescription: 'A specialized architecture tailored for conducting comprehensive research across multiple domains. This approach uses iterative workflows where research queries trigger domain-specific agents, whose findings are aggregated, cross-validated, refined, and synthesized into a final report—optimal for academic research, market intelligence, and deep data investigation.',
   author: {
-    name: 'Community',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    github: 'madebyagents-community'
-  },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
   category: ['Research', 'Iterative', 'Synthesis'],
   tags: ['research', 'planning', 'validation', 'synthesis', 'multi-domain'],
   diagram: {
@@ -2811,10 +2257,10 @@ async execute(task) {
    description: 'Consensus-based validation to minimize hallucinations: primary agent generates, multiple validators fact-check, consensus decides to accept or refine.',
    longDescription: 'An architecture specifically crafted to minimize and eliminate hallucinations in AI-generated outputs using consensus-based validation. A primary agent produces an initial response, which is then fact-checked by multiple secondary validator agents. A consensus engine evaluates agreement among validations to either finalize the output (if confidence exceeds a threshold) or trigger a targeted refinement loop back to the primary agent.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Safety', 'Validation', 'Consensus'],
    tags: ['de-hallucination', 'validation', 'consensus', 'confidence-scoring', 'refinement'],
    diagram: {
@@ -2962,10 +2408,10 @@ async execute(task) {
    description: 'Creator produces an initial solution; Verifiers independently evaluate; Refiners improve based on feedback; iterates to high-quality output.',
    longDescription: 'Multi-Agent Learning Task (MALT) is a structured multi-agent framework in which a Creator Agent produces an initial solution, Verifier Agents evaluate it independently, and Refiner Agents enhance it based on feedback. This iterative process supports high-quality outputs for complex tasks such as mathematical proofs, translations, or content generation.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Iterative', 'Quality', 'Orchestration'],
    tags: ['creator', 'verifier', 'refiner', 'feedback', 'iteration', 'malt'],
    diagram: {
@@ -3115,10 +2561,10 @@ async execute(task) {
    description: 'Agents independently vote on proposed decisions; the option with the most votes is selected as final.',
    longDescription: 'A consensus architecture where each agent casts a vote on proposed decisions or outputs; the option with the most votes is selected as final. This reduces errors and promotes democratic decision-making in contexts like quality control or ensemble predictions.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Consensus', 'Ensemble', 'Validation'],
    tags: ['majority-vote', 'consensus', 'ensemble', 'aggregation'],
    diagram: {
@@ -3194,10 +2640,10 @@ async execute(task) {
    description: 'Tasks are distributed cyclically among agents in a fixed sequence for fair load balancing.',
    longDescription: 'Tasks are distributed cyclically among agents in a fixed sequence, ensuring fair load balancing and preventing any single agent from being overburdened. It’s widely used in scheduling, resource allocation, and parallel workflows.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Scheduling', 'Load Balancing'],
    tags: ['round-robin', 'scheduler', 'fairness', 'queue'],
    diagram: {
@@ -3261,10 +2707,10 @@ async execute(task) {
    description: 'Inspects task requirements and automatically composes the necessary agents into a working swarm.',
    longDescription: 'A meta-architecture that inspects task requirements and automatically composes and configures the necessary agents into a working swarm. It streamlines rapid prototyping and adaptive system creation.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Orchestration', 'Automation'],
    tags: ['auto-builder', 'composition', 'generation', 'factory'],
    diagram: {
@@ -3322,10 +2768,10 @@ async execute(task) {
    description: 'Top-level coordinator delegates tasks; peer clusters collaborate directly for efficiency.',
    longDescription: 'Combines a hierarchical control layer with peer-to-peer clustering among lower-level agents. The top-level coordinator delegates broad tasks, while peer clusters collaborate directly for efficiency.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Hybrid', 'Hierarchical', 'P2P'],
    tags: ['hybrid', 'hierarchy', 'cluster', 'peer-to-peer'],
    diagram: {
@@ -3386,10 +2832,10 @@ async execute(task) {
    description: 'Agents run a ballot to elect a leader or make collective choices with fault-tolerant coordination.',
    longDescription: 'Agents run a ballot among themselves to elect a leader or make collective choices. This democratic approach supports robust governance in distributed systems and fault-tolerant coordination.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Consensus', 'Governance'],
    tags: ['election', 'leader-election', 'ballot', 'consensus'],
    diagram: {
@@ -3446,10 +2892,10 @@ async execute(task) {
    description: 'An adaptive chat architecture that selects which agents join and how messages are routed based on context, user goals, and prior dialogue—ideal for advanced customer support and context-aware chatbots.',
    longDescription: 'An adaptive conversational architecture where a context analyzer inspects dialogue state and user intent, a selector chooses the most relevant chat agents to engage, and a message router orchestrates turn-taking and delivery. This enables targeted, context-aware responses while minimizing noise from unrelated participants.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Conversational', 'Adaptive', 'Routing'],
    tags: ['dynamic', 'chat', 'routing', 'selector', 'context-aware'],
    diagram: {
@@ -3519,10 +2965,10 @@ async execute(task) {
    description: 'A strict parent-child hierarchy where each agent has exactly one parent (except the root) and may have multiple children. This structure simplifies delegation, logging, and failure isolation.',
    longDescription: 'A classic tree structure with a single root agent, internal nodes as managers, and leaves as executors. Each node has exactly one parent, enabling clear delegation paths, easy logging/traceability, and isolated failure handling. Common in organizational charts, decision trees, and taxonomy engines.',
    author: {
-     name: 'Community',
-     avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-     github: 'madebyagents-community'
-   },
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
    category: ['Hierarchical', 'Structured'],
    tags: ['tree', 'hierarchy', 'delegation', 'supervision'],
    diagram: {
@@ -3576,6 +3022,138 @@ class TreeArchitecture {
        { "id": "t2", "from": "root", "to": "child-2", "type": "delegate", "name": "Delegate Task" },
        { "id": "t3", "from": "child-1", "to": "leaf-1", "type": "delegate", "name": "Delegate Subtask" },
        { "id": "t4", "from": "child-2", "to": "leaf-2", "type": "delegate", "name": "Delegate Subtask" }
+     ]
+   }
+ },
+ {
+   id: 'collaborative-circle',
+   title: 'Collaborative Circle Architecture',
+   description: 'A collaborative multi-agent system where agents contribute to a shared memory and iteratively refine a solution through open, cyclical information sharing.',
+   longDescription: 'The Collaborative Circle architecture is a multi-agent system designed for cooperative problem-solving. In this structure, a group of agents works together on a shared task, contributing their individual capabilities. Information is shared openly among the agents in a cyclical or all-to-all manner, allowing for iterative refinement and collective decision-making. This architecture is well-suited for tasks that benefit from diverse perspectives and collaborative iteration to achieve a robust final output.',
+   author: {
+      name: 'Eren Kızılırmak',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      github: 'eren9677'
+    },
+   category: ['Collaborative', 'Swarm'],
+   tags: ['collaborative', 'shared-memory', 'all-to-all', 'iteration'],
+   diagram: {
+     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+     alt: 'Collaborative Circle - Agents contribute to and read from shared memory in a cyclic manner'
+   },
+   implementation: {
+     codeExample: `{
+ "name": "Collaborative Circle Architecture",
+ "type": "collaborative_circle",
+ "components": [
+   {
+     "id": "shared-memory",
+     "type": "memory",
+     "position": { "x": 400, "y": 250 },
+     "label": "Shared Memory",
+     "color": "#f3e8ff"
+   },
+   {
+     "id": "agent-1",
+     "type": "agent",
+     "position": { "x": 400, "y": 50 },
+     "label": "Agent 1",
+     "color": "#dbeafe"
+   },
+   {
+     "id": "agent-2",
+     "type": "agent",
+     "position": { "x": 650, "y": 250 },
+     "label": "Agent 2",
+     "color": "#dcfce7"
+   },
+   {
+     "id": "agent-3",
+     "type": "agent",
+     "position": { "x": 400, "y": 450 },
+     "label": "Agent 3",
+     "color": "#fee2e2"
+   },
+   {
+     "id": "agent-4",
+     "type": "agent",
+     "position": { "x": 150, "y": 250 },
+     "label": "Agent 4",
+     "color": "#fef9c3"
+   }
+ ],
+ "connections": [
+   { "id": "conn-1", "from": "agent-1", "to": "shared-memory", "type": "write", "name": "Contribute" },
+   { "id": "conn-2", "from": "agent-2", "to": "shared-memory", "type": "write", "name": "Contribute" },
+   { "id": "conn-3", "from": "agent-3", "to": "shared-memory", "type": "write", "name": "Contribute" },
+   { "id": "conn-4", "from": "agent-4", "to": "shared-memory", "type": "write", "name": "Contribute" },
+   { "id": "conn-5", "from": "shared-memory", "to": "agent-1", "type": "read", "name": "Read Update" },
+   { "id": "conn-6", "from": "shared-memory", "to": "agent-2", "type": "read", "name": "Read Update" },
+   { "id": "conn-7", "from": "shared-memory", "to": "agent-3", "type": "read", "name": "Read Update" },
+   { "id": "conn-8", "from": "shared-memory", "to": "agent-4", "type": "read", "name": "Read Update" }
+ ]
+}`,
+     language: 'json'
+   },
+   useCases: [
+     'Collaborative content creation with iterative peer refinement',
+     'Brainstorming and design sessions where agents share diverse perspectives',
+     'Research synthesis with shared knowledge accumulation across agents'
+   ],
+   performance: { scalability: 8, complexity: 4, reliability: 9 },
+   createdAt: '2025-08-07',
+   updatedAt: '2025-08-07',
+   githubUrl: null,
+   documentationUrl: 'https://docs.swarms.world/en/latest/swarms/structs/overview/',
+   visual: {
+     name: 'Collaborative Circle Architecture',
+     type: 'collaborative_circle',
+     components: [
+       {
+         id: 'shared-memory',
+         type: 'memory',
+         position: { x: 400, y: 250 },
+         label: 'Shared Memory',
+         color: '#f3e8ff'
+       },
+       {
+         id: 'agent-1',
+         type: 'agent',
+         position: { x: 400, y: 50 },
+         label: 'Agent 1',
+         color: '#dbeafe'
+       },
+       {
+         id: 'agent-2',
+         type: 'agent',
+         position: { x: 650, y: 250 },
+         label: 'Agent 2',
+         color: '#dcfce7'
+       },
+       {
+         id: 'agent-3',
+         type: 'agent',
+         position: { x: 400, y: 450 },
+         label: 'Agent 3',
+         color: '#fee2e2'
+       },
+       {
+         id: 'agent-4',
+         type: 'agent',
+         position: { x: 150, y: 250 },
+         label: 'Agent 4',
+         color: '#fef9c3'
+       }
+     ],
+     connections: [
+       { id: 'conn-1', from: 'agent-1', to: 'shared-memory', type: 'write', name: 'Contribute' },
+       { id: 'conn-2', from: 'agent-2', to: 'shared-memory', type: 'write', name: 'Contribute' },
+       { id: 'conn-3', from: 'agent-3', to: 'shared-memory', type: 'write', name: 'Contribute' },
+       { id: 'conn-4', from: 'agent-4', to: 'shared-memory', type: 'write', name: 'Contribute' },
+       { id: 'conn-5', from: 'shared-memory', to: 'agent-1', type: 'read', name: 'Read Update' },
+       { id: 'conn-6', from: 'shared-memory', to: 'agent-2', type: 'read', name: 'Read Update' },
+       { id: 'conn-7', from: 'shared-memory', to: 'agent-3', type: 'read', name: 'Read Update' },
+       { id: 'conn-8', from: 'shared-memory', to: 'agent-4', type: 'read', name: 'Read Update' }
      ]
    }
  }
