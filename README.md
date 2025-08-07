@@ -21,7 +21,12 @@ We hope you find these architectures useful and have fun exploring the  world of
 ## 🚀 Features
 
 - **Grid-based Architecture Display**: Responsive grid layout showcasing different multi-agent architectures
-- **Smooth Modal System**: Detailed architecture views with smooth fade-in/fade-out animations
+- **Architecture Design System**: Design architectures and get the architecture code in json to collaborate 
+
+<div align="center">
+  <img src="canvas.png" alt="Mainpage Screenshot" width="800">
+</div>
+
 - **Advanced Search & Filtering**: Search by title, description, tags, or author with category and sort filtering
 - **Performance Metrics**: Visual performance indicators for scalability, complexity, and reliability
 - **Responsive Design**: Mobile-first design that works across all devices
