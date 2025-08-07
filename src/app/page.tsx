@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Architecture, FilterOptions, ModalState } from '@/types'
 import { architectures } from '@/data/architectures'
 import { filterArchitectures, getAllCategories } from '@/utils/helpers'
@@ -20,6 +20,9 @@ export default function Home() {
     isOpen: false,
     architecture: null
   })
+
+  const [starCount, setStarCount] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const filteredArchitectures = useMemo(() => {
     return filterArchitectures(architectures, filters)
@@ -43,6 +46,28 @@ export default function Home() {
     })
   }
 
+  useEffect(() => {
+    const fetchStarCount = async () => {
+      try {
+        const response = await fetch('https://api.github.com/repos/eren9677/MAS-multi-agent-architectures')
+        if (response.ok) {
+          const data = await response.json()
+          setStarCount(data.stargazers_count)
+        } else {
+          console.error('Failed to fetch star count')
+          setStarCount(null)
+        }
+      } catch (error) {
+        console.error('Error fetching star count:', error)
+        setStarCount(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStarCount()
+  }, [])
+
 
   return (
     <div className="min-h-screen bg-light-bg dark:bg-dark-bg transition-colors duration-200">
@@ -64,7 +89,9 @@ export default function Home() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 text-sm text-light-text-secondary dark:text-dark-text-secondary">
                 <span className="text-primary-500">★</span>
-                <span>131,885</span>
+                <span>
+                  {loading ? '...' : starCount !== null ? starCount.toLocaleString() : 'N/A'}
+                </span>
               </div>
               <ThemeToggle />
             </div>
