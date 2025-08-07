@@ -2,6 +2,7 @@
 const nextConfig = {
   output: 'export',
   basePath: '/MAS-multi-agent-architectures',
+  assetPrefix: '/MAS-multi-agent-architectures/',
   images: {
     unoptimized: true,
   },
