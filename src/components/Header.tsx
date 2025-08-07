@@ -68,17 +68,13 @@ export const Header: React.FC = () => {
               Contribute
             </a>
           </nav>
-
           {/* CTA Button */}
           <div className="flex items-center">
-            <Link href="/MAS-multi-agent-architectures/architecture-builder" passHref>
-              <Button
-                variant="primary"
-                size="md"
-                className="hidden sm:inline-flex relative z-10"
-              >
-                Add Architecture
-              </Button>
+            <Link
+              href="/architecture-builder"
+              className="hidden sm:inline-flex relative z-10 items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-light-bg dark:focus:ring-offset-dark-bg bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 shadow-soft hover:shadow-soft-hover transform hover:scale-105 px-4 py-2 text-sm"
+            >
+              Add Architecture
             </Link>
           </div>
         </div>
