@@ -158,9 +158,19 @@ export default function Home() {
             {/* About Section */}
             <div className="pt-4 border-t border-light-border dark:border-dark-border">
               <h4 className="text-sm font-medium text-light-text dark:text-dark-text mb-2">About</h4>
-              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
-                A curated collection of multi-agent AI architectures for researchers, developers, and AI enthusiasts. 
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed mb-2">
+                A curated collection of multi-agent AI architectures for researchers, developers, and AI enthusiasts.
                 Explore innovative agent-based systems and share your own architectures with the community.
+              </p>
+              <p className="text-xs text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
+                Curated by <a
+                  href="https://www.linkedin.com/in/eren9677/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 underline transition-colors duration-200"
+                >
+                  Eren Kızılırmak
+                </a>
               </p>
             </div>
 
