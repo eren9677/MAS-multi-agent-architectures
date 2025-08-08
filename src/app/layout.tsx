@@ -39,6 +39,13 @@ export const metadata: Metadata = {
     ],
   },
   
+  // Icons and favicon
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
+  
   // Enhanced Twitter Card
   twitter: {
     card: 'summary_large_image',
@@ -86,8 +93,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Favicon */}
+        <link rel="icon" href="/icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
+        
+        {/* Open Graph logo tag */}
+        <meta property="og:logo" content="https://masdesign.site/icon.png" />
+        
         {/* Additional meta tags for better social sharing */}
-        <meta name="theme-color" content="#000000ff" />
+        <meta name="theme-color" content="#000000" />
         <meta name="application-name" content="Multi-Agent Architectures" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
