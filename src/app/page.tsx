@@ -87,12 +87,33 @@ export default function Home() {
 
             {/* Right: Utility Icons */}
             <div className="flex items-center space-x-4">
+              <a
+                href="https://github.com/eren9677/MAS-multi-agent-architectures"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center text-light-text-secondary dark:text-dark-text-secondary hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                aria-label="GitHub Repository"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  className="mr-1"
+                >
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.82-.26.82-.577v-2.234c-3.338.726-4.042-1.61-4.042-1.61-.546-1.388-1.333-1.758-1.333-1.758-1.09-.745.082-.73.082-.73 1.205.085 1.84 1.238 1.84 1.238 1.07 1.834 2.807 1.304 3.492.997.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.335-5.466-5.93 0-1.31.467-2.38 1.235-3.22-.123-.302-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.52 11.52 0 0 1 3-.404c1.02.005 2.045.138 3 .404 2.29-1.552 3.296-1.23 3.296-1.23.655 1.653.244 2.874.12 3.176.77.84 1.233 1.91 1.233 3.22 0 4.61-2.807 5.625-5.48 5.92.43.372.823 1.103.823 2.222v3.293c0 .32.217.694.825.576C20.565 21.796 24 17.297 24 12c0-6.63-5.373-12-12-12z" />
+                </svg>
+                Repo
+              </a>
+
               <div className="flex items-center space-x-2 text-sm text-light-text-secondary dark:text-dark-text-secondary">
                 <span className="text-primary-500">★</span>
                 <span>
                   {loading ? '...' : starCount !== null ? starCount.toLocaleString() : 'N/A'}
                 </span>
               </div>
+
               <ThemeToggle />
             </div>
           </div>
@@ -236,4 +257,4 @@ export default function Home() {
     />
   </div>
   )
-} 
+}
