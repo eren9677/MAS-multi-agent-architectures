@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useRef } from 'react'
-import { Button } from './ui/Button'
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null)

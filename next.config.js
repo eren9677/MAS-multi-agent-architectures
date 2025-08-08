@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/MAS-multi-agent-architectures',
-  assetPrefix: '/MAS-multi-agent-architectures/',
+  basePath: '',
+  assetPrefix: '',
   
   // Add this line
   trailingSlash: true,
