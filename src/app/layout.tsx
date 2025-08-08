@@ -89,7 +89,8 @@ export const metadata: Metadata = {
   //   yandex: 'your-yandex-verification-code',
   //   yahoo: 'your-yahoo-verification-code',
   // },
-}
+}// Keep your existing `metadata` object at the top of the file exactly as it is.
+// ...
 
 export default function RootLayout({
   children,
@@ -99,15 +100,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Favicon - Complete set */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-        
-        {/* Open Graph logo tag */}
-        <meta property="og:logo" content="https://masdesign.site/apple-touch-icon.png" />
+        {/*
+          ALL of the <link> tags for icons have been REMOVED from here.
+          The `metadata` object above will automatically generate them during the build process.
+          This prevents conflicts and is the correct Next.js approach.
+        */}
         
         {/* Additional meta tags for better social sharing */}
         <meta name="theme-color" content="#000000" />
