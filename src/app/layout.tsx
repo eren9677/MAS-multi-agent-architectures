@@ -41,10 +41,16 @@ export const metadata: Metadata = {
   
   // Icons and favicon
   icons: {
-    icon: '/icon.png',
-    shortcut: '/icon.png',
-    apple: '/icon.png',
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
+  
+  // Web app manifest
+  manifest: '/site.webmanifest',
   
   // Enhanced Twitter Card
   twitter: {
@@ -93,12 +99,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Favicon */}
-        <link rel="icon" href="/icon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/icon.png" />
+        {/* Favicon - Complete set */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
         
         {/* Open Graph logo tag */}
-        <meta property="og:logo" content="https://masdesign.site/icon.png" />
+        <meta property="og:logo" content="https://masdesign.site/apple-touch-icon.png" />
         
         {/* Additional meta tags for better social sharing */}
         <meta name="theme-color" content="#000000" />
