@@ -1,0 +1,33 @@
+{
+    "name": "Multi-Agent Architectures - Open Source Collaboration Platform",
+    "short_name": "MA Architectures",
+    "description": "Discover and share multi-agent AI architectures with 25+ proven patterns and interactive builder",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "categories": ["productivity", "developer", "education"],
+    "lang": "en-US",
+    "dir": "ltr"
+}
