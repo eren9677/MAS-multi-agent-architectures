@@ -80,7 +80,7 @@ export function createConnection(
   toCorner: string = 'auto'
 ): Connection {
   return {
-    id: `conn-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    id: `conn-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
     name,
     from,
     to,
@@ -99,7 +99,7 @@ export function createComponent(
   id?: string
 ): Component {
   return {
-    id: id || `component-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    id: id || `component-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
     type,
     position,
     label,
